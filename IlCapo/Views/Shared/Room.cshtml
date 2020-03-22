@@ -1,0 +1,32 @@
+﻿<div class=" d-flex flex-wrap room shadow-lg ">
+
+    @for (int i = 1; i < 13; i++)
+    {
+        var visibility = 1;
+        if (i == 2 || i == 5 || i == 8 || i == 11)
+        {
+            visibility = 0;
+        }
+
+        var wall = "";
+
+        if (i == 4 || i == 6)
+        {
+            wall = "2px solid";
+        }
+        <div class="col-md-4 d-flex justify-content-center align-items-center flex-wrap " style="opacity: @visibility; border-top:  @wall;">
+
+            <a class="table-room text-white justify-content-center align-items-center d-flex assistant-btn" data-toggle="modal" data-target="#exampleModal">
+                <span>@i</span>
+            </a>
+            <div class="col-md-12 d-flex justify-content-center ">
+                <div class="rounded" style="width:150px; height: 50px; background-color: rgba(0,0,0,.6); margin-top: -1vh;">
+
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+</div>

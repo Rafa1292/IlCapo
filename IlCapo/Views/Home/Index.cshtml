@@ -1,0 +1,213 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="col-6 p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:5px 5px 15px gray; position: absolute; z-index: 1000; min-height: 90vh; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw);" id="ordersToGo">
+    <div class="col-12 px-0 py-3 d-flex" style="background-color: rgba(255, 255, 255, 0.01)">
+        @for (int i = 0; i < 20; i++)
+        {
+
+            <span class="mx-0 px-3 arrow-left" onclick="HideOrdersToGo()" style=" color: rgba(255, 2255, 255, .05); font-size: 20px; z-index: 10000; display: none; transition: all 2s;">
+                <i style="" class="fas fa-less-than"></i>
+            </span>
+            <span class="mx-0 px-3 arrow-right" onclick="ShowOrdersToGo()" style=" color: rgba(255, 2255, 255, .05); font-size: 20px; z-index: 10000;transition: all 2s;">
+                <i style="" class="fas fa-greater-than"></i>
+            </span>
+        }
+    </div>
+
+    <div class="col-md-12 d-flex flex-wrap p-4 " style="justify-content: center; transition: all 1s cubic-bezier(.42,0,.23,1.09); transform: translateX(19vw);" id="OrdersToGoBtnContainer">
+        <button type="button" class="btn btn-outline-warning  " data-toggle="modal" data-target="#exampleModal">Agregar orden</button>
+    </div>
+    @Html.Partial("OrdersToGo")
+
+</div>
+
+<div class="container-fluid d-flex flex-wrap  p-0">
+    <div style="width: 12vw;">
+
+    </div>
+    <div class="justify-content-center p-2 d-flex" style="width: 74vw;">
+        @Html.Partial("Room")
+    </div>
+    <div class="justify-content-center p-2 d-flex flex-wrap assistant" >
+        <div class="col-12 d-flex justify-content-center p-2 m-2">
+            <button class="btn assistant-btn uno col-12 p-2 btn-red ">
+                <strong>
+                    Retiro
+                </strong>
+            </button>
+        </div>
+        <div class="col-12 d-flex justify-content-center  p-2 m-2">
+            <button class="btn assistant-btn btn-green col-12 p-2">
+                <strong>
+                    Ingreso
+                </strong>
+            </button>
+        </div>
+        <div class="col-12 d-flex justify-content-center p-2 m-2">
+            <button class="btn assistant-btn btn-blue col-12 p-2">
+                <strong>
+                    Calculadora
+                </strong>
+            </button>
+        </div>
+        <div class="col-12 d-flex justify-content-center p-2 m-2">
+            <button class="btn assistant-btn btn-gray col-12 p-2">
+                <strong>
+                    Facturas
+                </strong>
+            </button>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="modal fade m-0 p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog m-0 p-0" role="document" style="min-width: 100vw;">
+        <div class="modal-content m-0 p-0">
+
+            <button type="button" class="btn btn-danger" data-dismiss="modal" style="position:absolute; top:5px; right: 20px; z-index : 100;">
+                <i class="fas fa-times "></i>
+            </button>
+
+            <div class="modal-body m-0 p-0">
+                @Html.Partial("Bill")
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="SliceAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @Html.Partial("SliceAccount")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" data-target="#SliceAccount">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+        var room = document.getElementById("ordersToGo");
+        var containerBtn = document.getElementById("OrdersToGoBtnContainer")
+        var arrowsRight = document.getElementsByClassName("arrow-right");
+        var arrowsLeft = document.getElementsByClassName("arrow-left");
+
+
+
+    function HideOrdersToGo() {
+
+        room.style.transform = "translateX(-38vw)";
+        containerBtn.style.transform = "translateX(19vw)";
+        rotate(arrowsLeft, 180);
+
+        setTimeout(function () {
+
+            toggleView(arrowsLeft, "none");
+            toggleView(arrowsRight, "block");
+            rotate(arrowsLeft, 0);
+
+        }, 1000)
+
+    }
+
+    function ShowOrdersToGo() {
+
+        room.style.transform = "translateX(0)";
+        containerBtn.style.transform = "translateX(0)";
+        rotate(arrowsRight, 180);
+
+        setTimeout(function () {
+
+            toggleView(arrowsRight, "none");
+            toggleView(arrowsLeft, "block");
+            rotate(arrowsRight, 0);
+
+        }, 1000)
+    }
+
+    function rotate(array, deg) {
+        var style = `rotateY(${deg.toString()}deg)`;
+
+        for (var i = 0; i < array.length; i++) {
+            array[i].style.transform = style;
+        }
+    }
+
+
+    function toggleView(array, style) {
+        for (var i = 0; i < array.length; i++) {
+            array[i].style.display = style;
+        }
+    }
+
+    function ActionController(url, id) {
+
+
+         $.ajax({
+             type: "GET",
+             url: url,
+             data: $(id).serialize(),
+             cache: false
+         })
+             .then(function (data) {
+                 setTimeout(function myfunction() {
+                     var modalBody = document.getElementById("BasicModalContent");
+                     modalBody.innerHTML = data;
+
+                 }, 1000);
+
+
+             })
+             .fail(function (data) {
+                 alert('No');
+
+             })
+
+         return false;
+     }
+
+    function validate() {
+        var amount = validateAmount();
+        if (amount) {
+            var concept = validateConcept();
+        }
+
+        if (amount && concept ) {
+            ActionController("Pays/AddPay", "#Pay");
+        }
+    }
+
+    function validateAmount() {
+        var element = document.getElementById("Amount");
+        var label = document.getElementById("payLabel");
+        if (!(parseInt(element.value) > 0)) {
+            label.innerHTML = "Debe agregar un monto!!!";
+            return false;
+        }
+        label.innerHTML = "";
+        return true;
+    }
+
+    function validateConcept() {
+        var element = document.getElementById("payName");
+        var label = document.getElementById("payLabel");
+        if (!(parseInt(element.value) != 0)) {
+            label.innerHTML = "Debe agregar un tipo de pago!!!";
+            return false;
+        }
+        label.innerHTML = "";
+        return true;
+    }
+</script>

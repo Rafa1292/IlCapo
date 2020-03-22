@@ -1,0 +1,62 @@
+﻿@model IEnumerable<IlCapo.Models.Pay>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<p>
+    <button class=" btn btn-primary " onclick='GetView("Pays/Create","Retiros")'>Registrar pago</button>
+
+</p>
+<div class="d-flex justify-content-center text-center">
+    <span class="text-danger">
+        <strong>
+            @ViewBag.error
+        </strong>
+    </span>
+</div>
+<table class="table text-center">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Provider.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @if (item.Provider != null)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Provider.Name)
+                </td>
+            }
+            @if (item.Worker != null)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Worker.Name)
+                </td>
+            }
+            @if (item.basicServices != null)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.basicServices.Name)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+        </tr>
+    }
+
+</table>

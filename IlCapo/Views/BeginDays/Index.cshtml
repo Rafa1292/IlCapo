@@ -1,0 +1,43 @@
+﻿@model IEnumerable<IlCapo.Models.BeginDay>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<p>
+    <button class=" btn btn-primary " onclick='GetView("BeginDays/Create","Agregar jornada")'>Agregar jornada</button>
+
+</p>
+<div class="col-12 d-flex text-center justify-content-center">
+    <span class="text-danger"><strong>@ViewBag.error</strong></span>
+</div>
+<table class="table text-center ">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Worker.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cash)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Worker.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cash)
+            </td>
+        </tr>
+    }
+
+</table>

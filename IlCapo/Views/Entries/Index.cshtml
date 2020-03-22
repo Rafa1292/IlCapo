@@ -1,0 +1,48 @@
+﻿@model IEnumerable<IlCapo.Models.Entry>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+    <button class=" btn btn-primary " onclick='GetView("Entries/Create","Ingresos")'>Registrar ingreso</button>
+
+</p>
+
+<div class="d-flex justify-content-center text-center">
+    <span class="text-danger">
+        <strong>
+            @ViewBag.error
+        </strong>
+    </span>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.EntryId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.EntryId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.EntryId })
+            </td>
+        </tr>
+    }
+
+</table>
