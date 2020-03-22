@@ -11,8 +11,10 @@ namespace IlCapo.Models
         [Key]
         public int EntryId { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public decimal Amount { get; set; }
 
         public int BeginDayId { get; set; }

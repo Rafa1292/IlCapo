@@ -5,7 +5,7 @@
 }
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Entries", FormMethod.Post, new { @class = "d-flex flex-wrap justify-content-center", @id = "Entry" }))
 {
     @Html.AntiForgeryToken()
     <div class="col-12 text-center">
@@ -37,7 +37,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="button" onclick="ActionController('Entries/AddEntry', '#Entry')" value="Agregar ingreso" class="btn btn-success" />
             </div>
         </div>
     </div>

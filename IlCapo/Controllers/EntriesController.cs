@@ -33,16 +33,31 @@ namespace IlCapo.Controllers
         }
 
 
-        public ActionResult AddEntry([Bind(Include = "EntryId,Description,Amount")] Entry entry)
+        public ActionResult AddEntry(Entry entry)
         {
             if (ModelState.IsValid)
             {
-                db.Entries.Add(entry);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ValidateUser())
+                {
+                    try
+                    {
+                        Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+                        BeginDay beginDay = new BeginDay();
+                        entry.BeginDayId = beginDay.GetBeginDayId(worker);
+                        db.Entries.Add(entry);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+
+                }
             }
 
-            return View(entry);
+            return PartialView("Create", entry);
         }
 
         public bool ValidateWorker()

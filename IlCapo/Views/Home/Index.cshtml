@@ -179,7 +179,7 @@
      }
 
     function validate() {
-        var amount = validateAmount();
+        var amount = validateAmount("Amount");
         if (amount) {
             var concept = validateConcept();
         }
@@ -189,8 +189,8 @@
         }
     }
 
-    function validateAmount() {
-        var element = document.getElementById("Amount");
+    function validateAmount(id) {
+        var element = document.getElementById(id);
         var label = document.getElementById("payLabel");
         if (!(parseInt(element.value) > 0)) {
             label.innerHTML = "Debe agregar un monto!!!";
