@@ -17,107 +17,108 @@ namespace IlCapo.Controllers
         // GET: EndDays
         public ActionResult Index()
         {
-            var endDays = db.EndDays.Include(e => e.Worker);
-            return View(endDays.ToList());
+
+            return PartialView("Index", GetValidateEndDaysList());
+
         }
 
-        // GET: EndDays/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EndDay endDay = db.EndDays.Find(id);
-            if (endDay == null)
-            {
-                return HttpNotFound();
-            }
-            return View(endDay);
-        }
 
-        // GET: EndDays/Create
         public ActionResult Create()
         {
-            ViewBag.WorkerId = new SelectList(db.Workers, "WorkerId", "Name");
-            return View();
+            if (!ValidateUser())
+            {
+                return RedirectToAction("Index");
+            }
+
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            BeginDay beginDay = new BeginDay();
+            Pay pay = new Pay();
+            List<Pay> pays = pay.GetPays(beginDay.GetBeginDayId(worker), db.Pays.Include( p => p.Provider).ToList());
+            ViewBag.pays = pays;
+            Entry entry = new Entry();
+            List<Entry> entries = entry.GetEntries(beginDay.GetBeginDayId(worker), db.Entries.ToList());
+            ViewBag.entries = entries;            
+            EndDay endDay = new EndDay();
+            endDay.Worker = worker;
+
+
+            return PartialView("Create", endDay);
         }
 
-        // POST: EndDays/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EndDayId,CloseHour,Date,Cash,WorkerId")] EndDay endDay)
+        public ActionResult AddEndDay(EndDay endDay)
         {
+            if (!ValidateUser())
+            {
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
+                Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+                endDay.WorkerId = worker.WorkerId;
                 db.EndDays.Add(endDay);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.WorkerId = new SelectList(db.Workers, "WorkerId", "Name", endDay.WorkerId);
-            return View(endDay);
+            return PartialView("Create", endDay);
         }
 
-        // GET: EndDays/Edit/5
-        public ActionResult Edit(int? id)
+        public bool ValidateUser()
         {
-            if (id == null)
+            if (!ValidateWorker())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return false;
             }
-            EndDay endDay = db.EndDays.Find(id);
-            if (endDay == null)
+
+            if (!ValidateWorkerDay())
             {
-                return HttpNotFound();
+                return false;
             }
-            ViewBag.WorkerId = new SelectList(db.Workers, "WorkerId", "Name", endDay.WorkerId);
-            return View(endDay);
+
+            return true;
         }
 
-        // POST: EndDays/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EndDayId,CloseHour,Date,Cash,WorkerId")] EndDay endDay)
+        public bool ValidateWorkerDay()
         {
-            if (ModelState.IsValid)
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            WorkDay workDay = new WorkDay();
+
+            if (!workDay.IsInWorkingDay(worker))
             {
-                db.Entry(endDay).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.error = "Debes abrir una jornada antes!!!";
+                return false;
             }
-            ViewBag.WorkerId = new SelectList(db.Workers, "WorkerId", "Name", endDay.WorkerId);
-            return View(endDay);
+
+            return true;
         }
 
-        // GET: EndDays/Delete/5
-        public ActionResult Delete(int? id)
+        public bool ValidateWorker()
         {
-            if (id == null)
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+
+            if (worker == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.error = "Debes iniciar sesion antes!!!";
+                return false;
             }
-            EndDay endDay = db.EndDays.Find(id);
-            if (endDay == null)
-            {
-                return HttpNotFound();
-            }
-            return View(endDay);
+
+            return true;
         }
 
-        // POST: EndDays/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public List<EndDay> GetValidateEndDaysList()
         {
-            EndDay endDay = db.EndDays.Find(id);
-            db.EndDays.Remove(endDay);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            List<EndDay> endDays = new List<EndDay>();
+
+            if (ValidateUser())
+            {
+                Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+                EndDay endDay = new EndDay();
+                endDays = endDay.GetEndDays(worker);
+            }
+
+            return endDays;
         }
 
         protected override void Dispose(bool disposing)

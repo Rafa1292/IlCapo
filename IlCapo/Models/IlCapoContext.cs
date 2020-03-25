@@ -15,7 +15,7 @@ public class IlCapoContext : DbContext
 
     public IlCapoContext() : base("name=IlCapoContext")
     {
-        Database.SetInitializer<IlCapoContext>(new DropCreateDatabaseIfModelChanges<IlCapoContext>());
+        Database.SetInitializer<IlCapoContext>(new CreateDatabaseIfNotExists<IlCapoContext>());
     }
 
     public System.Data.Entity.DbSet<IlCapo.Models.ProductCategory> ProductCategories { get; set; }

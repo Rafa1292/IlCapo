@@ -413,9 +413,6 @@
     <Content Include="Views\Workers\Index.cshtml" />
     <Content Include="Views\Shared\ErrorPage.cshtml" />
     <Content Include="Views\EndDays\Create.cshtml" />
-    <Content Include="Views\EndDays\Delete.cshtml" />
-    <Content Include="Views\EndDays\Details.cshtml" />
-    <Content Include="Views\EndDays\Edit.cshtml" />
     <Content Include="Views\EndDays\Index.cshtml" />
     <Content Include="Views\Entries\Create.cshtml" />
     <Content Include="Views\Entries\Index.cshtml" />

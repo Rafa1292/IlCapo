@@ -2,58 +2,154 @@
 
 @{
     ViewBag.Title = "Create";
+    int[] currencyHundredsArray = { 5, 10, 25, 50, 100 };
+    int[] currencyThousandsArray = { 1000, 2000, 5000, 10000, 20000, 50000 };
 }
 
-<h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "EndDays", FormMethod.Post, new { @id = "EndDay" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>EndDay</h4>
-        <hr />
+        <span class="text-danger ">@ViewBag.error</span>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.CloseHour, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CloseHour, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CloseHour, "", new { @class = "text-danger" })
+
+        <div class="container-fluid  d-flex flex-wrap ">
+
+
+
+            <div class="col-md-3 d-flex flex-wrap ">
+                @foreach (var item in currencyHundredsArray)
+                {
+                    <div class="col-md-12 d-flex my-1">
+                        <div class="col-4 text-right d-flex " style="justify-content: flex-end">
+                            <span>¢</span>
+                            <span class="">@item</span>
+                        </div>
+                        <input class="form-control col-5" type="number" id="@item" onchange="InitialCash()" />
+                    </div>
+                }
+            </div>
+            <div class="col-md-3 d-flex flex-wrap ">
+                @foreach (var item in currencyThousandsArray)
+                {
+                    <div class="col-md-12 d-flex my-1">
+                        <div class="col-4 text-right d-flex " style="justify-content: flex-end">
+                            <span>¢</span>
+                            <span class="">@item</span>
+                        </div>
+                        <input class="form-control col-5" type="number" id="@item" onchange="InitialCash()" />
+                    </div>
+                }
+            </div>
+            <div class="col-md-6 p-3 rounded-lg d-flex flex-wrap endDay-box">
+                <div class="col-md-8">
+
+                    <div class="form-group d-flex ">
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="col-md-6">
+                            @{
+                                var date = DateTime.Now;
+                            }
+                            <span>@date</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex ">
+                        <label class="control-label col-md-6">Usuario:</label>
+                        <div class="col-md-6">
+                            <span>@Model.Worker.Mail</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex ">
+                        @Html.LabelFor(model => model.CreditCard, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="col-md-6">
+                            <input class="form-control col-12 text-box single-line" value="@Model.CreditCard" data-val="true" data-val-number="El campo Caja inicial debe ser un número." data-val-required="El campo Caja inicial es obligatorio." id="CreditCard" name="CreditCard" type="text">
+                            @Html.ValidationMessageFor(model => model.CreditCard, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex ">
+                        @Html.LabelFor(model => model.Cash, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="col-md-6">
+                            <input class="form-control col-12 text-box single-line" data-val="true" data-val-number="El campo Caja inicial debe ser un número." data-val-required="El campo Caja inicial es obligatorio." id="Cash" name="Cash" type="text">
+                            @Html.ValidationMessageFor(model => model.Cash, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex ">
+                        <label class="control-label col-md-6">Dolares</label>
+                        <div class="col-md-6">
+                            <input class="form-control col-12 text-box single-line" data-val="true" data-val-number="El campo Caja inicial debe ser un número." data-val-required="El campo Caja inicial es obligatorio." id="Dolar" name="Dolar" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 d-flex justify-content-center align-items-center border-left">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" value="Agregar cierre" onclick='ActionController("EndDays/AddEndDay", "#EndDay")' class="btn btn-outline-success" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="d-flex col-12 flex-wrap p-2 border-top border-gray mt-4">
+                <div class="d-flex col-6 flex-wrap p-2 justify-content-center ">
+                    <h5>
+                        Lista de retiros
+                    </h5>
+                    <div class="col-md-12 d-flex justify-content-center font-italic">
+
+                        <ul class="list-group list-group-flush">
+
+                            @foreach (var pay in ViewBag.pays)
+                            {
+                                var concept = "";
+
+                                if (pay.Provider != null)
+                                {
+                                    concept = pay.Provider.Name;
+                                }
+                                else if (pay.basicServices != null)
+                                {
+                                    concept = pay.BasicServices.Name;
+                                }
+                                else if (pay.Worker != null)
+                                {
+                                    concept = pay.Worker.Name;
+                                }
+
+                                <li class="list-group-item">@concept:  @pay.Amount</li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="d-flex col-6 flex-wrap p-2 justify-content-center">
+                    <h5>
+                        Lista de ingresos
+                    </h5>
+                    <div class="col-md-12 d-flex justify-content-center font-italic">
+
+                        <ul class="list-group list-group-flush">
+
+                            @if (ViewBag.entries != null)
+                            {
+
+                                foreach (var entry in ViewBag.entries)
+                                {
+
+                                    <li class="list-group-item">@entry.Description:  @entry.Amount</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Cash, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cash, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cash, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.WorkerId, "WorkerId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("WorkerId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.WorkerId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

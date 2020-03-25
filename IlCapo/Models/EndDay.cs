@@ -11,11 +11,16 @@ namespace IlCapo.Models
         [Key]
         public int EndDayId { get; set; }
 
-        public DateTime CloseHour { get; set; }
-
+        [Display(Name = "Fecha")]
         public DateTime Date { get; set; }
 
+        [Display(Name = "Dinero en caja")]
+        [Required]
         public decimal Cash { get; set; }
+
+        [Display(Name = "Ventas con tarjeta")]
+        [Required]
+        public decimal CreditCard { get; set; }
 
         public virtual Worker Worker { get; set; }
 
@@ -43,6 +48,23 @@ namespace IlCapo.Models
                 }
             }
             return state;
+        }
+
+        public List<EndDay> GetEndDays(Worker worker)
+        {
+            List<EndDay> InitialEnDaysList = new List<EndDay>();
+
+            using (IlCapoContext db = new IlCapoContext())
+            {
+
+                var entries = from e in db.EndDays
+                           where e.WorkerId == worker.WorkerId
+                           select e;
+
+                InitialEnDaysList = entries.ToList();
+            }
+
+            return InitialEnDaysList;
         }
     }
 }

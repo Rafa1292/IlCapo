@@ -36,13 +36,16 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class=" col-6 m-1">
                 <input type="button" onclick="ActionController('Entries/AddEntry', '#Entry')" value="Agregar ingreso" class="btn btn-success" />
+            </div>
+
+
+            <div class=" col-6 m-1">
+                <a class="btn btn-outline-secondary" onclick='GetView("Entries/Index","Ingresos")'>Regresar</a>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+

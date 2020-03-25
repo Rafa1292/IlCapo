@@ -4,48 +4,45 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+    <p>
+        <button class=" btn btn-primary " onclick='GetView("EndDays/Create","Agregar cierre")'>Agregar cierre</button>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    </p>
+    <div class="col-12 d-flex text-center justify-content-center">
+        <span class="text-danger"><strong>@ViewBag.error</strong></span>
+    </div>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Worker.Name)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CloseHour)
-        </th>
+
         <th>
             @Html.DisplayNameFor(model => model.Date)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Cash)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditCard)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Worker.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CloseHour)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cash)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.EndDayId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.EndDayId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.EndDayId })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Worker.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Cash)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreditCard)
+    </td>
+</tr>
 }
 
 </table>
