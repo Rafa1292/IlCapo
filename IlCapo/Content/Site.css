@@ -23,7 +23,7 @@ textarea {
 }
 
 .room-container {
-    background-color: rgba(23, 162, 184, .7);
+    background-color: rgba(23, 162, 184, 1);
     min-height: fit-content;
     overflow: hidden;
     font-weight: 900;
@@ -43,14 +43,14 @@ textarea {
 
 .options-container-list {
     overflow-y: scroll;
-    height: 350px;
+    height: 43vh;
 }
 
 .triangle {
     width: 0;
     height: 0;
     border-left: 11px solid transparent;
-    border-bottom: 8px solid rgba(0, 0, 0, .8);
+    border-bottom: 8px solid white;
     border-right: 11px solid transparent;
 }
 
@@ -60,11 +60,11 @@ textarea {
     display: flex;
     text-align: center;
     justify-content: center;
-    max-height: 90px;
+    height: 5vh !important;
 }
 
 .bill-header {
-    max-height: 75px;
+    height: 5vh;
 }
 
 .bill-item {
@@ -84,14 +84,17 @@ textarea {
 
 .bill-modal-base {
     min-width: 80vw;
-    background-color: rgba(0, 0, 0, .9);
+    /*background-color: rgba(0, 0, 0, .9);*/
 }
 
 .select-product {
-    background-color: rgba(255, 193, 7, .8);
+    background-color: rgba(0, 0, 0, .7);
     color: white;
     text-shadow: 1px 1px 1px grey;
     font-weight: bolder;
+    box-shadow: 2px 10px 11px -3px grey;
+    width: 30%;
+    font-size: 14px;
 }
 
 .product {
@@ -101,11 +104,25 @@ textarea {
     font-weight: bolder;
 }
 
+.categories-section {
+    margin-left: 5px;
+    border: 2px solid #ffc107;
+    padding: 10px;
+    border-radius: 15px;
+    background: rgba(0,0,0,.8);
+    box-shadow: 2px 10px 11px 0px grey;
+    height: 46vh !important;
+}
+
+
+
+
 .category-product {
-    background-color: rgba(220, 53, 69, .7);
+    background-color: rgba(255, 255, 255, .7);
     color: white;
     text-shadow: 1px 1px 1px grey;
     font-weight: bolder;
+    height: 40px;
 }
 
 .room {
@@ -132,6 +149,8 @@ textarea {
     box-shadow: 5px 5px 13px black;
     border-radius: 10px;
     color: white;
+    min-width: 47% !important;
+    max-width: 47% !important;
 }
 
 .loader-container {
@@ -178,7 +197,7 @@ textarea {
     height: fit-content;
     margin-top: 25vh;
     background-color: rgba(0, 0, 0, .8);
-    /* border-radius: 7px; */
+    box-shadow: -10px 10px 5px 4px gray !important;
     border-top-right-radius: 25px;
     border-bottom-left-radius: 25px;
     border: 2px solid #ffc107;

@@ -1,4 +1,4 @@
-﻿<div class=" d-flex flex-wrap room shadow-lg ">
+﻿<div class=" d-flex flex-wrap room ">
 
     @for (int i = 1; i < 13; i++)
     {
@@ -14,7 +14,7 @@
         {
             wall = "2px solid";
         }
-        <div class="col-md-4 d-flex justify-content-center align-items-center flex-wrap " style="opacity: @visibility; border-top:  @wall;">
+        <div class="col-md-4 d-flex justify-content-center align-items-center flex-wrap " style="opacity: @visibility; border-top:  @wall;" onclick="getBill(@i)">
 
             <a class="table-room text-white justify-content-center align-items-center d-flex assistant-btn" data-toggle="modal" data-target="#exampleModal">
                 <span>@i</span>

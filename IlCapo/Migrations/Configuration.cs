@@ -10,7 +10,7 @@ namespace IlCapo.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = false;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "IlCapoContext";
         }
 

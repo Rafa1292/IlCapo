@@ -8,8 +8,10 @@ namespace IlCapo.Controllers
 {
     public class HomeController : Controller
     {
+        IlCapoContext db = new IlCapoContext();
         public ActionResult Index()
         {
+
             return View();
         }
 

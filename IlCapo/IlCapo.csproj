@@ -173,6 +173,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BasicServicesController.cs" />
     <Compile Include="Controllers\BeginDaysController.cs" />
+    <Compile Include="Controllers\BillsController.cs" />
     <Compile Include="Controllers\EndDaysController.cs" />
     <Compile Include="Controllers\EntriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -186,7 +187,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\IlCapoContext.cs" />
+    <Compile Include="IlCapoContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -224,6 +225,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\Logo.jpeg" />
     <Content Include="Images\pizza-slice-solid.svg" />
+    <Content Include="Scripts\PersonalScripts\bill.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -258,6 +260,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\PersonalScripts\animations.js" />
+    <Content Include="Scripts\PersonalScripts\loader.js" />
+    <Content Include="Scripts\PersonalScripts\pays.js" />
+    <Content Include="Scripts\PersonalScripts\router.js" />
+    <Content Include="Scripts\PersonalScripts\search.js" />
+    <Content Include="Scripts\PersonalScripts\ToGo.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -416,6 +424,15 @@
     <Content Include="Views\EndDays\Index.cshtml" />
     <Content Include="Views\Entries\Create.cshtml" />
     <Content Include="Views\Entries\Index.cshtml" />
+    <Content Include="Views\Bills\Create.cshtml" />
+    <Content Include="Views\Bills\Delete.cshtml" />
+    <Content Include="Views\Bills\Details.cshtml" />
+    <Content Include="Views\Bills\Edit.cshtml" />
+    <Content Include="Views\Bills\Index.cshtml" />
+    <Content Include="Views\Shared\advertisement.cshtml" />
+    <Content Include="Views\Shared\Navbar.cshtml" />
+    <Content Include="Views\Shared\BasicModal.cshtml" />
+    <Content Include="Views\Shared\loader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

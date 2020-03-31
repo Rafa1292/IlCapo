@@ -14,6 +14,31 @@ namespace IlCapo
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+
+            //--------------------------------Personal scripts-----------------------------------------//
+
+            //layout scripts//
+            bundles.Add(new ScriptBundle("~/bundles/LayoutScripts").Include(
+            "~/Scripts/PersonalScripts/router.js",
+            "~/Scripts/PersonalScripts/loader.js",
+            "~/Scripts/PersonalScripts/animations.js"
+            ));
+
+
+
+            //index scripts//
+            bundles.Add(new ScriptBundle("~/bundles/IndexScripts").Include(
+            "~/Scripts/PersonalScripts/search.js",
+            "~/Scripts/PersonalScripts/bill.js",
+            "~/Scripts/PersonalScripts/pays.js",
+            "~/Scripts/PersonalScripts/ToGo.js"
+
+            ));
+
+
+
+            //---------------------------------------------------------------------------------------------//
+
             // Utilice la versión de desarrollo de Modernizr para desarrollar y obtener información. De este modo, estará
             // para la producción, use la herramienta de compilación disponible en https://modernizr.com para seleccionar solo las pruebas que necesite.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

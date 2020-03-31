@@ -15,7 +15,6 @@ public class IlCapoContext : DbContext
 
     public IlCapoContext() : base("name=IlCapoContext")
     {
-        Database.SetInitializer<IlCapoContext>(new CreateDatabaseIfNotExists<IlCapoContext>());
     }
 
     public System.Data.Entity.DbSet<IlCapo.Models.ProductCategory> ProductCategories { get; set; }
@@ -37,4 +36,8 @@ public class IlCapoContext : DbContext
     public System.Data.Entity.DbSet<IlCapo.Models.EndDay> EndDays { get; set; }
 
     public System.Data.Entity.DbSet<IlCapo.Models.Entry> Entries { get; set; }
+
+    public System.Data.Entity.DbSet<IlCapo.Models.Bill> Bills { get; set; }
+
+    public System.Data.Entity.DbSet<IlCapo.Models.Client> Clients { get; set; }
 }

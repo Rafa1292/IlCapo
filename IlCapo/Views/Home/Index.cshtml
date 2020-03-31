@@ -1,9 +1,11 @@
-﻿@{
+﻿
+
+@{
     ViewBag.Title = "Home Page";
 }
 
 
-<div class="col-6 p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:5px 5px 15px gray; position: absolute; z-index: 1000; min-height: 90vh; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw);" id="ordersToGo">
+<div class="col-6 p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:10px 10px 5px 4px gray; position: absolute; z-index: 1000; min-height: 90vh; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw);" id="ordersToGo">
     <div class="col-12 px-0 py-3 d-flex" style="background-color: rgba(255, 255, 255, 0.01)">
         @for (int i = 0; i < 20; i++)
         {
@@ -31,7 +33,7 @@
     <div class="justify-content-center p-2 d-flex" style="width: 74vw;">
         @Html.Partial("Room")
     </div>
-    <div class="justify-content-center p-2 d-flex flex-wrap assistant" >
+    <div class="justify-content-center p-2 d-flex flex-wrap assistant ">
         <div class="col-12 d-flex justify-content-center p-2 m-2">
             <button class="btn assistant-btn uno col-12 p-2 btn-red ">
                 <strong>
@@ -66,7 +68,7 @@
 </div>
 
 
-<div class="modal fade m-0 p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade m-0 p-0" id="billModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog m-0 p-0" role="document" style="min-width: 100vw;">
         <div class="modal-content m-0 p-0">
 
@@ -74,9 +76,7 @@
                 <i class="fas fa-times "></i>
             </button>
 
-            <div class="modal-body m-0 p-0">
-                @Html.Partial("Bill")
-
+            <div class="modal-body m-0 p-0 " id="bill-body">
             </div>
         </div>
     </div>
@@ -96,118 +96,5 @@
         </div>
     </div>
 </div>
-
-<script>
-
-        var room = document.getElementById("ordersToGo");
-        var containerBtn = document.getElementById("OrdersToGoBtnContainer")
-        var arrowsRight = document.getElementsByClassName("arrow-right");
-        var arrowsLeft = document.getElementsByClassName("arrow-left");
-
-
-
-    function HideOrdersToGo() {
-
-        room.style.transform = "translateX(-38vw)";
-        containerBtn.style.transform = "translateX(19vw)";
-        rotate(arrowsLeft, 180);
-
-        setTimeout(function () {
-
-            toggleView(arrowsLeft, "none");
-            toggleView(arrowsRight, "block");
-            rotate(arrowsLeft, 0);
-
-        }, 1000)
-
-    }
-
-    function ShowOrdersToGo() {
-
-        room.style.transform = "translateX(0)";
-        containerBtn.style.transform = "translateX(0)";
-        rotate(arrowsRight, 180);
-
-        setTimeout(function () {
-
-            toggleView(arrowsRight, "none");
-            toggleView(arrowsLeft, "block");
-            rotate(arrowsRight, 0);
-
-        }, 1000)
-    }
-
-    function rotate(array, deg) {
-        var style = `rotateY(${deg.toString()}deg)`;
-
-        for (var i = 0; i < array.length; i++) {
-            array[i].style.transform = style;
-        }
-    }
-
-
-    function toggleView(array, style) {
-        for (var i = 0; i < array.length; i++) {
-            array[i].style.display = style;
-        }
-    }
-
-    function ActionController(url, id) {
-
-
-         $.ajax({
-             type: "GET",
-             url: url,
-             data: $(id).serialize(),
-             cache: false
-         })
-             .then(function (data) {
-                 setTimeout(function myfunction() {
-                     var modalBody = document.getElementById("BasicModalContent");
-                     modalBody.innerHTML = data;
-
-                 }, 1000);
-
-
-             })
-             .fail(function (data) {
-                 alert('No');
-
-             })
-
-         return false;
-     }
-
-    function validate() {
-        var amount = validateAmount("Amount");
-        if (amount) {
-            var concept = validateConcept();
-        }
-
-        if (amount && concept ) {
-            ActionController("Pays/AddPay", "#Pay");
-        }
-    }
-
-    function validateAmount(id) {
-        var element = document.getElementById(id);
-        var label = document.getElementById("payLabel");
-        if (!(parseInt(element.value) > 0)) {
-            label.innerHTML = "Debe agregar un monto!!!";
-            return false;
-        }
-        label.innerHTML = "";
-        return true;
-    }
-
-    function validateConcept() {
-        var element = document.getElementById("payName");
-        var label = document.getElementById("payLabel");
-        if (!(parseInt(element.value) != 0)) {
-            label.innerHTML = "Debe agregar un tipo de pago!!!";
-            return false;
-        }
-        label.innerHTML = "";
-        return true;
-    }
-</script>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/IndexScripts")

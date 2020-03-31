@@ -13,6 +13,8 @@ namespace IlCapo.Models
 
         public bool State { get; set; }
 
+        public int TableId { get; set; }
+
         public virtual Client Client { get; set; }
 
         public int ClientId { get; set; }
@@ -23,8 +25,23 @@ namespace IlCapo.Models
 
         public bool Command { get; set; }
 
-        public virtual Worker Worker { get; set; }
+        public virtual BeginDay BeginDay { get; set; }
 
-        public int WorkerId { get; set; }
+        public int BeginDayId { get; set; }
+
+        public Bill tableContent(int tableId, int beginDayId)
+        {
+            Bill bill = new Bill();
+
+
+            using (IlCapoContext db = new IlCapoContext())
+            {
+                var bills = from b in db.Bills
+                            where b.BeginDayId == beginDayId && b.TableId == tableId && b.State
+                            select b;
+                bill = bills.FirstOrDefault();
+            }
+            return bill;
+        }
     }
 }

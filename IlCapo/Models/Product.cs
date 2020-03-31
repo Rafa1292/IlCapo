@@ -21,6 +21,8 @@ namespace IlCapo.Models
 
         public bool Sides { get; set; }
 
+        public int TotalSales { get; set; }
+
         public virtual ProductSubCategory ProductSubCategory { get; set; }
 
         public int ProductSubCategoryId { get; set; }

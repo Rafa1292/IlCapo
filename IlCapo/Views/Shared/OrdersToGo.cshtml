@@ -1,68 +1,36 @@
 ﻿
-    <table class="table table-dark table-transition" id="table-transition">
-        <thead>
-            <tr class="text-warning">
-                <th class="hideItem" scope="col">Nombre</th>
-                <th class="hideItem" scope="col">Direccion</th>
-                <th class="hideItem" scope="col">Telefono</th>
-                <th class="hideItem" scope="col">Monto</th>
-                <th scope="col"><i class="fas fa-stopwatch"></i></th>
-                <th scope="col">
-                    <i class="fas fa-phone-square"></i>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="hideItem">Mark</td>
-                <td class="hideItem">Otto</td>
-                <td class="hideItem">do</td>
-                <td class="hideItem">¢14,000</td>
-                <td style="width: 100px;">
-                    <p onload="carga()">
+<table class="table table-dark table-transition" id="table-transition">
+    <thead>
+        <tr class="text-warning">
+            <th class="hideItem" scope="col">Nombre</th>
+            <th class="hideItem" scope="col">Direccion</th>
+            <th class="hideItem" scope="col">Telefono</th>
+            <th class="hideItem" scope="col">Monto</th>
+            <th scope="col"><i class="fas fa-stopwatch"></i></th>
+            <th scope="col">
+                <i class="fas fa-phone-square"></i>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="hideItem">Mark</td>
+            <td class="hideItem">Otto</td>
+            <td class="hideItem">do</td>
+            <td class="hideItem">¢14,000</td>
+            <td style="width: 100px;">
+                <p onload="carga()">
 
-                        <span id="minutos">0</span>:<span id="segundos">0</span>
+                    <span id="minutos">0</span>:<span id="segundos">0</span>
 
-                    </p>
-                </td>
-                <th scope="row">
-                    <i class="fas fa-motorcycle"></i>
-                </th>
-            </tr>
-
-
-        </tbody>
-    </table>
-
-<script>
-
-    function carga() {
-
-        contador_s = 0;
-        contador_m = 0;
-
-        s = document.getElementById("segundos");
-        m = document.getElementById("minutos");
+                </p>
+            </td>
+            <th scope="row">
+                <i class="fas fa-motorcycle"></i>
+            </th>
+        </tr>
 
 
-        cronometro = setInterval(
-            function () {
-                if (contador_s == 60) {
-                    contador_s = 0;
-                    contador_m++;
-                    m.innerHTML = contador_m;
+    </tbody>
+</table>
 
-                    if (contador_m == 60) {
-                        contador_m = 0;
-                    }
-
-                }
-                s.innerHTML = contador_s;
-                contador_s++;
-            }
-            , 1000);
-    }
-
-    window.onload = carga();
-
-</script>
