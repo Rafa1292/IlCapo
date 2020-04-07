@@ -118,11 +118,10 @@ textarea {
 
 
 .category-product {
-    background-color: rgba(255, 255, 255, .7);
-    color: white;
-    text-shadow: 1px 1px 1px grey;
+    background-color: rgba(0, 0, 0, .1);
+    color: rgba(0, 0, 0, .7);
     font-weight: bolder;
-    height: 40px;
+    height: 45px;
 }
 
 .room {
@@ -141,6 +140,7 @@ textarea {
     text-shadow: 1px 1px 1px grey;
     box-shadow: 0px 0px 15px grey;
     border: 2px solid #ffc107;
+    color: white !important;
 }
 
 .bill-btn {
@@ -201,12 +201,12 @@ textarea {
     border-top-right-radius: 25px;
     border-bottom-left-radius: 25px;
     border: 2px solid #ffc107;
+    border-right: none;
+    border-left: none;
 }
 
 .assistant-btn {
-    border-color: #ffc107;
-    border-radius: 90px;
-    color: #ffc107 !important;
+    width: 80%;
 }
 
 .endDay-box {

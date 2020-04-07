@@ -224,6 +224,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\Logo.jpeg" />
+    <Content Include="Images\logoNebulosa.png" />
     <Content Include="Images\pizza-slice-solid.svg" />
     <Content Include="Scripts\PersonalScripts\bill.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -396,8 +397,8 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Shared\Bill.cshtml" />
-    <Content Include="Views\Shared\SliceAccount.cshtml" />
+    <Content Include="Views\Shared\TableMenu\Bill.cshtml" />
+    <Content Include="Views\Shared\BillParts\SliceAccount.cshtml" />
     <Content Include="Views\Shared\Room.cshtml" />
     <Content Include="Views\Shared\OrdersToGo.cshtml" />
     <Content Include="Views\BeginDays\Create.cshtml" />
@@ -432,7 +433,16 @@
     <Content Include="Views\Shared\advertisement.cshtml" />
     <Content Include="Views\Shared\Navbar.cshtml" />
     <Content Include="Views\Shared\BasicModal.cshtml" />
-    <Content Include="Views\Shared\loader.cshtml" />
+    <Content Include="Views\Shared\Loader.cshtml" />
+    <Content Include="Views\Shared\Assistant.cshtml" />
+    <Content Include="Views\Shared\TableMenu\TableMenu.cshtml" />
+    <Content Include="Views\Shared\TableMenu\SearchProducts.cshtml" />
+    <Content Include="Views\Shared\TableMenu\Favorites.cshtml" />
+    <Content Include="Views\Shared\TableMenu\CategoryFilter.cshtml" />
+    <Content Include="Views\Shared\BillParts\ClientInfo.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillProducts.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillActions.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillPayMethod.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

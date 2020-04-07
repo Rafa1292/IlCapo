@@ -5,7 +5,7 @@
 }
 
 
-<div class="col-6 p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:10px 10px 5px 4px gray; position: absolute; z-index: 1000; min-height: 90vh; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw);" id="ordersToGo">
+<div class=" p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:10px 10px 5px 4px gray; width: 50vw; z-index: 1000; min-height: 85vh; margin-top: 1vh; position: absolute; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw); border-top: none; border-bottom: none;" id="ordersToGo">
     <div class="col-12 px-0 py-3 d-flex" style="background-color: rgba(255, 255, 255, 0.01)">
         @for (int i = 0; i < 20; i++)
         {
@@ -25,43 +25,16 @@
     @Html.Partial("OrdersToGo")
 
 </div>
+<div class="container-fluid d-flex flex-wrap  p-0" style="margin-left: 12vw;">
 
-<div class="container-fluid d-flex flex-wrap  p-0">
-    <div style="width: 12vw;">
 
-    </div>
     <div class="justify-content-center p-2 d-flex" style="width: 74vw;">
         @Html.Partial("Room")
     </div>
+
+
     <div class="justify-content-center p-2 d-flex flex-wrap assistant ">
-        <div class="col-12 d-flex justify-content-center p-2 m-2">
-            <button class="btn assistant-btn uno col-12 p-2 btn-red ">
-                <strong>
-                    Retiro
-                </strong>
-            </button>
-        </div>
-        <div class="col-12 d-flex justify-content-center  p-2 m-2">
-            <button class="btn assistant-btn btn-green col-12 p-2">
-                <strong>
-                    Ingreso
-                </strong>
-            </button>
-        </div>
-        <div class="col-12 d-flex justify-content-center p-2 m-2">
-            <button class="btn assistant-btn btn-blue col-12 p-2">
-                <strong>
-                    Calculadora
-                </strong>
-            </button>
-        </div>
-        <div class="col-12 d-flex justify-content-center p-2 m-2">
-            <button class="btn assistant-btn btn-gray col-12 p-2">
-                <strong>
-                    Facturas
-                </strong>
-            </button>
-        </div>
+        @Html.Partial("Assistant")
     </div>
 
 
@@ -88,7 +61,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                @Html.Partial("SliceAccount")
+                @Html.Partial("BillParts/SliceAccount")
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" data-target="#SliceAccount">Cerrar</button>
@@ -98,3 +71,24 @@
 </div>
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/IndexScripts")
+
+<script>
+    var products;
+
+window.onload = function () {
+    $.ajax({
+        type: "GET",
+        url: "Products/GetProducts",
+        cache: false
+    })
+        .then(function (data) {
+            products = JSON.parse(data);
+        })
+        .fail(function (data) {
+            alert('Imposible obtener lista de articulos');
+
+        })
+
+    return false;
+}
+</script>

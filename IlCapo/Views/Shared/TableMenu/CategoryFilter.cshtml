@@ -1,0 +1,47 @@
+﻿<div class="col-md-12 m-1 p-0 d-flex flex-wrap justify-content-center" style="height: 50vh !important">
+
+    <div class="col-md-6 p-0 options-container-header text-center">
+        <h5 class="p-0" style="text-shadow: 2px 2px 1px lightgrey;">
+            Categorias
+        </h5>
+
+        <div class="col-md-12 d-flex flex-wrap justify-content-center options-container-list">
+
+            @if (ViewBag.Category != null)
+            {
+
+                foreach (var category in ViewBag.Category)
+                {
+                    <div class="col-md-12 my-2 p-1 rounded category-product text-center justify-content-center">
+                        @category.Name
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+
+    <div class="col-md-6 p-0 options-container-header text-center">
+
+        <h5 class="p-0" style="text-shadow: 2px 2px 1px lightgrey;">
+            Sub-Categorias
+        </h5>
+
+        <div class="col-md-12 d-flex flex-wrap justify-content-center options-container-list">
+
+            @if (ViewBag.Category != null)
+            {
+
+                foreach (var category in ViewBag.Category)
+                {
+                    <div class="col-md-12 my-2 p-1 rounded category-product text-center justify-content-center">
+                        @category.Name
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+</div>
+
+

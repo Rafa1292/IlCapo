@@ -9,12 +9,12 @@
     @Scripts.Render("~/bundles/modernizr")
     <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js"></script>
 </head>
-<body style="max-height: 100vh;">
+<body >
+    <div class="container-fluid body-content m-0 p-0" style="max-height: 97vh; overflow:hidden;">
     @Html.Partial("Navbar")
-    <div class="container-fluid body-content m-0 p-0">
         @RenderBody()
         @Html.Partial("BasicModal")
-        @Html.Partial("loader")
+        @Html.Partial("Loader")
     </div>
 
     @Scripts.Render("~/bundles/jquery")

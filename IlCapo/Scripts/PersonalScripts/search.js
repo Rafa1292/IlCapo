@@ -1,21 +1,4 @@
-﻿var products;
-
-window.onload = function () {
-    $.ajax({
-        type: "GET",
-        url: "Products/GetProducts",
-        cache: false
-    })
-        .then(function (data) {
-            products = JSON.parse(data);
-        })
-        .fail(function (data) {
-            alert('Imposible obtener lista de articulos');
-
-        })
-
-    return false;
-}
+﻿
 
 function search() {
     var text = document.getElementById("search").value.toLowerCase();

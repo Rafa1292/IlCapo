@@ -123,3 +123,4 @@ C:\Users\rvill\source\repos\IlCapo\IlCapo\bin\es\Microsoft.Owin.Security.Microso
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.csproj.CopyComplete
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.dll
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.pdb
+C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.csprojAssemblyReference.cache

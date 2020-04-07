@@ -55,7 +55,7 @@ namespace IlCapo.Controllers
             }
 
             ViewBag.Category = db.ProductCategories.ToList();            
-            return PartialView("Bill", bill);
+            return PartialView("TableMenu/TableMenu", bill);
         }
 
         // POST: Bills/Create
