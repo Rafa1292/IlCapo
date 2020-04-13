@@ -262,10 +262,14 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\PersonalScripts\animations.js" />
+    <Content Include="Scripts\PersonalScripts\billPayMethod.js" />
+    <Content Include="Scripts\PersonalScripts\categoryFilter.js" />
     <Content Include="Scripts\PersonalScripts\loader.js" />
     <Content Include="Scripts\PersonalScripts\pays.js" />
+    <Content Include="Scripts\PersonalScripts\products.js" />
     <Content Include="Scripts\PersonalScripts\router.js" />
     <Content Include="Scripts\PersonalScripts\search.js" />
+    <Content Include="Scripts\PersonalScripts\subCategoryFilter.js" />
     <Content Include="Scripts\PersonalScripts\ToGo.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -443,6 +447,7 @@
     <Content Include="Views\Shared\BillParts\BillProducts.cshtml" />
     <Content Include="Views\Shared\BillParts\BillActions.cshtml" />
     <Content Include="Views\Shared\BillParts\BillPayMethod.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

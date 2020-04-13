@@ -18,5 +18,14 @@ namespace IlCapo.Models
         public int ProductCategoryId { get; set; }
 
         public List<Product> Products { get; set; }
+
+        public IEnumerable<ProductSubCategory> Get()
+        {
+            using (IlCapoContext db = new IlCapoContext())
+            {
+                IEnumerable<ProductSubCategory> productSubCategory = db.ProductSubCategories.Include("ProductCategory").ToList();
+                return productSubCategory;
+            }
+        }
     }
 }

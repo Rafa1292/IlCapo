@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using IlCapo.Models;
+using Newtonsoft.Json;
 
 namespace IlCapo.Controllers
 {
@@ -118,6 +119,27 @@ namespace IlCapo.Controllers
             db.ProductSubCategories.Remove(productSubCategory);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public string GetProducts(int productSubCategoryId)
+        {
+            var json = "";
+            Product product = new Product();
+            var products = from p in product.Get()
+                           where p.ProductSubCategoryId == productSubCategoryId
+                           select p;
+            List<Object> productsList = new List<object>();
+
+            foreach (var item in products.ToList())
+            {
+                var o = new { Id = item.ProductId, Name = item.Name, SubCategory = item.ProductSubCategory.Name };
+                productsList.Add(o);
+            }
+
+            json = JsonConvert.SerializeObject(productsList);
+
+            return json;
+
         }
 
         protected override void Dispose(bool disposing)

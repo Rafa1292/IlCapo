@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using IlCapo.Models;
+using Newtonsoft.Json;
 
 namespace IlCapo.Controllers
 {
@@ -102,6 +103,27 @@ namespace IlCapo.Controllers
                 return HttpNotFound();
             }
             return View(productCategory);
+        }
+
+        public string GetSubCategories(int productCategoryId)
+        {
+            var json = "";
+            ProductSubCategory productSubCategory = new ProductSubCategory();
+            var productSubCategories = from s in productSubCategory.Get()
+                                       where s.ProductCategoryId == productCategoryId
+                                       select s;
+            List<Object> productSubCategoriesList = new List<object>();
+
+            foreach (var subCategory in productSubCategories.ToList())
+            {
+                var item = new { Id = subCategory.ProductSubCategoryId, Name = subCategory.Name };
+                productSubCategoriesList.Add(item);
+            }
+
+            json = JsonConvert.SerializeObject(productSubCategoriesList);
+
+            return json;
+
         }
 
         // POST: ProductCategories/Delete/5

@@ -54,6 +54,8 @@ namespace IlCapo.Controllers
                 bill = billContent;
             }
 
+            Product product = new Product();
+            ViewBag.Favorites = product.Get().OrderBy(p => p.TotalSales).ToList();
             ViewBag.Category = db.ProductCategories.ToList();            
             return PartialView("TableMenu/TableMenu", bill);
         }

@@ -12,7 +12,7 @@
 
                 foreach (var category in ViewBag.Category)
                 {
-                    <div class="col-md-12 my-2 p-1 rounded category-product text-center justify-content-center">
+                    <div class="col-md-12 my-2 p-1 rounded nebulosa-btn category-product text-center justify-content-center" onclick="selectCategory(@category.ProductCategoryId)">
                         @category.Name
                     </div>
                 }
@@ -27,18 +27,9 @@
             Sub-Categorias
         </h5>
 
-        <div class="col-md-12 d-flex flex-wrap justify-content-center options-container-list">
+        <div class="col-md-12 d-flex flex-wrap justify-content-center options-container-list" id="subCategoriesList">
 
-            @if (ViewBag.Category != null)
-            {
 
-                foreach (var category in ViewBag.Category)
-                {
-                    <div class="col-md-12 my-2 p-1 rounded category-product text-center justify-content-center">
-                        @category.Name
-                    </div>
-                }
-            }
         </div>
 
     </div>

@@ -22,6 +22,15 @@ textarea {
     max-width: 280px;
 }
 
+.nebulosa-btn {
+    border: 2px solid transparent;
+}
+
+    .nebulosa-btn:hover {
+        border: 2px solid #ffc107;
+        transform: perspective(500px) translate3d(0px,0px,30px);
+    }
+
 .room-container {
     background-color: rgba(23, 162, 184, 1);
     min-height: fit-content;
@@ -43,7 +52,7 @@ textarea {
 
 .options-container-list {
     overflow-y: scroll;
-    height: 43vh;
+    max-height: 43vh;
 }
 
 .triangle {
@@ -149,8 +158,8 @@ textarea {
     box-shadow: 5px 5px 13px black;
     border-radius: 10px;
     color: white;
-    min-width: 47% !important;
-    max-width: 47% !important;
+    min-width: 40% !important;
+    max-width: 40% !important;
 }
 
 .loader-container {
