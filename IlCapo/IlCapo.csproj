@@ -183,6 +183,7 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ProductSubCategoriesController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
+    <Compile Include="Controllers\TaxesController.cs" />
     <Compile Include="Controllers\WorkersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -206,8 +207,10 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ProductSubCategory.cs" />
+    <Compile Include="Models\ProductTax.cs" />
     <Compile Include="Models\Provider.cs" />
     <Compile Include="Models\Sides.cs" />
+    <Compile Include="Models\Tax.cs" />
     <Compile Include="Models\WorkDay.cs" />
     <Compile Include="Models\Worker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -448,6 +451,11 @@
     <Content Include="Views\Shared\BillParts\BillActions.cshtml" />
     <Content Include="Views\Shared\BillParts\BillPayMethod.cshtml" />
     <Content Include="Views\Shared\BillParts\BillHeader.cshtml" />
+    <Content Include="Views\Taxes\Create.cshtml" />
+    <Content Include="Views\Taxes\Delete.cshtml" />
+    <Content Include="Views\Taxes\Details.cshtml" />
+    <Content Include="Views\Taxes\Edit.cshtml" />
+    <Content Include="Views\Taxes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

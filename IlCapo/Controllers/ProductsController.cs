@@ -41,6 +41,7 @@ namespace IlCapo.Controllers
         public ActionResult Create()
         {
             ViewBag.ProductSubCategoryId = new SelectList(db.ProductSubCategories, "ProductSubCategoryId", "Name");
+            ViewBag.Taxes = new SelectList(db.Taxes, "TaxId", "Name");
             return View();
         }
 
@@ -49,17 +50,55 @@ namespace IlCapo.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,Name,Cost,Price,KitchenMessage,ProductSubCategoryId")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,Name,Cost,Price,KitchenMessage,ProductSubCategoryId")] Product product, int[] Tax)
         {
-            if (ModelState.IsValid)
+            using (var transaction = db.Database.BeginTransaction())
             {
                 db.Products.Add(product);
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                bool TaxState = Tax != null ? AddTaxes(Tax, product) : true;
 
-            ViewBag.ProductSubCategoryId = new SelectList(db.ProductSubCategories, "ProductSubCategoryId", "Name", product.ProductSubCategoryId);
-            return View(product);
+                if (TaxState)
+                {
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+
+                transaction.Rollback();
+                ViewBag.Taxes = new SelectList(db.Taxes, "TaxId", "Name");
+                ViewBag.ProductSubCategoryId = new SelectList(db.ProductSubCategories, "ProductSubCategoryId", "Name", product.ProductSubCategoryId);
+                return View(product);
+            }
+        }
+
+        public bool AddTaxes(int[] taxesId, Product product)
+        {
+            ProductTax productTax = new ProductTax();
+            List<ProductTax> productTaxes = new List<ProductTax>();
+
+            if (!(taxesId.Count() > 0))
+                return true;
+
+            try
+            {
+                foreach (var tax in taxesId)
+                {
+                    productTax = new ProductTax();
+                    productTax.ProductId = product.ProductId;
+                    productTax.TaxId = tax;
+                    productTaxes.Add(productTax);
+                }
+
+                db.ProductTaxes.AddRange(productTaxes);
+                db.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
 
         // GET: Products/Edit/5
@@ -136,15 +175,25 @@ namespace IlCapo.Controllers
                     Sides = product.Sides,
                     Category = product.ProductSubCategory.ProductCategory.Name,
                     SubCategory = product.ProductSubCategory.Name,
+                    Taxes = GetTaxes(product)
                 };
 
                 productsJson.Add(productJson);
             }
 
             var json = JsonConvert.SerializeObject(productsJson);
-
             return json;
+        }
 
+        public List<Tax> GetTaxes(Product product)
+        {
+            List<Tax> taxesList = new List<Tax>();
+            var taxes = from t in db.ProductTaxes
+                        where t.ProductId == product.ProductId
+                        select t.Tax;
+            taxesList = taxes.ToList();
+
+            return taxesList;
         }
 
         protected override void Dispose(bool disposing)
