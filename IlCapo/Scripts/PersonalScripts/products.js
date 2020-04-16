@@ -1,7 +1,7 @@
 ﻿function addProductToBill(id) {
     let product = selectProduct(id);
     verifyExistence(product);
-    updateSubTotal();
+    amountsManager();
 }
 
 function selectProduct(id) {
@@ -86,10 +86,10 @@ function createElement(product) {
     quantity.classList.add("col-2", "p-0");
     quantity.setAttribute("id", `quantity${product.Id}`);
     price.classList.add("col-1", "p-0");
-    taxService.classList.add("d-none","tax");
+    taxService.classList.add("d-none");
     taxService.setAttribute("name", "taxService");
     taxService.setAttribute("id", `taxService${product.Id}`)
-    taxSale.classList.add("d-none", "tax");
+    taxSale.classList.add("d-none");
     taxSale.setAttribute("name", "taxSale");
     taxSale.setAttribute("id", `taxSale${product.Id}`);
     totalPrice.classList.add("col-2", "p-0");

@@ -58,7 +58,7 @@ namespace IlCapo.Controllers
                 bill = GetEmptyBill();
             }
 
-            ViewBag.ToGo = toGo;
+            ViewBag.ToGo = toGo.ToString();
             Product product = new Product();
             ViewBag.Favorites = product.Get().OrderBy(p => p.TotalSales).ToList();
             ViewBag.Category = db.ProductCategories.ToList();            

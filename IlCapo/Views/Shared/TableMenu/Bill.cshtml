@@ -1,11 +1,9 @@
 ﻿@model IlCapo.Models.Bill
 
 
-
     <div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
-        <input value="@ViewBag.Express" id="toGo" class="d-none" />
-        <input value="@ViewBag.ToGo" id="express" class="d-none" />
-        @if (ViewBag.ToGo)
+        <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-flex" />
+        @if (ViewBag.ToGo == "true")
         {
             <div class="col-12 justify-content-start d-flex pt-2">
                 <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
