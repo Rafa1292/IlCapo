@@ -36,7 +36,7 @@ namespace IlCapo.Controllers
         }
 
         // GET: Bills/Create
-        public ActionResult Create(int tableId)
+        public ActionResult Create(int tableId, bool toGo)
         {
             if (!ValidateUser())
             {
@@ -53,7 +53,12 @@ namespace IlCapo.Controllers
             {
                 bill = billContent;
             }
+            else
+            {
+                bill = GetEmptyBill();
+            }
 
+            ViewBag.ToGo = toGo;
             Product product = new Product();
             ViewBag.Favorites = product.Get().OrderBy(p => p.TotalSales).ToList();
             ViewBag.Category = db.ProductCategories.ToList();            
@@ -89,6 +94,19 @@ namespace IlCapo.Controllers
             }
 
             return true;
+        }
+
+        public Bill GetEmptyBill()
+        {
+            Bill bill = new Bill();
+            Client emptyClient = new Client { Name = "", Phone = 0 };
+            Address emptyAddress = new Address { Description = "", Client = emptyClient };
+            List<Item> emptyItems = new List<Item>();
+            bill.Client = emptyClient;
+            bill.Address = emptyAddress;
+            bill.Items = emptyItems;
+
+            return bill;
         }
 
         public bool ValidateWorkerDay()

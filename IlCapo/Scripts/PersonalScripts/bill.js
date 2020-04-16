@@ -1,11 +1,14 @@
-﻿function getBill(tableId) {
+﻿function getBill(tableId, toGo) {
 
     openLoader();
 
     $.ajax({
         type: "GET",
         url: "Bills/Create",
-        data: { tableId: tableId },
+        data: {
+            tableId: tableId,
+            toGo: toGo
+        },
         cache: false
     })
         .then(function (data) {
@@ -13,9 +16,6 @@
             modalBody.innerHTML = data;
             $('#billModal').modal('show');
             closeLoader();
-
-
-
 
         })
         .fail(function (data) {

@@ -25,6 +25,10 @@ namespace IlCapo.Models
 
         public bool Command { get; set; }
 
+        public bool Express { get; set; }
+
+        public Address Address { get; set; }
+
         public virtual BeginDay BeginDay { get; set; }
 
         public int BeginDayId { get; set; }

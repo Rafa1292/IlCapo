@@ -7,6 +7,8 @@
     }
 
     subtotal.innerHTML = `${price}`;
+    updateTax();
+    
     updateTotal();
 }
 
@@ -18,4 +20,18 @@ function updateTotal() {
     let price = subtotal + impuestos - descuento;
     total.innerHTML = `${price}`;
 
+}
+
+function updateTax() {
+    let toGo = document.getElementById("toGo").value;
+    let taxes = document.getElementsByClassName("tax");
+    let tax = document.getElementById("impuestos");
+
+    let taxAmount = 0;
+
+    for (var i = 0; i < taxes.length; i++) {
+        taxAmount += parseInt(taxes[i].value);
+    }
+
+    tax.innerHTML = taxAmount;
 }

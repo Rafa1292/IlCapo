@@ -1,76 +1,93 @@
-﻿
-<div class="col-12 text-white text-center p-0 bill-order-name">
-    <h5><strong> Orden #3256</strong></h5>
-</div>
+﻿@model IlCapo.Models.Bill
+
+
+
+    <div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
+        <input value="@ViewBag.Express" id="toGo" class="d-none" />
+        <input value="@ViewBag.ToGo" id="express" class="d-none" />
+        @if (ViewBag.ToGo)
+        {
+            <div class="col-12 justify-content-start d-flex pt-2">
+                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
+                    <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
+                </button>
+                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="walking" onclick="express(this.id)">
+                    <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
+                </button>
+                <input class="d-none" id="express" value="" />
+            </div>
+        }
+        <h5 class="mb-2"><strong> Orden #</strong></h5>
+    </div>
 
 <div class="col-12 p-2 d-flex flex-wrap text-white justify-content-around" style="height: 13vh !important;">
-    @Html.Partial("BillParts/ClientInfo")
+    @Html.Partial("BillParts/ClientInfo", Model)
 </div>
 <div class="col-12 bill-header d-flex flex-wrap text-white text-center border-white border-bottom border-top p-1">
     @Html.Partial("BillParts/BillHeader")
 </div>
 
 <div class="bill-body col-12 p-1" id="billProductsContainer">
-    @Html.Partial("BillParts/BillProducts")
+    @Html.Partial("BillParts/BillProducts", Model.Items)
 
 </div>
 
-    <div class="col-12 d-flex pb-4 flex-wrap text-white ">
+<div class="col-12 d-flex pb-4 flex-wrap text-white ">
 
-        <div class="col-md-6 p-0 d-flex flex-wrap justify-content-around ">
-            @Html.Partial("BillParts/BillActions")
-
-        </div>
-
-        <div class="col-md-6 d-flex flex-wrap justify-content-end ">
-            @Html.Partial("BillParts/BillPayMethod")
-
-        </div>
+    <div class="col-md-6 p-0 d-flex flex-wrap justify-content-around ">
+        @Html.Partial("BillParts/BillActions")
 
     </div>
 
+    <div class="col-md-6 d-flex flex-wrap justify-content-end ">
+        @Html.Partial("BillParts/BillPayMethod")
 
-    <div class="col-md-12 d-flex p-0" style="position:absolute; bottom:0;">
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
-        <div class="triangle"></div>
     </div>
+
+</div>
+
+
+<div class="col-md-12 d-flex p-0" style="position:absolute; bottom:0;">
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+    <div class="triangle"></div>
+</div>
 
 

@@ -1,4 +1,6 @@
-﻿
+﻿@model ICollection<IlCapo.Models.Bill>
+
+
 <table class="table table-dark table-transition" id="table-transition">
     <thead>
         <tr class="text-warning">
@@ -6,31 +8,40 @@
             <th class="hideItem" scope="col">Direccion</th>
             <th class="hideItem" scope="col">Telefono</th>
             <th class="hideItem" scope="col">Monto</th>
-            <th scope="col"><i class="fas fa-stopwatch" ></i></th>
+            <th scope="col"><i class="fas fa-stopwatch"></i></th>
             <th scope="col">
                 <i class="fas fa-phone-square"></i>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="hideItem">Mark</td>
-            <td class="hideItem">Otto</td>
-            <td class="hideItem">do</td>
-            <td class="hideItem">¢14,000</td>
-            <td style="width: 100px;">
-                <p onload="carga()">
-
-                    <span id="minutos">0</span>:<span id="segundos">0</span>
-
-                </p>
-            </td>
-            <th scope="row">
-                <i class="fas fa-motorcycle"></i>
-            </th>
-        </tr>
-
-
+        @if (Model != null)
+        {
+            foreach (var bill in Model)
+            {
+                decimal price = 0;
+                var express = bill.Express ? "fas fa-motorcycle" : "fas fa-walking";
+                foreach (var item in bill.Items)
+                {
+                    var productPrice = item.Quantity * item.Product.Price;
+                    price += productPrice;
+                }
+                <tr>
+                    <td class="hideItem">@bill.Client.Name</td>
+                    <td class="hideItem">@bill.Address</td>
+                    <td class="hideItem">@bill.Client.Phone</td>
+                    <td class="hideItem">¢@price</td>
+                    <td style="width: 100px;">
+                        <p onload="carga()">
+                            <span id="minutos">0</span>:<span id="segundos">0</span>
+                        </p>
+                    </td>
+                    <th scope="row">
+                        <i class="@express"></i>
+                    </th>
+                </tr>
+            }
+        }
     </tbody>
 </table>
 

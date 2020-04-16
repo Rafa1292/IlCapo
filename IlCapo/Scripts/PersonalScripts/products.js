@@ -10,6 +10,7 @@ function selectProduct(id) {
 }
 
 function verifyExistence(product) {
+
     let elements = document.getElementsByName("BillProducts")
     let exist = false
 
@@ -34,7 +35,17 @@ function setQuantity(product) {
     let currentQuantity = parseInt(element.innerHTML);
     let newQuantity = currentQuantity + 1;
     element.innerHTML = newQuantity;
-    updateTotalPrice(product, newQuantity);
+    updateTotalPrice(product, newQuantity);  
+    setTax(product, newQuantity);
+}
+
+function setTax(product, quantity) {
+    let inputTaxService = document.getElementById(`taxService${product.Id}`);
+    let inputTaxSale = document.getElementById(`taxSale${product.Id}`);
+    let taxService = getServiceTax(product);
+    let taxSale = getSaleTax(product);
+    inputTaxService.value = taxService * quantity;
+    inputTaxSale.value = taxSale * quantity;
 }
 
 function updateTotalPrice(product, quantity) {
@@ -59,6 +70,8 @@ function createElement(product) {
     let name = document.createElement("div");
     let quantity = document.createElement("div");
     let price = document.createElement("div");
+    let taxService = document.createElement("input");
+    let taxSale = document.createElement("input");
     let totalPrice = document.createElement("div");
     let observation = document.createElement("div");
     let inputObservation = document.createElement("input");
@@ -73,6 +86,12 @@ function createElement(product) {
     quantity.classList.add("col-2", "p-0");
     quantity.setAttribute("id", `quantity${product.Id}`);
     price.classList.add("col-1", "p-0");
+    taxService.classList.add("d-none","tax");
+    taxService.setAttribute("name", "taxService");
+    taxService.setAttribute("id", `taxService${product.Id}`)
+    taxSale.classList.add("d-none", "tax");
+    taxSale.setAttribute("name", "taxSale");
+    taxSale.setAttribute("id", `taxSale${product.Id}`);
     totalPrice.classList.add("col-2", "p-0");
     totalPrice.setAttribute("id", `totalPrice${product.Id}`);
     totalPrice.setAttribute("name", "totalPrice");
@@ -84,8 +103,12 @@ function createElement(product) {
     quantity.innerText = 1;
     price.innerText = product.Price;
     totalPrice.innerText = product.Price;
+    taxService.value = getServiceTax(product);
+    taxSale.value = getSaleTax(product);
 
     check.appendChild(inputCheck);
+    price.appendChild(taxService);
+    price.appendChild(taxSale);
     observation.appendChild(inputObservation);
     productContainer.appendChild(check);
     productContainer.appendChild(name);
@@ -95,5 +118,30 @@ function createElement(product) {
     productContainer.appendChild(observation);
 
     return productContainer;
+}
 
+function getSaleTax(product) {
+    let tax = 0;
+
+    for (var i = 0; i < product.Taxes.length; i++) {
+
+        if (product.Taxes[i].Name.toLowerCase() == "impuesto de venta") {
+            tax = product.Price * product.Taxes[i].Percentage / 100;
+        }
+    }
+
+    return tax;
+}
+
+function getServiceTax(product) {
+    let tax = 0;
+
+    for (var i = 0; i < product.Taxes.length; i++) {
+
+        if (product.Taxes[i].Name.toLowerCase() == "impuesto de servicio") {
+            tax = product.Price * product.Taxes[i].Percentage / 100;
+        }
+    }
+
+    return tax;
 }

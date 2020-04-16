@@ -1,26 +1,25 @@
-﻿@*@for (int i = 0; i < 1; i++)
+﻿@model ICollection<IlCapo.Models.Item>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
     {
-
-        <div class="col-12 bill-item d-flex flex-wrap text-white text-center border-white ">
+        <div class="col-12 bill-item d-flex flex-wrap text-white text-center border-white" id="@item.ProductId" name="BillProducts">
             <div class="col-1 justify-content-center align-items-center bill-item-check">
-                <input class="form-check" type="checkbox" checked />
+                <input class="form-check" type="checkbox">
             </div>
-            <div class="col-3 p-0">
-                Arroz con pollo
-            </div>
-            <div class="col-2 p-0">
-                2
-            </div>
+            <div class="col-3 p-0">@item.Product.Name</div>
+            <div class="col-2 p-0" id='"quantity"@item.Quantity'>@item.Quantity</div>
             <div class="col-1 p-0">
-                ¢3,000
+                @item.Product.Price
+                <input class="d-none tax" name="taxService" id='"taxService"@item.ProductId'>
+                <input class="d-none tax" name="taxSale" id='"taxSale"@item.ProductId'>
             </div>
-            <div class="col-2 p-0">
-                ¢6,000
-            </div>
+            <div class="col-2 p-0" id='"totalPrice"@item.ProductId' name="totalPrice">@item.Quantity * @item.Product.Price</div>
             <div class="col-3 p-0">
-                <input type="text" class="form-control rounded" />
-
+                <input class="form-control rounded" type="text" value="@item.Description">
             </div>
         </div>
     }
-*@
+}
+
