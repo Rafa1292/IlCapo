@@ -21,7 +21,8 @@ namespace IlCapo
             bundles.Add(new ScriptBundle("~/bundles/LayoutScripts").Include(
             "~/Scripts/PersonalScripts/router.js",
             "~/Scripts/PersonalScripts/loader.js",
-            "~/Scripts/PersonalScripts/animations.js"
+            "~/Scripts/PersonalScripts/animations.js",
+            "~/Scripts/PersonalScripts/localStorageManagement.js"
             ));
 
 

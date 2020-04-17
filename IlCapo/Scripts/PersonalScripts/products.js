@@ -92,7 +92,7 @@ function createElement(product) {
     taxSale.classList.add("d-none");
     taxSale.setAttribute("name", "taxSale");
     taxSale.setAttribute("id", `taxSale${product.Id}`);
-    totalPrice.classList.add("col-2", "p-0");
+    totalPrice.classList.add("col-2", "p-0", "billable");
     totalPrice.setAttribute("id", `totalPrice${product.Id}`);
     totalPrice.setAttribute("name", "totalPrice");
     observation.classList.add("col-3", "p-0");

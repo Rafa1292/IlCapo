@@ -123,6 +123,15 @@ namespace IlCapo.Controllers
             return true;
         }
 
+        public ActionResult SliceAccount(int quantity, int price)
+        {
+            SliceAccount sliceAccount = new SliceAccount();
+            sliceAccount.Price = price / quantity;
+            sliceAccount.Quantity = quantity;
+
+            return PartialView("BillParts/SliceAccount", sliceAccount);
+        }
+
         public bool ValidateUser()
         {
             if (!ValidateWorker())

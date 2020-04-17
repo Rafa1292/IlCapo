@@ -1,22 +1,24 @@
 ﻿@model IlCapo.Models.Bill
 
 
-    <div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
-        <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-flex" />
-        @if (ViewBag.ToGo == "true")
-        {
-            <div class="col-12 justify-content-start d-flex pt-2">
-                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
-                    <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
-                </button>
-                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="walking" onclick="express(this.id)">
-                    <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
-                </button>
-                <input class="d-none" id="express" value="" />
-            </div>
-        }
-        <h5 class="mb-2"><strong> Orden #</strong></h5>
-    </div>
+<div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
+    <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-none" />
+
+
+    @if (ViewBag.ToGo == "true")
+    {
+        <div class="col-12 justify-content-start d-flex pt-2">
+            <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
+                <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
+            </button>
+            <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="walking" onclick="express(this.id)">
+                <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
+            </button>
+            <input class="d-none" id="express" value="" />
+        </div>
+    }
+    <h5 class="mb-2"><strong> Orden #</strong></h5>
+</div>
 
 <div class="col-12 p-2 d-flex flex-wrap text-white justify-content-around" style="height: 13vh !important;">
     @Html.Partial("BillParts/ClientInfo", Model)
