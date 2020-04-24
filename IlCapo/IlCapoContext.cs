@@ -45,5 +45,5 @@ public class IlCapoContext : DbContext
 
     public System.Data.Entity.DbSet<IlCapo.Models.ProductTax> ProductTaxes { get; set; }
 
-
+    public System.Data.Entity.DbSet<IlCapo.Models.Sides> Sides { get; set; }
 }

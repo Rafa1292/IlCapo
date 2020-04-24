@@ -60,11 +60,11 @@
 <!-- Modal -->
 <div class="modal fade" id="billModalAux" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="auxModalContent">
             <div class="modal-body" id="modalBody">
                 @*@Html.Partial("BillParts/SliceAccount")*@
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-0">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" data-target="#SliceAccount">Cerrar</button>
             </div>
         </div>
@@ -75,8 +75,13 @@
 
 <script>
     var products;
-    
+    var sides;
     window.onload = function () {
+        getInitialProducts();
+        getInitialSides();
+    }
+
+    function getInitialProducts() {
         $.ajax({
             type: "GET",
             url: "Products/GetProducts",
@@ -87,6 +92,23 @@
             })
             .fail(function (data) {
                 alert('Imposible obtener lista de articulos');
+
+            })
+
+        return false;
+    }
+
+        function getInitialSides() {
+        $.ajax({
+            type: "GET",
+            url: "Sides/GetSides",
+            cache: false
+        })
+            .then(function (data) {
+                sides = JSON.parse(data);
+            })
+            .fail(function (data) {
+                alert('Imposible obtener lista de acompañamientos');
 
             })
 

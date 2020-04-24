@@ -1,5 +1,4 @@
 ﻿function getBill(tableId, toGo) {
-
     openLoader();
 
     $.ajax({

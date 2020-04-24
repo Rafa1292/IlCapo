@@ -13,8 +13,6 @@ namespace IlCapo.Models
 
         public string Name { get; set; }
 
-        public decimal Cost { get; set; }
 
-        public int Price { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace IlCapo.Models
 
         public bool Sides { get; set; }
 
+        public int SidesQuantity { get; set; }
+
         public int TotalSales { get; set; }
 
         public ICollection<Tax> Taxes { get; set; }

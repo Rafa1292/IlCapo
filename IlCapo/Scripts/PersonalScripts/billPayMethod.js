@@ -86,6 +86,7 @@ function createDiscountView() {
 }
 
 function getDiscountView() {
+    setOriginalPositionModal();
     let view = createDiscountView();
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";
@@ -113,6 +114,7 @@ function amountsManager() {
 }
 
 function getSliceAccountView() {
+    setOriginalPositionModal();
     let view = createSliceAccountView();
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";
@@ -183,5 +185,43 @@ function SliceAccount() {
     return false;
 }
 
+function separateAccount() {
+    $('#billModalAux').modal('show');   
+    modifyModal();
+    hideProducts();
+    getProductsToSeparate();
+
+    
+}
+
+function modifyModal() {
+    let modal = document.getElementById("auxModalContent");
+    modal.style.position = "absolute";
+    modal.style.right = "25vw";
+    modal.style.top = "27vh";
+    modal.style.background = "rgba(0, 0, 0, .8)";
+}
+
+function setOriginalPositionModal() {
+    let modal = document.getElementById("auxModalContent");
+    modal.style.position = "";
+    modal.style.right = "";
+    modal.style.top = "";
+    modal.style.background = "";
+
+}
+
+function hideProducts() {
+    let selectProducts = document.getElementById("selectProducts");
+    let searchProducts = document.getElementById("searchProducts");
+    selectProducts.style.opacity = "0";
+    searchProducts.style.opacity = "0";
+}
 
 
+function getProductsToSeparate() {
+
+
+
+
+}

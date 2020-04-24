@@ -183,6 +183,7 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ProductSubCategoriesController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
+    <Compile Include="Controllers\SidesController.cs" />
     <Compile Include="Controllers\TaxesController.cs" />
     <Compile Include="Controllers\WorkersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -274,8 +275,11 @@
     <Content Include="Scripts\PersonalScripts\products.js" />
     <Content Include="Scripts\PersonalScripts\router.js" />
     <Content Include="Scripts\PersonalScripts\search.js" />
+    <Content Include="Scripts\PersonalScripts\sides.js" />
     <Content Include="Scripts\PersonalScripts\subCategoryFilter.js" />
     <Content Include="Scripts\PersonalScripts\ToGo.js" />
+    <Content Include="Scripts\PersonalScripts\Views\productBillView.js" />
+    <Content Include="Scripts\PersonalScripts\Views\sideView.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -458,6 +462,11 @@
     <Content Include="Views\Taxes\Details.cshtml" />
     <Content Include="Views\Taxes\Edit.cshtml" />
     <Content Include="Views\Taxes\Index.cshtml" />
+    <Content Include="Views\Sides\Create.cshtml" />
+    <Content Include="Views\Sides\Delete.cshtml" />
+    <Content Include="Views\Sides\Details.cshtml" />
+    <Content Include="Views\Sides\Edit.cshtml" />
+    <Content Include="Views\Sides\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

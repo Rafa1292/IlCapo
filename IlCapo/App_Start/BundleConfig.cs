@@ -36,7 +36,11 @@ namespace IlCapo
             "~/Scripts/PersonalScripts/subCategoryFilter.js",
             "~/Scripts/PersonalScripts/products.js",
             "~/Scripts/PersonalScripts/billPayMethod.js",
-            "~/Scripts/PersonalScripts/ToGo.js"
+            "~/Scripts/PersonalScripts/ToGo.js",
+            "~/Scripts/PersonalScripts/Views/productBillView.js",
+            "~/Scripts/PersonalScripts/Views/sideView.js",
+            "~/Scripts/PersonalScripts/sides.js"
+
             ));
 
 

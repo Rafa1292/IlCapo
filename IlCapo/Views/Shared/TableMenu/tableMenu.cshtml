@@ -1,16 +1,16 @@
 ﻿@model IlCapo.Models.Bill
 
 
-<div class=" bill-modal-base p-0">
+<div class=" bill-modal-base p-0 ">
 
-    <div class="d-flex flex-wrap p-0 justify-content-center container-fluid">
+    <div class="d-flex flex-wrap p-0 justify-content-center container-fluid ">
 
-        <div class="col-4 d-flex flex-wrap p-0 justify-content-center  options-container">
+        <div class="col-4 d-flex flex-wrap p-0 justify-content-center  options-container" id="selectProducts">
             @Html.Partial("TableMenu/Favorites")
             @Html.Partial("TableMenu/CategoryFilter")
         </div>
 
-        <div class="col-md-2 p-1" style="height: 95vh !important; overflow-y: scroll;">
+        <div class="col-md-2 p-1" style="height: 95vh !important; overflow-y: scroll;" id="searchProducts">
             @Html.Partial("TableMenu/SearchProducts")
         </div>
 

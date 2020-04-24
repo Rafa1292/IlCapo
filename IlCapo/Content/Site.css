@@ -22,6 +22,16 @@ textarea {
     max-width: 280px;
 }
 
+.selected {
+    background: green !important;
+    color: white !important;
+}
+
+.side-edit {
+    position: absolute;
+    right: 10px;
+}
+
 .nebulosa-btn {
     border: 2px solid transparent;
 }
@@ -63,6 +73,10 @@ textarea {
     border-right: 11px solid transparent;
 }
 
+.product-price{
+    margin-left: 0.6vw;
+}
+
 .bill-order-name {
     align-items: center;
     /* align-content: center; */
@@ -77,8 +91,8 @@ textarea {
 }
 
 .bill-item {
-    border-bottom: dotted;
-    padding: 3px 0;
+    border-bottom: solid;
+    padding: 6px 0;
 }
 
 .bill-item-check {
@@ -259,4 +273,8 @@ textarea {
     background-color: rgba(255, 193, 7, .5);
     color: white !important;
     border: 1px solid rgba(255, 193, 7, .5);
+}
+
+.background-light {
+    background: rgba(0, 0, 0, .3);
 }

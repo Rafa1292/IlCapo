@@ -173,6 +173,7 @@ namespace IlCapo.Controllers
                     Price = product.Price,
                     Message = product.KitchenMessage,
                     Sides = product.Sides,
+                    SidesQuantity = 5,
                     Category = product.ProductSubCategory.ProductCategory.Name,
                     SubCategory = product.ProductSubCategory.Name,
                     Taxes = GetTaxes(product)

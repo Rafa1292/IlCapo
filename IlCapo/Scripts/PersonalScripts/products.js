@@ -1,6 +1,21 @@
 ﻿function addProductToBill(id) {
     let product = selectProduct(id);
-    verifyExistence(product);
+    let exists = verifyExistence(product);
+
+    if (exists) {
+        let newQuantity = setQuantity(product);
+        updateTotalPrice(product, newQuantity);
+        setTax(product, newQuantity);
+    }
+    else {
+        drawBillProducts(product);
+    }
+
+    //cambiar al actualizar create de products
+    if (!product.Sides) {
+        getSidesView(product, true, undefined, 0);
+    }
+
     amountsManager();
 }
 
@@ -12,21 +27,16 @@ function selectProduct(id) {
 function verifyExistence(product) {
 
     let elements = document.getElementsByName("BillProducts")
-    let exist = false
+    let exists = false
 
     for (var i = 0; i < elements.length; i++) {
         if (elements[i].id == product.Id) {
-            exist = true;
+            exists = true;
             break;
         }
     }
 
-    if (exist) {
-        setQuantity(product);
-    }
-    else {
-        drawBillProducts(product);
-    }
+    return exists;
 }
 
 function setQuantity(product) {
@@ -35,8 +45,8 @@ function setQuantity(product) {
     let currentQuantity = parseInt(element.innerHTML);
     let newQuantity = currentQuantity + 1;
     element.innerHTML = newQuantity;
-    updateTotalPrice(product, newQuantity);  
-    setTax(product, newQuantity);
+
+    return newQuantity;
 }
 
 function setTax(product, quantity) {
@@ -58,66 +68,8 @@ function updateTotalPrice(product, quantity) {
 
 function drawBillProducts(product) {
     var billProductsContainer = document.getElementById("billProductsContainer");
-    let newProduct = createElement(product);    
-    billProductsContainer.append(newProduct);
-}
-
-function createElement(product) {
-
-    let productContainer = document.createElement("div");
-    let check = document.createElement("div");
-    let inputCheck = document.createElement("input");
-    let name = document.createElement("div");
-    let quantity = document.createElement("div");
-    let price = document.createElement("div");
-    let taxService = document.createElement("input");
-    let taxSale = document.createElement("input");
-    let totalPrice = document.createElement("div");
-    let observation = document.createElement("div");
-    let inputObservation = document.createElement("input");
-
-    productContainer.classList.add("col-12", "bill-item", "d-flex", "flex-wrap", "text-white", "text-center", "border-white");
-    productContainer.setAttribute("id", product.Id);
-    productContainer.setAttribute("name", "BillProducts");
-    check.classList.add("col-1", "justify-content-center", "align-items-center", "bill-item-check");
-    inputCheck.classList.add("form-check");
-    inputCheck.setAttribute("type", "checkbox");
-    name.classList.add("col-3", "p-0");
-    quantity.classList.add("col-2", "p-0");
-    quantity.setAttribute("id", `quantity${product.Id}`);
-    price.classList.add("col-1", "p-0");
-    taxService.classList.add("d-none");
-    taxService.setAttribute("name", "taxService");
-    taxService.setAttribute("id", `taxService${product.Id}`)
-    taxSale.classList.add("d-none");
-    taxSale.setAttribute("name", "taxSale");
-    taxSale.setAttribute("id", `taxSale${product.Id}`);
-    totalPrice.classList.add("col-2", "p-0", "billable");
-    totalPrice.setAttribute("id", `totalPrice${product.Id}`);
-    totalPrice.setAttribute("name", "totalPrice");
-    observation.classList.add("col-3", "p-0");
-    inputObservation.classList.add("form-control", "rounded");
-    inputObservation.setAttribute("type", "text");
-
-    name.innerText = product.Name;
-    quantity.innerText = 1;
-    price.innerText = product.Price;
-    totalPrice.innerText = product.Price;
-    taxService.value = getServiceTax(product);
-    taxSale.value = getSaleTax(product);
-
-    check.appendChild(inputCheck);
-    price.appendChild(taxService);
-    price.appendChild(taxSale);
-    observation.appendChild(inputObservation);
-    productContainer.appendChild(check);
-    productContainer.appendChild(name);
-    productContainer.appendChild(quantity);
-    productContainer.appendChild(price);
-    productContainer.appendChild(totalPrice);
-    productContainer.appendChild(observation);
-
-    return productContainer;
+    let newProduct = getProductView(product);  
+    billProductsContainer.prepend(newProduct);
 }
 
 function getSaleTax(product) {
@@ -145,3 +97,4 @@ function getServiceTax(product) {
 
     return tax;
 }
+
