@@ -145,3 +145,11 @@ function editSides(containerId, productId, quantity) {
     getSidesView(product, false, selectedSides, quantity);
 
 }
+
+function deleteSideContainer(productId, currentQuantity) {
+    let sideLabelContainerId = `sideLabelContainer${productId}${currentQuantity}`;
+    let sideLabelContainer = document.getElementById(sideLabelContainerId);
+    let sidesContainer = sideLabelContainer.parentNode;
+    sidesContainer.removeChild(sideLabelContainer);
+    alert("Verifique que los acompañamientos seleccionados sean los indicados!!!");
+}

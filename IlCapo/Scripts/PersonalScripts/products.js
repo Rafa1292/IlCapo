@@ -98,3 +98,35 @@ function getServiceTax(product) {
     return tax;
 }
 
+function reduceProductQuantity(productId) {
+    let product = selectProduct(productId);
+    let quantityId = `quantity${productId}`;
+    let element = document.getElementById(quantityId);
+    let currentQuantity = parseInt(element.innerHTML);
+    if (currentQuantity > 1) {
+        let newQuantity = currentQuantity - 1;
+        element.innerHTML = newQuantity;
+        updateTotalPrice(product, newQuantity);
+        setTax(product, newQuantity);
+        amountsManager();
+        deleteSideContainer(productId, currentQuantity);
+    }
+    else {
+        alert("La cantidad minima es de 1");
+    }
+
+}
+
+function deleteProduct(productId) {
+    let productsContainer = document.getElementById("billProductsContainer");
+    let products = productsContainer.getElementsByTagName("div");
+    for (var i = 0; i < products.length; i++) {
+        if (products[i].id == productId) {
+            productsContainer.removeChild(products[i]);
+        }
+    }
+    amountsManager();
+}
+
+
+
