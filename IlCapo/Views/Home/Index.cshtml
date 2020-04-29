@@ -76,9 +76,12 @@
 <script>
     var products;
     var sides;
+    var extras;
+
     window.onload = function () {
         getInitialProducts();
         getInitialSides();
+        getInitialExtras();
     }
 
     function getInitialProducts() {
@@ -98,20 +101,39 @@
         return false;
     }
 
-        function getInitialSides() {
-        $.ajax({
-            type: "GET",
-            url: "Sides/GetSides",
-            cache: false
+    function getInitialSides() {
+    $.ajax({
+        type: "GET",
+        url: "Sides/GetSides",
+        cache: false
         })
-            .then(function (data) {
-                sides = JSON.parse(data);
-            })
-            .fail(function (data) {
-                alert('Imposible obtener lista de acompañamientos');
+        .then(function (data) {
+            sides = JSON.parse(data);
+        })
+        .fail(function (data) {
+            alert('Imposible obtener lista de acompañamientos');
 
-            })
+        })
 
-        return false;
+    return false;
     }
+
+    function getInitialExtras() {
+        $.ajax({
+        type: "GET",
+        url: "Extras/GetExtras",
+        cache: false
+        })
+        .then(function (data) {
+            extras = JSON.parse(data);
+        })
+        .fail(function (data) {
+            alert('Imposible obtener lista de extras');
+
+        })
+
+    return false;
+    }
+
+
 </script>

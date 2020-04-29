@@ -1,7 +1,7 @@
 ﻿function updateSubTotal() {
     let elements = document.getElementsByName("totalPrice");
     let price = 0;
-    let subtotal = document.getElementById("subtotal");
+    let subtotal = document.getElementsByName("subtotal");
 
     for (var i = 0; i < elements.length; i++) {
         if (elements[i].classList.contains("billable")) {
@@ -9,14 +9,33 @@
         }
     }
 
-    subtotal.innerHTML = `${price}`;
+    for (var i = 0; i < subtotal.length; i++) {
+
+        subtotal[i].innerHTML = `${price}`;
+    }
+}
+
+function updateExtras() {
+    let billExtras = document.getElementsByName("extras");
+    let extrasAmount = 0;
+    let extraLabel = document.getElementsByName("extras");
+    for (var i = 0; i < billExtras.length; i++) {
+        if (billExtras[i].checked) {
+            extrasAmount += parseInt(billExtras[i].value);
+        }
+    }
+
+    for (var i = 0; i < extraLabel.length; i++) {
+
+        extraLabel[i].innerHTML = extrasAmount;
+    }
 }
 
 function updateTax() {
     let toGo = document.getElementById("toGo");
     let taxeService = document.getElementsByName("taxService");
     let taxeSale = document.getElementsByName("taxSale");
-    let tax = document.getElementById("impuestos");
+    let tax = document.getElementsByName("impuestos");
     let taxAmount = 0;
 
     for (var i = 0; i < taxeSale.length; i++) {
@@ -29,16 +48,24 @@ function updateTax() {
         }
     }
 
-    tax.innerHTML = taxAmount;
+    for (var i = 0; i < tax.length; i++) {
+
+        tax[i].innerHTML = taxAmount;
+    }
 }
 
 function updateTotal() {
     let subtotal = parseInt(document.getElementById("subtotal").innerHTML);
     let impuestos = parseInt(document.getElementById("impuestos").innerHTML);
     let descuento = parseInt(document.getElementById("descuento").innerHTML);
-    let total = document.getElementById("total");
-    let price = subtotal + impuestos - descuento;
-    total.innerHTML = `${price}`;
+    let extra = parseInt(document.getElementById("extras").innerHTML);
+    let total = document.getElementsByName("total");
+    let price = subtotal + extra + impuestos - descuento;
+
+    for (var i = 0; i < total.length; i++) {
+
+        total[i].innerHTML = `${price}`;
+    }
 
 }
 
@@ -98,10 +125,15 @@ function applyDiscount() {
     let discountPercentage = parseInt(document.getElementById("discountAmount").value);
     let subtotal = parseInt(document.getElementById("subtotal").innerHTML);
     let impuestos = parseInt(document.getElementById("impuestos").innerHTML);
+    let extra = parseInt(document.getElementById("extras").innerHTML);
 
-    let discount = document.getElementById("descuento");
-    let discountAmount = discountPercentage * (subtotal + impuestos) / 100;
-    discount.innerHTML = discountAmount;
+    let discount = document.getElementsByName("descuento");
+    let discountAmount = discountPercentage * (subtotal + impuestos + extra) / 100;
+
+    for (var i = 0; i < discount.length; i++) {
+
+        discount[i].innerHTML = discountAmount;
+    }
     amountsManager(discountPercentage);
     $('#billModalAux').modal('hide');
 
@@ -109,6 +141,7 @@ function applyDiscount() {
 
 function amountsManager() {
     updateSubTotal();
+    updateExtras();
     updateTax();
     updateTotal();
 }
@@ -225,3 +258,24 @@ function getProductsToSeparate() {
 
 
 }
+
+function ShowPaid() {
+    let paysViewContainer = document.getElementById("payViewContainer");
+    paysViewContainer.style.transition = "top 0s ease, background 1s ease";
+    paysViewContainer.style.top = "0";
+    paysViewContainer.style.background = "rgba(0, 0, 0, .7)";
+    let paysView = document.getElementById("payView");
+    paysView.style.top = "25vh";
+
+}
+
+function hidePaid() {
+    let paysView = document.getElementById("payView");
+    paysView.style.top = "-50vh";
+    let paysViewContainer = document.getElementById("payViewContainer");
+    paysViewContainer.style.transition = "top 3s ease, background 100ms ease-in";
+    paysViewContainer.style.background = "transparent";
+    paysViewContainer.style.top = "-100vh";
+}
+
+

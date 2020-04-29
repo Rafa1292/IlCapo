@@ -39,7 +39,8 @@ namespace IlCapo
             "~/Scripts/PersonalScripts/ToGo.js",
             "~/Scripts/PersonalScripts/Views/productBillView.js",
             "~/Scripts/PersonalScripts/Views/sideView.js",
-            "~/Scripts/PersonalScripts/sides.js"
+            "~/Scripts/PersonalScripts/sides.js",
+            "~/Scripts/PersonalScripts/extras.js"
 
             ));
 

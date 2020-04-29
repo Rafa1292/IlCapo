@@ -176,6 +176,7 @@
     <Compile Include="Controllers\BillsController.cs" />
     <Compile Include="Controllers\EndDaysController.cs" />
     <Compile Include="Controllers\EntriesController.cs" />
+    <Compile Include="Controllers\ExtrasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PaysController.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\EndDay.cs" />
     <Compile Include="Models\Entry.cs" />
+    <Compile Include="Models\Extra.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -269,6 +271,7 @@
     <Content Include="Scripts\PersonalScripts\animations.js" />
     <Content Include="Scripts\PersonalScripts\billPayMethod.js" />
     <Content Include="Scripts\PersonalScripts\categoryFilter.js" />
+    <Content Include="Scripts\PersonalScripts\extras.js" />
     <Content Include="Scripts\PersonalScripts\loader.js" />
     <Content Include="Scripts\PersonalScripts\localStorageManagement.js" />
     <Content Include="Scripts\PersonalScripts\pays.js" />
@@ -467,6 +470,12 @@
     <Content Include="Views\Sides\Details.cshtml" />
     <Content Include="Views\Sides\Edit.cshtml" />
     <Content Include="Views\Sides\Index.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillAmount.cshtml" />
+    <Content Include="Views\Extras\Create.cshtml" />
+    <Content Include="Views\Extras\Delete.cshtml" />
+    <Content Include="Views\Extras\Details.cshtml" />
+    <Content Include="Views\Extras\Edit.cshtml" />
+    <Content Include="Views\Extras\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

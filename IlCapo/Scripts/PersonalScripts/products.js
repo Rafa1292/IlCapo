@@ -4,17 +4,20 @@
 
     if (exists) {
         let newQuantity = setQuantity(product);
+        addExtra(newQuantity, id);
         updateTotalPrice(product, newQuantity);
         setTax(product, newQuantity);
     }
     else {
         drawBillProducts(product);
+        addExtra(1, id);
     }
 
     //cambiar al actualizar create de products
     if (!product.Sides) {
         getSidesView(product, true, undefined, 0);
     }
+
 
     amountsManager();
 }
@@ -110,6 +113,7 @@ function reduceProductQuantity(productId) {
         setTax(product, newQuantity);
         amountsManager();
         deleteSideContainer(productId, currentQuantity);
+        deleteExtra(productId, currentQuantity);
     }
     else {
         alert("La cantidad minima es de 1");

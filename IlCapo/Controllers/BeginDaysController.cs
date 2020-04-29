@@ -17,7 +17,7 @@ namespace IlCapo.Controllers
         // GET: BeginDays
         public ActionResult Index()
         {
-            var beginDays = db.BeginDays.Include(b => b.Worker);
+            var beginDays = db.BeginDays.Include(b => b.Worker).OrderByDescending(x => x.Date).ToList();
             return PartialView("Index", beginDays.ToList());
         }
 

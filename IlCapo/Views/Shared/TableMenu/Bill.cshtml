@@ -27,20 +27,31 @@
     @Html.Partial("BillParts/BillHeader")
 </div>
 
-<div class="bill-body col-12 p-1" id="billProductsContainer">
+<div class="bill-body col-12 p-1 bill-products-container" id="billProductsContainer">
     @Html.Partial("BillParts/BillProducts", Model.Items)
 
 </div>
 
-<div class="col-12 d-flex pb-4 flex-wrap text-white ">
-
-    <div class="col-md-6 p-0 d-flex flex-wrap justify-content-around ">
-        @Html.Partial("BillParts/BillActions")
-
-    </div>
-
+<div class="col-12 d-flex pb-4 flex-wrap text-white">
     <div class="col-md-6 d-flex flex-wrap justify-content-end ">
-        @Html.Partial("BillParts/BillPayMethod")
+        <div class="col-md-12 d-flex flex-wrap justify-content-around p-1">
+
+            <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn nebulosa-btn">
+                <i class="fas fa-concierge-bell col-md-12" style="font-size:20px;"></i>
+                <span class="col-md-12">
+                    Comandar
+                </span>
+            </button>
+            <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn nebulosa-btn" onclick="ShowPaid()">
+                <i class="fas fa-cash-register col-md-12" style="font-size:20px;"></i>
+                <span class="col-md-12">
+                    Caja
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex flex-wrap justify-content-end " style="font-size: 15px;">
+        @Html.Partial("BillParts/BillAmount")
 
     </div>
 

@@ -1,50 +1,46 @@
 ﻿<div class="col-md-12 d-flex flex-wrap justify-content-around p-1">
 
-    <div class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn ">
-        <i class="fas fa-concierge-bell col-md-12" style="font-size:20px;"></i>
-        <span class="col-md-12">
-            Comandar
-        </span>
-    </div>
-    <div class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn"  onclick="getDiscountView()">
+        <img src="~/Images/logoNebulosa.png" class="position-absolute" style="height:5vh; width: 8vw; top: -1vh; left: -3vw; filter: invert();" alt="Alternate Text" />
+    <span class="col-md-5"></span>
+    <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn" onclick="getDiscountView()">
         <i class="fas fa-percent col-md-12" style="font-size:20px;"></i>
         <span class="col-md-12">
             Descuento
         </span>
-    </div>
+    </button>
 </div>
 
 <div class="col-md-12 d-flex flex-wrap justify-content-around p-1" >
-    <div class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn" onclick="getSliceAccountView()">
+    <button type="button" class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn" onclick="getSliceAccountView()">
         <i class="fas fa-users col-md-12" style="font-size:20px;"></i>
         <span class="col-md-12">
             Dividir 
         </span>
-    </div>
-    <div class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn " onclick="separateAccount()">
-        <i class="fas fa-receipt col-md-6 " style="font-size:20px;"></i>
-        <i class="fas fa-receipt col-md-6 " style="font-size: 20px;"></i>
+    </button>
+    <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn " onclick="separateAccount()">
+        <i class="fas fa-receipt mx-1 " style="font-size:20px;"></i>
+        <i class="fas fa-receipt mx-1 " style="font-size: 20px;"></i>
 
         <span class="col-md-12 ">
             Separar 
         </span>
-    </div>
+    </button>
 </div>
 
 <div class="col-md-12 d-flex flex-wrap justify-content-around p-1">
-    <div class="col-md-2 d-flex flex-wrap justify-content-center p-2  bill-btn" style="background-color: rgba(40, 167, 69, .6) !important;">
+    <button class="col-md-2 d-flex flex-wrap justify-content-center p-2  bill-btn" style="background-color: rgba(40, 167, 69, 1) !important;">
         <i class="fas fa-cash-register " style="font-size: 20px;"></i>
         <span class="col-md-12">
             Facturar
         </span>
-    </div>
+    </button>
 
-    <div class="col-md-2 d-flex flex-wrap justify-content-center p-2 bill-btn" style="background-color:rgba(220, 53, 69, .6) !important;">
+    <button class="col-md-2 d-flex flex-wrap justify-content-center p-2 bill-btn" style="background-color:rgba(220, 53, 69, 1) !important;">
         <i class="fas fa-times " style="font-size:20px;"></i>
         <span class="col-md-12">
             Anular
         </span>
-    </div>
+    </button>
 </div>
 
 

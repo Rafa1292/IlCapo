@@ -8,11 +8,11 @@
                 ${product.Name}
             </div>
             <div class="col-3 p-0 justify-content-center" >
-            <i class="fas fa-minus text-danger" onclick="reduceProductQuantity(${product.Id})"></i>
-            <span class="mx-2" id="quantity${product.Id}">
-                1
-            </span>
-            <i class="fas fa-plus text-success" onclick="addProductToBill(${product.Id})"></i>
+                <i class="fas fa-minus value-manager red" onclick="reduceProductQuantity(${product.Id})"></i>
+                <span class="mx-2" id="quantity${product.Id}">
+                    1
+                </span>
+                <i class="fas fa-plus value-manager" onclick="addProductToBill(${product.Id})"></i>
             </div>
             <div class="col-1 p-0">
                 ${product.Price}
@@ -25,9 +25,15 @@
             <div class="col-3 p-0">
                 <input class="form-control rounded" type="text">
             </div>
-            <div class="col-12 d-flex flex-wrap text-white justify-content-center font-weight-light" id="sidesContainer${product.Id}">
+            <div class="col-12 d-flex flex-wrap text-white justify-content-center font-weight-light">
+                <button type="button" class="btn justify-content-center p-0 align-content-center btn-outline-success text-center text-white d-flex col-1 border-white extra-button" onmouseover="showExtrasContainer(${product.Id})" onmouseout="hideExtrasContainer(${product.Id})">Extras</button>
+                <div class="position-absolute flex-wrap extras-container" onmouseover="showExtrasContainer(${product.Id})"  onmouseout="hideExtrasContainer(${product.Id})" id="extrasContainer${product.Id}">
 
+                </div>
+                <div class="col-11 d-flex flex-wrap text-white justify-content-center font-weight-light" id="sidesContainer${product.Id}">
+                </div>
             </div>
+
           </div>`;
 
     let frag = document.createDocumentFragment();
