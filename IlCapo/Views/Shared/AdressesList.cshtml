@@ -1,0 +1,20 @@
+﻿@model IEnumerable<IlCapo.Models.Address>
+
+<label for="exampleFormControlSelect1">Direcciones</label>
+@if (Model.Count() > 0)
+{
+<select class="form-control" onchange="addAddress(this.value)" id="exampleFormControlSelect1">
+
+    @foreach (var address in Model)
+    {
+        <option>@address.Description</option>
+    }
+    <option style="background:rgba(40, 167, 69, .7); color: white; padding: 1rem; text-align: center;" value="0">Añadir direccion</option>
+
+</select>
+}
+else
+{
+    <input type="text" class="form-control rounded" onchange="saveAddress()" id="newAddress" value="" />
+
+}

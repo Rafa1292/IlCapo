@@ -171,9 +171,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\BasicServicesController.cs" />
     <Compile Include="Controllers\BeginDaysController.cs" />
     <Compile Include="Controllers\BillsController.cs" />
+    <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\EndDaysController.cs" />
     <Compile Include="Controllers\EntriesController.cs" />
     <Compile Include="Controllers\ExtrasController.cs" />
@@ -476,6 +478,17 @@
     <Content Include="Views\Extras\Details.cshtml" />
     <Content Include="Views\Extras\Edit.cshtml" />
     <Content Include="Views\Extras\Index.cshtml" />
+    <Content Include="Views\Clients\Create.cshtml" />
+    <Content Include="Views\Clients\Delete.cshtml" />
+    <Content Include="Views\Clients\Details.cshtml" />
+    <Content Include="Views\Clients\Edit.cshtml" />
+    <Content Include="Views\Clients\Index.cshtml" />
+    <Content Include="Views\Addresses\Create.cshtml" />
+    <Content Include="Views\Addresses\Delete.cshtml" />
+    <Content Include="Views\Addresses\Details.cshtml" />
+    <Content Include="Views\Addresses\Edit.cshtml" />
+    <Content Include="Views\Addresses\Index.cshtml" />
+    <Content Include="Views\Shared\AdressesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

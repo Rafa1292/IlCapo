@@ -10,16 +10,17 @@
 
 <div class="col-md-4 p-1 d-flex flex-wrap justify-content-center">
     <label class="mx-2 col-md-6">Nombre</label>
-    <input type="text" class="form-control rounded" value="@Model.Client.Name" />
+    <input type="text" class="form-control rounded" id="name" value="@Model.Client.Name" />
 </div>
 
 <div class="col-md-3 p-1 d-flex flex-wrap justify-content-center ">
     <label class="mx-2 col-md-6">Telefono</label>
-    <input type="number" class="form-control rounded" value="@phone" />
+    <input type="number" class="form-control rounded" value="@phone" id="phone" onkeyup="getAddress(this.value)" />
 </div>
 
-<div class="col-md-4 p-1 d-flex flex-wrap justify-content-center ">
+<div class="col-md-4 p-1 d-flex flex-wrap justify-content-center " id="addressessContainer">
     <label class="mx-2 col-md-6">Direcciones</label>
-    <input type="text" class="form-control rounded" value="@Model.Address.Description" />
+
+    <input type="text" class="form-control rounded" onchange="saveAddress()" id="newAddress" value="@Model.Address.Description" />
 </div>
 

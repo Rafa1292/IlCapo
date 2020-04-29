@@ -58,6 +58,7 @@ namespace IlCapo.Controllers
                 bill = GetEmptyBill();
             }
 
+            ViewBag.TableId = tableId;
             ViewBag.ToGo = toGo.ToString();
             Product product = new Product();
             ViewBag.Favorites = product.Get().OrderBy(p => p.TotalSales).ToList();
@@ -70,8 +71,10 @@ namespace IlCapo.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BillId,State,TableId,ClientId,Discount,Command,WorkerId")] Bill bill)
+        public ActionResult Create(Bill bill)
         {
+
+
             if (ModelState.IsValid)
             {
                 db.Bills.Add(bill);
