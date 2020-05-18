@@ -43,7 +43,8 @@ namespace IlCapo.Controllers
                     {
                         Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
                         BeginDay beginDay = new BeginDay();
-                        entry.BeginDayId = beginDay.GetBeginDayId(worker);
+                        beginDay = beginDay.GetBeginDay(worker);
+                        entry.BeginDayId = beginDay.BeginDayId;
                         db.Entries.Add(entry);
                         db.SaveChanges();
                         return RedirectToAction("Index");
@@ -112,9 +113,10 @@ namespace IlCapo.Controllers
             {
                 Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
                 BeginDay beginDay = new BeginDay();
+                beginDay = beginDay.GetBeginDay(worker);
                 Entry entry = new Entry();
 
-                entries = entry.GetEntries(beginDay.GetBeginDayId(worker), entriesList);
+                entries = entry.GetEntries(beginDay.BeginDayId, entriesList);
             }
 
             return entries;

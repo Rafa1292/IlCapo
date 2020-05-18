@@ -16,13 +16,12 @@
 }
 
 function updateExtras() {
-    let billExtras = document.getElementsByName("extras");
+    let billExtras = document.getElementsByName("extraFinalPrice");
     let extrasAmount = 0;
     let extraLabel = document.getElementsByName("extras");
+
     for (var i = 0; i < billExtras.length; i++) {
-        if (billExtras[i].checked) {
-            extrasAmount += parseInt(billExtras[i].value);
-        }
+        extrasAmount += parseInt(billExtras[i].value);
     }
 
     for (var i = 0; i < extraLabel.length; i++) {

@@ -47,14 +47,9 @@ namespace IlCapo.Models
             return state;
         }
 
-        public int GetBeginDayId(Worker worker)
+        public BeginDay GetBeginDay(Worker worker)
         {
-            int id = 0;
-
-            if (worker == null)
-            {
-                return id;
-            }
+            BeginDay beginDay = new BeginDay();
 
             using (IlCapoContext db = new IlCapoContext())
             {
@@ -64,12 +59,12 @@ namespace IlCapo.Models
                 {
                     if (bD.Date.Date == DateTime.Now.Date && bD.Worker.WorkerId == worker.WorkerId)
                     {
-                        return bD.BeginDayId;
+                        beginDay = bD;
                     }
                 }
             }
 
-            return id;
+            return beginDay;
         }
 
     }

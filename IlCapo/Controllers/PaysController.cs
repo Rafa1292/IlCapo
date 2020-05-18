@@ -47,11 +47,12 @@ namespace IlCapo.Controllers
             }
 
             BeginDay beginDay = new BeginDay();
+            beginDay = beginDay.GetBeginDay(worker);
             Pay tempPay = SetPayType(pay.PayType, payName);
             pay.basicServices = tempPay.basicServices;
             pay.Provider = tempPay.Provider;
             pay.Worker = tempPay.Worker;
-            pay.BeginDayId = beginDay.GetBeginDayId(worker);
+            pay.BeginDayId = beginDay.BeginDayId;
 
             if (ModelState.IsValid)
             {
@@ -116,9 +117,10 @@ namespace IlCapo.Controllers
             {
                 Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
                 BeginDay beginDay = new BeginDay();
+                beginDay = beginDay.GetBeginDay(worker);
                 Pay pay = new Pay();
 
-                pays = pay.GetPays(beginDay.GetBeginDayId(worker), paysdb);
+                pays = pay.GetPays(beginDay.BeginDayId, paysdb);
             }
 
             ViewBag.Provider = db.Providers.ToList();

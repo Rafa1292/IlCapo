@@ -17,7 +17,10 @@
             <input class="d-none" id="express" value="" />
         </div>
     }
-    <h5 class="mb-2"><strong> Orden #</strong></h5>
+    <h5 class="mb-2">
+    <strong> Orden #</strong>
+    <span id="orderNumber">@Model.BillId</span>
+    </h5>
 </div>
 
 <div class="col-12 p-2 d-flex flex-wrap text-white justify-content-around" style="height: 13vh !important;">
@@ -36,7 +39,7 @@
     <div class="col-md-6 d-flex flex-wrap justify-content-end ">
         <div class="col-md-12 d-flex flex-wrap justify-content-around p-1">
 
-            <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn nebulosa-btn">
+            <button class="col-md-5 d-flex flex-wrap justify-content-center m-1 p-2 bill-btn nebulosa-btn" onclick="commandBill()">
                 <i class="fas fa-concierge-bell col-md-12" style="font-size:20px;"></i>
                 <span class="col-md-12">
                     Comandar

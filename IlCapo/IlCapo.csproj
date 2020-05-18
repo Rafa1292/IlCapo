@@ -194,6 +194,10 @@
     </Compile>
     <Compile Include="IlCapoContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ModelJson\BillJson.cs" />
+    <Compile Include="ModelJson\ExtraJson.cs" />
+    <Compile Include="ModelJson\ItemJson.cs" />
+    <Compile Include="ModelJson\SideJson.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BasicServices.cs" />
@@ -206,9 +210,12 @@
     <Compile Include="Models\Extra.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\ItemExtra.cs" />
+    <Compile Include="Models\ItemSide.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Pay.cs" />
     <Compile Include="Models\PayType.cs" />
+    <Compile Include="Models\Printer.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ProductSubCategory.cs" />

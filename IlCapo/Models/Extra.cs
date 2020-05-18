@@ -16,5 +16,7 @@ namespace IlCapo.Models
         public decimal Price { get; set; }
 
         public decimal cost { get; set; }
+
+
     }
 }

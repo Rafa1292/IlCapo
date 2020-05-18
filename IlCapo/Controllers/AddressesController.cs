@@ -120,9 +120,8 @@ namespace IlCapo.Controllers
             return RedirectToAction("Index");
         }
 
-        public bool NewAddress(string name, int phone, string address)
+        public ActionResult NewAddress(string name, int phone, string address)
         {
-            bool result = false;
             Client client = new Client();
             Address newAddress = new Address();
             client = client.GetClient(phone);
@@ -132,25 +131,20 @@ namespace IlCapo.Controllers
                 client = client.AddClient(phone, name);
             }
 
-            result = newAddress.AddAddress(client, address);
+            newAddress = newAddress.AddAddress(client, address);
+            List<Address> addresses = newAddress.GetAddresses(client);
+            ViewBag.SelectedId = newAddress.AddressId;
 
-            return result;
+            return PartialView("AdressesList", addresses);
         }
 
         public ActionResult GetAddress(int phone)
         {
             Client client = new Client();
-            List<Address> addresses = new List<Address>();
+            Address address = new Address();
             client = client.GetClient(phone);
-
-            if (client != null)
-            {
-                var addressesEF = from a in db.Addresses
-                                  where a.ClientId == client.ClientId
-                                  select a;
-                addresses = addressesEF.ToList();
-            }
-
+            List<Address> addresses = address.GetAddresses(client);
+            ViewBag.SelectedId = 0;
             return PartialView("AdressesList", addresses);
 
         }

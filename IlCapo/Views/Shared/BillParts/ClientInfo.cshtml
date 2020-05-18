@@ -19,8 +19,6 @@
 </div>
 
 <div class="col-md-4 p-1 d-flex flex-wrap justify-content-center " id="addressessContainer">
-    <label class="mx-2 col-md-6">Direcciones</label>
-
-    <input type="text" class="form-control rounded" onchange="saveAddress()" id="newAddress" value="@Model.Address.Description" />
+    @Html.Partial("AdressesList", Model.Client.Addresses)
 </div>
 

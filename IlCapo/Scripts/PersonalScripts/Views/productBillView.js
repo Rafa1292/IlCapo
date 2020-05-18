@@ -23,7 +23,7 @@
             ${product.Price}
             </div>
             <div class="col-3 p-0">
-                <input class="form-control rounded" type="text">
+                <input class="form-control rounded" id="observation${product.Id}" type="text">
             </div>
             <div class="col-12 d-flex flex-wrap text-white justify-content-center font-weight-light">
                 <button type="button" class="btn justify-content-center p-0 align-content-center btn-outline-success text-center text-white d-flex col-1 border-white extra-button" onmouseover="showExtrasContainer(${product.Id})" onmouseout="hideExtrasContainer(${product.Id})">Extras</button>

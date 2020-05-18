@@ -27,6 +27,8 @@ namespace IlCapo.Models
 
         public bool Express { get; set; }
 
+        public bool ToGo { get; set; }
+
         public Address Address { get; set; }
 
         public virtual BeginDay BeginDay { get; set; }
@@ -40,10 +42,10 @@ namespace IlCapo.Models
 
             using (IlCapoContext db = new IlCapoContext())
             {
-                var bills = from b in db.Bills
-                            where b.BeginDayId == beginDayId && b.TableId == tableId && b.State
+                var bills = from b in db.Bills.Include("Client").Include("Address")
+                            where  b.TableId == tableId && b.State
                             select b;
-                bill = bills.FirstOrDefault();
+                bill = bills.ToList().FirstOrDefault();
             }
             return bill;
         }

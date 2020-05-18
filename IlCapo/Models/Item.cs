@@ -22,5 +22,24 @@ namespace IlCapo.Models
         public virtual Bill Bill { get; set; }
 
         public int BillId { get; set; }
+
+        public List<ItemExtra> ItemExtras { get; set; }
+
+        public List<ItemSide> ItemSides { get; set; }
+
+        public List<Extra> GetExtras(Item item)
+        {
+
+            using (IlCapoContext db = new IlCapoContext())
+            {
+                var extras = from e in db.ItemExtras
+                             where e.ItemId == item.KeyId
+                             select e.Extra;
+
+                return extras.ToList();
+            }
+
+        }
+
     }
 }

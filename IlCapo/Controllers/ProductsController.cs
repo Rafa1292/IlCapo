@@ -162,7 +162,7 @@ namespace IlCapo.Controllers
 
         public string GetProducts()
         {
-            var products = db.Products.ToList();
+            var products = db.Products.Include("ProductTaxes").ToList();
             List<object> productsJson = new List<object>();
             foreach (var product in products)
             {

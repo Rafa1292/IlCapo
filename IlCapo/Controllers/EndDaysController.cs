@@ -32,11 +32,12 @@ namespace IlCapo.Controllers
 
             Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
             BeginDay beginDay = new BeginDay();
+            beginDay = beginDay.GetBeginDay(worker);
             Pay pay = new Pay();
-            List<Pay> pays = pay.GetPays(beginDay.GetBeginDayId(worker), db.Pays.Include( p => p.Provider).ToList());
+            List<Pay> pays = pay.GetPays(beginDay.BeginDayId, db.Pays.Include( p => p.Provider).ToList());
             ViewBag.pays = pays;
             Entry entry = new Entry();
-            List<Entry> entries = entry.GetEntries(beginDay.GetBeginDayId(worker), db.Entries.ToList());
+            List<Entry> entries = entry.GetEntries(beginDay.BeginDayId, db.Entries.ToList());
             ViewBag.entries = entries;            
             EndDay endDay = new EndDay();
             endDay.Worker = worker;

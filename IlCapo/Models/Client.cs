@@ -22,7 +22,7 @@ namespace IlCapo.Models
             Client client = new Client();
             using (IlCapoContext db = new IlCapoContext())
             {
-                var ClientEF = from c in db.Clients
+                var ClientEF = from c in db.Clients.Include("Addresses")
                                where c.Phone == phone
                                select c;
                 client = ClientEF.ToList().FirstOrDefault();
