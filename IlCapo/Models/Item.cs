@@ -9,7 +9,7 @@ namespace IlCapo.Models
     public class Item
     {
         [Key]
-        public int KeyId { get; set; }
+        public int ItemId { get; set; }
 
         public int Quantity { get; set; }
 
@@ -33,7 +33,7 @@ namespace IlCapo.Models
             using (IlCapoContext db = new IlCapoContext())
             {
                 var extras = from e in db.ItemExtras
-                             where e.ItemId == item.KeyId
+                             where e.ItemId == item.ItemId
                              select e.Extra;
 
                 return extras.ToList();

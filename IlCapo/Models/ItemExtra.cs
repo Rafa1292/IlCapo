@@ -23,20 +23,6 @@ namespace IlCapo.Models
 
         public int Quantity { get; set; }
 
-        public ItemExtra CreateItemExtra(int itemId, int extraId, int quantity)
-        {
-            ItemExtra itemExtra = new ItemExtra();
 
-            using (IlCapoContext db = new IlCapoContext())
-            {
-                itemExtra.ItemId = itemId;
-                itemExtra.ExtraId = extraId;
-                itemExtra.Quantity = quantity;
-                db.ItemExtras.Add(itemExtra);
-                db.SaveChanges();
-            }
-
-            return itemExtra;
-        }
     }
 }

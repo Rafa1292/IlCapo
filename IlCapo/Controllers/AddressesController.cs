@@ -128,6 +128,7 @@ namespace IlCapo.Controllers
 
             if (client == null)
             {
+                client = new Client();
                 client = client.AddClient(phone, name);
             }
 

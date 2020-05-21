@@ -62,6 +62,7 @@ namespace IlCapo.Controllers
                 bill = GetEmptyBill();
             }
 
+            ViewBag.SelectedId = bill.Client.SelectedAddressId;
             var productTaxes = db.ProductTaxes.ToList();
             ViewBag.Extras = db.Extras.ToList();
             ViewBag.Sides = db.Sides.ToList();
@@ -78,14 +79,27 @@ namespace IlCapo.Controllers
         {
             List<Item> items = new List<Item>();
             var itemsEF = from i in db.Items.Include("ItemExtras").Include(x => x.Product.ProductTaxes).Include("ItemSides")
-                    where i.BillId == bill.BillId
-                    select i;
+                          where i.BillId == bill.BillId
+                          select i;
 
             items = itemsEF.ToList();
 
             return items;
         }
 
+        public Bill GetEmptyBill()
+        {
+            Bill bill = new Bill();
+            Client emptyClient = new Client { Name = "", Phone = 0 };
+            List<Address> emptyAddresses = new List<Address>();
+            emptyClient.Addresses = emptyAddresses;
+            List<Item> emptyItems = new List<Item>();
+            bill.Client = emptyClient;
+            bill.Items = emptyItems;
+            bill.BillId = 0;
+
+            return bill;
+        }
 
         public bool CommandBill(string jsonData, int orderNumber)
         {
@@ -97,13 +111,15 @@ namespace IlCapo.Controllers
             Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
             BeginDay beginDay = new BeginDay();
             beginDay = beginDay.GetBeginDay(worker);
-
+            db.SaveChanges();
             Bill bill = new Bill();
             Bill newBill = ParseJsonBill(jsonData, beginDay);
+
 
             if (orderNumber > 0)
             {
                 bill = db.Bills.Find(orderNumber);
+                bill.Items = GetBillItems(bill);
                 bill = EditBill(bill, newBill);
             }
             else
@@ -114,122 +130,17 @@ namespace IlCapo.Controllers
             return true;
         }
 
-
-        public Bill EditBill(Bill bill, Bill newBill)
-        {
-            bill.Address = newBill.Address;
-            bill.Client = newBill.Client;
-            bill.Discount = newBill.Discount;
-            bill.Express = newBill.Express;
-            bill.Items = EditItems(bill, newBill);
-
-
-            return bill;
-        }
-
-        private List<Item> EditItems(Bill bill, Bill newBill)
-        {
-            List<Item> items = new List<Item>();
-
-            foreach (var newItem in newBill.Items)
-            {
-                var itemExists = false;
-
-                foreach (var item in bill.Items)
-                {
-                    if (newItem.ProductId == item.ProductId)
-                    {
-                        itemExists = true;
-                    }
-                }
-
-                if (!itemExists)
-                {
-                    items.Add(CreateItem(newItem, bill));
-                }
-            }
-
-            return items;
-        }
-
-        public Bill CreateBill(Bill bill)
-        {
-            List<Item> currentItems = bill.Items;
-            List<Item> Items = new List<Item>();
-            bill.Items = Items;
-            db.Bills.Add(bill);
-            db.SaveChanges();
-
-
-            foreach (var item in currentItems)
-            {
-                Items.Add(CreateItem(item, bill));
-            }
-
-            bill.Items = Items;
-
-            return bill;
-        }
-
-        public Item CreateItem(Item item, Bill bill)
-        {
-            List<ItemExtra> currentItemExtra = new List<ItemExtra>();
-            currentItemExtra = item.ItemExtras;
-            List<ItemSide> currentItemSide = new List<ItemSide>();
-            currentItemSide = item.ItemSides;
-            item.Bill = bill;
-            item.ItemExtras = new List<ItemExtra>();
-            item.ItemSides = new List<ItemSide>();
-            db.Items.Add(item);
-            db.SaveChanges();
-            item.ItemExtras = currentItemExtra;
-            //item.ItemExtras = CreateExtras(item);
-            item.ItemSides = currentItemSide;
-
-            db.ItemExtras.AddRange(item.ItemExtras);
-            db.ItemSides.AddRange(item.ItemSides);
-            db.SaveChanges();
-
-            return item;
-        }
-
-
-
-        private List<ItemExtra> CreateExtras(Item item)
-        {
-            ItemExtra itemExtra = new ItemExtra();
-            List<ItemExtra> CurrentItemExtras = item.ItemExtras;
-            List<ItemExtra> itemExtras = new List<ItemExtra>();
-
-            foreach (var extra in CurrentItemExtras)
-            {
-                itemExtra.ExtraId = extra.ExtraId;
-                itemExtra.Item = item;
-                itemExtra.Quantity = extra.Quantity;
-                itemExtra.ProductQuantity = extra.ProductQuantity;
-
-                itemExtras.Add(itemExtra);
-            }
-
-            db.ItemExtras.AddRange(itemExtras);
-            db.SaveChanges();
-
-            return itemExtras;
-        }
-
         private Bill ParseJsonBill(string jsonData, BeginDay beginDay)
         {
             var serializer = new JavaScriptSerializer();
             var billJson = serializer.Deserialize<BillJson>(jsonData);
-            Address address = new Address();
-            address = address.GetAddress(billJson.Address);
 
             Client client = new Client();
             client = client.GetClient(billJson.Phone);
+            client.SelectedAddressId = billJson.Address;
 
             Bill bill = new Bill();
             bill.BeginDayId = beginDay.BeginDayId;
-            bill.Address = address;
             bill.Client = client;
             bill.Command = false;
             bill.Discount = billJson.Discount;
@@ -283,51 +194,195 @@ namespace IlCapo.Controllers
             return items;
         }
 
-        public void CompareItems(Item newItem, Item item)
+        public Bill EditBill(Bill bill, Bill newBill)
         {
 
-            if (newItem.Quantity == item.Quantity)
+            Client client = new Client();
+            client = client.GetClient(newBill.Client.Phone);
+            client.SelectedAddressId = newBill.Client.SelectedAddressId;
+            db.Entry(client).State = EntityState.Modified;
+
+            bill.ClientId = client.ClientId;
+            bill.Discount = newBill.Discount;
+            bill.Express = newBill.Express;
+            EditItems(bill, newBill);
+
+            db.Entry(bill).State = EntityState.Modified;
+
+            db.SaveChanges();
+            return bill;
+        }
+
+        private List<Item> EditItems(Bill bill, Bill newBill)
+        {
+            List<Item> items = new List<Item>();
+
+            var productosDeListaVieja = bill.Items.Select(y => y.ProductId).ToList();
+            var productosDeListaNueva = newBill.Items.Select(y => y.ProductId).ToList();
+
+            var listaDeItemsPorAgregar = newBill.Items.Where(x => !productosDeListaVieja.Contains(x.ProductId)).ToList();
+            var listaDeItemsPorAjustar = newBill.Items.Where(x => productosDeListaVieja.Contains(x.ProductId)).ToList();
+
+            foreach (var itemPorAgregar in listaDeItemsPorAgregar)
             {
-                CompareExtras(newItem, item);
+                items.Add(CreateItem(itemPorAgregar, bill));
             }
 
-        }
-
-        public bool CompareExtras(Item newItem, Item item)
-        {
-            List<Extra> extras = item.GetExtras(item);
-            
-            
-  
-
-            return false;
-        }
-
-        public bool DeleteExtras(List<Extra> newExtras, List<Extra> extras)
-        {
-
-            foreach (var extra in extras)
+            foreach (var itemPorAjustar in listaDeItemsPorAjustar)
             {
-                foreach (var newExtra in newExtras)
+                var itemInicial = bill.Items.SingleOrDefault(y => y.ProductId == itemPorAjustar.ProductId);
+                EditItem(itemPorAjustar, itemInicial);
+            }
+
+            return items;
+        }
+
+
+        public void EditItem(Item newItem, Item item)
+        {
+            if (item.Quantity != newItem.Quantity)
+            {
+                item.Quantity = newItem.Quantity;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            CompareExtras(newItem.ItemExtras, item.ItemExtras, item);
+            //CompareSides(newItem.ItemSides, item.ItemSides, item.Quantity);
+        }
+
+        public void CompareExtras(List<ItemExtra> newItemExtraList, List<ItemExtra> ItemExtraList, Item item)
+        {
+            var extrasDeListaVieja = ItemExtraList.Select(y => y.ExtraId).ToList();
+            var extrasDeListaNueva = newItemExtraList.Select(y => y.ExtraId).ToList();
+
+
+            var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !extrasDeListaVieja.Contains(x.ExtraId)).ToList();
+            var listaDeExtrasPorAjustar = newItemExtraList.Where(x => extrasDeListaVieja.Contains(x.ExtraId)).ToList();
+            var listaDeExtrasPorBorrar = ItemExtraList.Where(x => !extrasDeListaNueva.Contains(x.ExtraId)).ToList();
+
+            AddExtras(listaDeExtrasPorAgregar, item);
+            DeleteExtras(listaDeExtrasPorBorrar);
+            EditExtras(ItemExtraList, listaDeExtrasPorAjustar);
+
+        }
+
+        public void CompareSides(List<ItemSide> newItemSideList, List<ItemSide> itemSideList, int currentQuantity)
+        {
+            foreach (var newItem in newItemSideList)
+            {
+                var itemExists = false;
+                foreach (var item in itemSideList)
                 {
-                    
+                    if (newItem.SidesId == item.SidesId && newItem.ProductQuantity <= currentQuantity && item.ProductQuantity <= currentQuantity)
+                    {
+                        itemExists = true;
+                    }
+                }
+
+                if (!itemExists)
+                {
+                    db.ItemSides.Add(newItem);
                 }
             }
 
+            foreach (var item in itemSideList)
+            {
+                var itemExists = false;
+                foreach (var newItem in newItemSideList)
+                {
+                    if (newItem.ItemSideId == item.ItemSideId && newItem.ProductQuantity <= currentQuantity && item.ProductQuantity <= currentQuantity)
+                    {
+                        itemExists = true;
+                    }
+                }
 
-            return false;
+                if (!itemExists)
+                {
+                    db.ItemSides.Remove(item);
+                }
+            }
         }
 
-        public bool AddExtras(List<Extra> newExtras, List<Extra> Extras)
+        public void AddExtras(List<ItemExtra> itemExtras, Item item)
         {
-
-
-
-
-            return false;
+            foreach (var itemExtra in itemExtras)
+            {
+                itemExtra.ItemId = item.ItemId;
+                db.ItemExtras.Add(itemExtra);
+            }
+            db.SaveChanges();
         }
 
+        public void DeleteExtras(List<ItemExtra> itemExtras)
+        {
+            foreach (var item in itemExtras)
+            {
+                db.ItemExtras.Remove(item);
+            }
+            db.SaveChanges();
+        }
 
+        public void EditExtras(List<ItemExtra> itemExtrasList, List<ItemExtra> listaDeExtrasPorAjustar)
+        {
+            foreach (var extraPorAjustar in listaDeExtrasPorAjustar)
+            {
+                var itemExtra = itemExtrasList.SingleOrDefault(y => y.ExtraId == extraPorAjustar.ExtraId);
+
+                if (itemExtra.Quantity != extraPorAjustar.Quantity)
+                {
+                    itemExtra.Quantity = extraPorAjustar.Quantity;
+                    db.Entry(itemExtra).State = EntityState.Modified;
+                }
+            }
+            db.SaveChanges();
+        }
+
+        public void DeleteItem(int ItemId)
+        {
+            Item item = db.Items.Find(ItemId);
+            db.Items.Remove(item);
+            db.SaveChanges();
+        }
+
+        public Bill CreateBill(Bill bill)
+        {
+            List<Item> currentItems = bill.Items;
+            List<Item> Items = new List<Item>();
+            bill.Items = Items;
+            db.Bills.Add(bill);
+            db.SaveChanges();
+
+
+            foreach (var item in currentItems)
+            {
+                Items.Add(CreateItem(item, bill));
+            }
+
+            bill.Items = Items;
+
+            return bill;
+        }
+
+        public Item CreateItem(Item item, Bill bill)
+        {
+            List<ItemExtra> currentItemExtra = new List<ItemExtra>();
+            List<ItemSide> currentItemSide = new List<ItemSide>();
+            currentItemExtra = item.ItemExtras;
+            currentItemSide = item.ItemSides;
+            item.Bill = bill;
+            item.ItemExtras = new List<ItemExtra>();
+            item.ItemSides = new List<ItemSide>();
+            db.Items.Add(item);
+            db.SaveChanges();
+            item.ItemExtras = currentItemExtra;
+            item.ItemSides = currentItemSide;
+
+            db.ItemExtras.AddRange(item.ItemExtras);
+            db.ItemSides.AddRange(item.ItemSides);
+            db.SaveChanges();
+
+            return item;
+        }
 
         public bool ValidateWorker()
         {
@@ -340,20 +395,6 @@ namespace IlCapo.Controllers
             }
 
             return true;
-        }
-
-        public Bill GetEmptyBill()
-        {
-            Bill bill = new Bill();
-            Client emptyClient = new Client { Name = "", Phone = 0 };
-            List<Address> emptyAddresses = new List<Address >();
-            emptyClient.Addresses = emptyAddresses;
-            List<Item> emptyItems = new List<Item>();
-            bill.Client = emptyClient;
-            bill.Items = emptyItems;
-            bill.BillId = 0;
-
-            return bill;
         }
 
         public bool ValidateWorkerDay()

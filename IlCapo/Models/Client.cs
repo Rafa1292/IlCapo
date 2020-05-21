@@ -17,6 +17,8 @@ namespace IlCapo.Models
 
         public List<Address> Addresses { get; set; }
 
+        public int SelectedAddressId { get; set; }
+
         public Client GetClient(int phone)
         {
             Client client = new Client();
