@@ -7,8 +7,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using IlCapo.IEqualityComparer;
 using IlCapo.ModelJson;
 using IlCapo.Models;
+using IlCapo.Validation;
 
 namespace IlCapo.Controllers
 {
@@ -40,8 +42,13 @@ namespace IlCapo.Controllers
         // GET: Bills/Create
         public ActionResult Create(int tableId, bool toGo)
         {
-            if (!ValidateUser())
+
+            Validation.Validation elValidador = new Validation.Validation(db, User.Identity.Name);
+            Result elResultado = elValidador.ValidateUser();
+
+            if (!elResultado.IsValid)
             {
+                ViewBag.error = elResultado.Message;
                 return PartialView("advertisement");
             }
 
@@ -103,9 +110,13 @@ namespace IlCapo.Controllers
 
         public bool CommandBill(string jsonData, int orderNumber)
         {
-            if (!ValidateUser())
+            Validation.Validation elValidador = new Validation.Validation(db, User.Identity.Name);
+            Result elResultado = elValidador.ValidateUser();
+
+            if (!elResultado.IsValid)
             {
-                return false;
+                ViewBag.error = elResultado.Message;
+                return elResultado.IsValid;
             }
 
             Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
@@ -139,15 +150,17 @@ namespace IlCapo.Controllers
             client = client.GetClient(billJson.Phone);
             client.SelectedAddressId = billJson.Address;
 
-            Bill bill = new Bill();
-            bill.BeginDayId = beginDay.BeginDayId;
-            bill.Client = client;
-            bill.Command = false;
-            bill.Discount = billJson.Discount;
-            bill.ToGo = billJson.ToGo;
-            bill.Express = billJson.Express;
-            bill.State = true;
-            bill.TableId = billJson.TableId;
+            Bill bill = new Bill()
+            {
+                BeginDayId = beginDay.BeginDayId,
+                Client = client,
+                Command = false,
+                Discount = billJson.Discount,
+                ToGo = billJson.ToGo,
+                Express = billJson.Express,
+                State = true,
+                TableId = billJson.TableId
+            };
             List<Item> items = ParseItems(billJson.Items, bill);
             bill.Items = items;
 
@@ -237,7 +250,6 @@ namespace IlCapo.Controllers
             return items;
         }
 
-
         public void EditItem(Item newItem, Item item)
         {
             if (item.Quantity != newItem.Quantity)
@@ -247,18 +259,14 @@ namespace IlCapo.Controllers
                 db.SaveChanges();
             }
             CompareExtras(newItem.ItemExtras, item.ItemExtras, item);
-            //CompareSides(newItem.ItemSides, item.ItemSides, item.Quantity);
+            CompareSides(newItem.ItemSides, item.ItemSides, item);
         }
 
         public void CompareExtras(List<ItemExtra> newItemExtraList, List<ItemExtra> ItemExtraList, Item item)
         {
-            var extrasDeListaVieja = ItemExtraList.Select(y => y.ExtraId).ToList();
-            var extrasDeListaNueva = newItemExtraList.Select(y => y.ExtraId).ToList();
-
-
-            var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !extrasDeListaVieja.Contains(x.ExtraId)).ToList();
-            var listaDeExtrasPorAjustar = newItemExtraList.Where(x => extrasDeListaVieja.Contains(x.ExtraId)).ToList();
-            var listaDeExtrasPorBorrar = ItemExtraList.Where(x => !extrasDeListaNueva.Contains(x.ExtraId)).ToList();
+            var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
+            var listaDeExtrasPorAjustar = newItemExtraList.Where(x => ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
+            var listaDeExtrasPorBorrar = ItemExtraList.Where(x => !newItemExtraList.Contains(x,  new ExtrasEqualityComparer())).ToList();
 
             AddExtras(listaDeExtrasPorAgregar, item);
             DeleteExtras(listaDeExtrasPorBorrar);
@@ -266,41 +274,26 @@ namespace IlCapo.Controllers
 
         }
 
-        public void CompareSides(List<ItemSide> newItemSideList, List<ItemSide> itemSideList, int currentQuantity)
+        public void CompareSides(List<ItemSide> newItemSideList, List<ItemSide> itemSideList, Item item)
         {
-            foreach (var newItem in newItemSideList)
-            {
-                var itemExists = false;
-                foreach (var item in itemSideList)
-                {
-                    if (newItem.SidesId == item.SidesId && newItem.ProductQuantity <= currentQuantity && item.ProductQuantity <= currentQuantity)
-                    {
-                        itemExists = true;
-                    }
-                }
+            var listaDeSidesPorAgregar = newItemSideList.Where(x => !itemSideList.Contains(x, new SidesEqualityComparer())).ToList();
+            var listaDeSidesPorBorrar = itemSideList.Where(x => !newItemSideList.Contains(x, new SidesEqualityComparer())).ToList();
+            listaDeSidesPorAgregar.ForEach(x => AddSides(x, item));
+            listaDeSidesPorBorrar.ForEach(x => DeleteSides(x));
 
-                if (!itemExists)
-                {
-                    db.ItemSides.Add(newItem);
-                }
-            }
+        }
 
-            foreach (var item in itemSideList)
-            {
-                var itemExists = false;
-                foreach (var newItem in newItemSideList)
-                {
-                    if (newItem.ItemSideId == item.ItemSideId && newItem.ProductQuantity <= currentQuantity && item.ProductQuantity <= currentQuantity)
-                    {
-                        itemExists = true;
-                    }
-                }
+        public void AddSides(ItemSide itemSide, Item item)
+        {
+            itemSide.ItemId = item.ItemId;
+            db.ItemSides.Add(itemSide);
+            db.SaveChanges();
+        }
 
-                if (!itemExists)
-                {
-                    db.ItemSides.Remove(item);
-                }
-            }
+        public void DeleteSides(ItemSide itemSide)
+        {
+            db.ItemSides.Remove(itemSide);
+            db.SaveChanges();
         }
 
         public void AddExtras(List<ItemExtra> itemExtras, Item item)
@@ -326,7 +319,7 @@ namespace IlCapo.Controllers
         {
             foreach (var extraPorAjustar in listaDeExtrasPorAjustar)
             {
-                var itemExtra = itemExtrasList.SingleOrDefault(y => y.ExtraId == extraPorAjustar.ExtraId);
+                var itemExtra = itemExtrasList.SingleOrDefault(y => y.ExtraId == extraPorAjustar.ExtraId && y.ProductQuantity == extraPorAjustar.ProductQuantity);
 
                 if (itemExtra.Quantity != extraPorAjustar.Quantity)
                 {
@@ -384,33 +377,6 @@ namespace IlCapo.Controllers
             return item;
         }
 
-        public bool ValidateWorker()
-        {
-            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
-
-            if (worker == null)
-            {
-                ViewBag.error = "Debes iniciar sesion antes!!!";
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool ValidateWorkerDay()
-        {
-            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
-            WorkDay workDay = new WorkDay();
-
-            if (!workDay.IsInWorkingDay(worker))
-            {
-                ViewBag.error = "Debes abrir una jornada antes!!!";
-                return false;
-            }
-
-            return true;
-        }
-
         public ActionResult SliceAccount(int quantity, int price)
         {
             SliceAccount sliceAccount = new SliceAccount();
@@ -418,22 +384,6 @@ namespace IlCapo.Controllers
             sliceAccount.Quantity = quantity;
 
             return PartialView("BillParts/SliceAccount", sliceAccount);
-        }
-
-        public bool ValidateUser()
-        {
-            if (!ValidateWorker())
-            {
-                return false;
-            }
-
-            if (!ValidateWorkerDay())
-            {
-                return false;
-            }
-
-
-            return true;
         }
 
         protected override void Dispose(bool disposing)

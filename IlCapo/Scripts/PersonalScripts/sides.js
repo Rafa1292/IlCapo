@@ -124,7 +124,7 @@ function switchClass(sideId) {
 }
 
 function deleteSideLabel(product, quantityValue, sideId) {
-    let labelId = `${product.Id}${quantityValue}${sideId}`;
+    let labelId = `sideLabel${product.Id}${quantityValue}${sideId}`;
     let label = document.getElementById(labelId);
     let labelContainer = label.parentNode;
     labelContainer.removeChild(label);
@@ -136,10 +136,10 @@ function editSides(containerId, productId, quantity) {
     let selectedSidescontainer = document.getElementById(containerId);
     let selectedSideselements = selectedSidescontainer.getElementsByTagName("small");
     let selectedSides = [];
+
     for (var i = 0; i < selectedSideselements.length; i++) {
-        let sideId = selectedSideselements[i].id;
-        sideId = sideId.substr(2, 2);
-        selectedSides.push(parseInt(sideId));
+        let sideInput = selectedSideselements[i].getElementsByTagName("input");
+        selectedSides.push(parseInt(sideInput[0].value));
     }
 
     getSidesView(product, false, selectedSides, quantity);
