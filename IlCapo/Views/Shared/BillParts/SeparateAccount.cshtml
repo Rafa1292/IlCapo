@@ -1,0 +1,63 @@
+﻿@model IlCapo.Models.Bill
+
+<div class=" bill-modal-base p-0 ">
+
+    <div class="d-flex flex-wrap p-0 justify-content-center container-fluid ">
+
+        <div class="col-6 d-flex flex-wrap p-2 justify-content-center">
+            @*Aqui van productos a separar*@
+            <h5 class="p-2 border text-white rounded text-center" style="max-height: 10vh; width: 20vw; margin-top: 27vh; background: rgba(0,0,0,.7);">
+                <strong>
+                    Arrastre los elementos hacia la factura
+                </strong>
+            </h5>
+            <div class="col-12 d-flex p-3 flex-wrap justify-content-center bill-body bill-products-container" ondrop="dropProduct(this, event)" ondragenter="return false" ondragover="return false" style="background-color: rgba(23, 162, 184, 1);">
+                @Html.Partial("BillParts/BillProductsSeparate", Model.Items)
+            </div>
+        </div>
+
+
+
+        <div class="col-6 d-flex flex-wrap p-0  rounded  shadow-sm room-container " style="height: 100vh !important;">
+            @*aqui va la factura*@
+            <div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
+                <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-none" />
+                <input type="number" value="@ViewBag.TableId" id="tableId" class="d-none" />
+
+                @if (ViewBag.ToGo == "True")
+                {
+                    <div class="col-12 justify-content-start d-flex pt-2">
+                        <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="walking" onclick="express(this.id)">
+                            <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
+                        </button>
+                        <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
+                            <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
+                        </button>
+                        <input class="d-none" id="express" value="" />
+                    </div>
+                }
+                <h5 class="mb-2">
+                    <strong> Orden #</strong>
+                    <span id="orderNumber">@Model.BillId</span>
+                </h5>
+            </div>
+
+            <div class="col-12 p-2 d-flex flex-wrap text-white justify-content-around" style="height: 13vh !important;">
+                @Html.Partial("BillParts/ClientInfo")
+            </div>
+            <div class="col-12 bill-header d-flex flex-wrap text-white text-center border-white border-bottom border-top p-1">
+                @Html.Partial("BillParts/BillHeader")
+            </div>
+            <div class="bill-body col-12 p-1 bill-products-container" ondrop="dropProduct(this, event)" ondragenter="return false" ondragover="return false" id="billProductsContainer">
+
+            </div>
+            <div class="col-12 d-flex flex-wrap text-white p-2">
+                @Html.Partial("BillParts/BillAmount")
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

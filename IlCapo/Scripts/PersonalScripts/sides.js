@@ -2,7 +2,7 @@
     if (drawSideContainerBool) {
         drawSideContainer(product);
     }
-    setOriginalPositionModal();
+    
     let view = createSidesView(product, selectedSides, quantity);
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";

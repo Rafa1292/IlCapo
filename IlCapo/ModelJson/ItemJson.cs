@@ -13,6 +13,8 @@ namespace IlCapo.ModelJson
 
         public string Observation { get; set; }
 
+        public int Price { get; set; }
+
         public List<ExtraJson> Extras { get; set; }
 
         public List<SideJson> Sides { get; set; }

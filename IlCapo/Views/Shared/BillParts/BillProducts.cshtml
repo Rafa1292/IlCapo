@@ -1,5 +1,8 @@
 ﻿@model ICollection<IlCapo.Models.Item>
 
+
+
+
 @if (Model != null)
 {
     foreach (var item in Model)
@@ -20,18 +23,19 @@
                 taxSale = Decimal.ToInt32(tax.Tax.Percentage * totalPrice / 100);
             }
         }
+                    
 
-        <div class="col-12 bill-item d-flex flex-wrap text-white text-center border-white " id="@item.ProductId" name="BillProducts">
-            <i class="far fa-times-circle  text-danger position-absolute" onclick="deleteProduct(@item.ProductId)" style="z-index: 10"></i>
+        <div class="col-12 @ViewBag.Billable bill-item d-flex flex-wrap text-white text-center border-white" ondragstart="productDragStart(this, event)"  draggable="true" id="@item.ProductId" name="BillProducts">
+            <i class="far fa-times-circle  text-danger position-absolute"  onclick="deleteProduct(@item.ProductId)" style="z-index: 10"></i>
             <div class="col-3 p-0">
                 @item.Product.Name
             </div>
             <div class="col-3 p-0 justify-content-center">
-                <i class="fas fa-minus value-manager red" onclick="reduceProductQuantity(@item.ProductId)"></i>
+                <i class="fas fa-minus value-manager red" style="display: @ViewBag.Display" onclick="reduceProductQuantity(@item.ProductId)"></i>
                 <span class="mx-2" id=@String.Concat("quantity",item.ProductId)>
                     @item.Quantity
                 </span>
-                <i class="fas fa-plus value-manager" onclick="addProductToBill(@item.ProductId)"></i>
+                <i class="fas fa-plus value-manager" style="display: @ViewBag.Display" onclick="addProductToBill(@item.ProductId)"></i>
             </div>
 
             <div class="col-1 p-0">
@@ -39,7 +43,7 @@
                 <input class="d-none tax" value="@taxService" name="taxService" id=@String.Concat("taxService",item.ProductId)>
                 <input class="d-none tax" value="@taxSale" name="taxSale" id=@String.Concat("taxSale",item.ProductId)>
             </div>
-            <div class="col-2 p-0 billable" id=@String.Concat("totalPrice",item.ProductId) name="totalPrice">
+            <div class="col-2 p-0 " id=@String.Concat("totalPrice",item.ProductId) name="totalPrice">
                 @Decimal.ToInt32(totalPrice)
             </div>
             <div class="col-3 p-0">
@@ -69,15 +73,15 @@
                                     <div class=" col-12 d-flex flex-wrap p-0 mb-2">
                                         <div class="col-md-7 p-0 d-flex justify-content-start align-items-center">
                                             <input type="number" value="@Decimal.ToInt32(extra.Price)" name="extraUnitPrice" class="d-none" id=@String.Concat("extraUnitPrice",item.ProductId,i,extra.ExtraId)>
-                                            <input type="number" value="@Decimal.ToInt32(extraFinalPrice)" name="extraFinalPrice" class="d-none" id=@String.Concat("extraFinalPrice",item.ProductId,i,extra.ExtraId)>
+                                            <input type="number" value="@Decimal.ToInt32(extraFinalPrice)" name="extraFinalPrice" class="d-none " id=@String.Concat("extraFinalPrice",item.ProductId,i,extra.ExtraId)>
                                             <label class="m-0">@extra.Name ¢@Decimal.ToInt32(extra.Price)</label>
                                         </div>
                                         <div class="col-md-5 p-0 d-flex justify-content-start align-items-center">
-                                            <i class="fas fa-minus value-manager red text-white" onclick="reduceExtraQuantity(@item.ProductId@i@extra.ExtraId)"></i>
+                                            <i class="fas fa-minus value-manager red text-white" style="display: @ViewBag.Display" onclick="reduceExtraQuantity(@item.ProductId@i@extra.ExtraId)"></i>
                                             <span class="mx-2" id=@String.Concat("extraQuantity",item.ProductId,i,extra.ExtraId)>
                                                 @quantity
                                             </span>
-                                            <i class="fas fa-plus value-manager text-white" onclick="addExtraToBill(@item.ProductId@i@extra.ExtraId)"></i>
+                                            <i class="fas fa-plus value-manager text-white" style="display: @ViewBag.Display" onclick="addExtraToBill(@item.ProductId@i@extra.ExtraId)"></i>
                                         </div>
                                     </div>
                                 }
@@ -102,7 +106,7 @@
                             }
 
 
-                            <i class="fas fa-pencil-alt side-edit" onclick="editSides(@item.ProductId@i, @item.ProductId, @i)"></i>
+                            <i class="fas fa-pencil-alt side-edit" style="display: @ViewBag.Display" onclick="editSides(@item.ProductId@i, @item.ProductId, @i)"></i>
                         </div>
                     }
                 </div>

@@ -27,11 +27,6 @@
 
 }
 
-function separateAccount() {
-
-
-}
-
 function getAddress(phone) {
     if (phone == "") {
         phone = 0;
@@ -140,11 +135,14 @@ function getItemsList() {
         let observation = document.getElementById(`observation${products[i].id}`).value;
         let extras = getExtrasByProduct(id, quantity);
         let sides = getSidesByProduct(id, quantity);
+        let productObject = selectProduct(id);
+        let Price = productObject.Price * quantity;
 
         let product = {
             ProductId: id,
             ProductQuantity: quantity,
             Observation: observation,
+            Price: Price,
             Extras: extras,
             Sides: sides
         }

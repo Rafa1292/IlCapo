@@ -4,7 +4,7 @@
     let subtotal = document.getElementsByName("subtotal");
 
     for (var i = 0; i < elements.length; i++) {
-        if (elements[i].classList.contains("billable")) {
+        if (elements[i].parentNode.classList.contains("billable")) {
             price += parseInt(elements[i].innerHTML);
         }
     }
@@ -21,7 +21,9 @@ function updateExtras() {
     let extraLabel = document.getElementsByName("extras");
 
     for (var i = 0; i < billExtras.length; i++) {
-        extrasAmount += parseInt(billExtras[i].value);
+        if (billExtras[i].parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.classList.contains("billable")) {
+            extrasAmount += parseInt(billExtras[i].value);
+        }
     }
 
     for (var i = 0; i < extraLabel.length; i++) {
@@ -117,7 +119,7 @@ function getDiscountView() {
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";
     viewContainer.appendChild(view);
-    $('#billModalAux').modal('show');    
+    $('#billModalAux').modal('show');
 }
 
 function applyDiscount() {
@@ -151,7 +153,7 @@ function getSliceAccountView() {
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";
     viewContainer.appendChild(view);
-    $('#billModalAux').modal('show');  
+    $('#billModalAux').modal('show');
 }
 
 function createSliceAccountView() {
@@ -218,40 +220,31 @@ function SliceAccount() {
 }
 
 function separateAccount() {
-    $('#billModalAux').modal('show');   
-    modifyModal();
-    hideProducts();
-    getProductsToSeparate();
+    let billId = parseInt(document.getElementById("orderNumber").innerHTML);
 
-    
-}
+    openLoader();
 
-function modifyModal() {
-    let modal = document.getElementById("auxModalContent");
-    modal.style.position = "absolute";
-    modal.style.right = "25vw";
-    modal.style.top = "27vh";
-    modal.style.background = "rgba(0, 0, 0, .8)";
-}
+    $.ajax({
+        type: "GET",
+        url: "Bills/SeparateAccount",
+        data: {
+            billId: billId,
+        },
+        cache: false
+    })
+        .then(function (data) {
+            hidePaid();
+            document.getElementById("bill-body").innerHTML = data;
+            closeLoader();
 
-function setOriginalPositionModal() {
-    let modal = document.getElementById("auxModalContent");
-    modal.style.position = "";
-    modal.style.right = "";
-    modal.style.top = "";
-    modal.style.background = "";
+        })
+        .fail(function (data) {
+            alert('No');
+            closeLoader();
 
-}
+        })
 
-function hideProducts() {
-    let selectProducts = document.getElementById("selectProducts");
-    let searchProducts = document.getElementById("searchProducts");
-    selectProducts.style.opacity = "0";
-    searchProducts.style.opacity = "0";
-}
-
-
-function getProductsToSeparate() {
+    return false;
 
 
 
@@ -277,4 +270,27 @@ function hidePaid() {
     paysViewContainer.style.top = "-100vh";
 }
 
+function productDragStart(box, e) {
 
+    event.dataTransfer.setData("Data", box.id);
+}
+
+function dropProduct(target, e) {
+
+    var boxId = event.dataTransfer.getData("Data");
+    var products = Array.from(document.getElementsByName("BillProducts"));
+    products.forEach(x => x.id == boxId ? makeProductBillable(target, x) : "");
+    amountsManager();
+}
+
+function makeProductBillable(target, product) {
+    target.appendChild(product);
+    switchBillableClass(product);
+
+}
+
+function switchBillableClass(product) {
+    product.classList.toggle("billable");
+    product.classList.toggle("notBillable");
+
+}

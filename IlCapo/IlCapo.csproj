@@ -500,6 +500,8 @@
     <Content Include="Views\Addresses\Edit.cshtml" />
     <Content Include="Views\Addresses\Index.cshtml" />
     <Content Include="Views\Shared\AdressesList.cshtml" />
+    <Content Include="Views\Shared\BillParts\SeparateAccount.cshtml" />
+    <Content Include="Views\Shared\BillParts\BillProductsSeparate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -148,6 +148,7 @@ textarea {
 .bill-item {
     border-bottom: solid;
     padding: 6px 0;
+    height:fit-content;
 }
 
 .bill-item-check {

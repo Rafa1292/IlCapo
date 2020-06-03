@@ -69,6 +69,8 @@ namespace IlCapo.Controllers
                 bill = GetEmptyBill();
             }
 
+            ViewBag.Billable = "billable";
+            ViewBag.Display = "";
             ViewBag.SelectedId = bill.Client.SelectedAddressId;
             var productTaxes = db.ProductTaxes.ToList();
             ViewBag.Extras = db.Extras.ToList();
@@ -171,40 +173,45 @@ namespace IlCapo.Controllers
         {
             List<Item> items = new List<Item>();
 
-            foreach (var Json in itemsJson)
+            itemsJson.ForEach(i => items.Add(new Item()
             {
-                List<ItemExtra> itemExtras = new List<ItemExtra>();
-                List<ItemSide> itemSides = new List<ItemSide>();
-                Item item = new Item();
-
-                item.Description = Json.Observation;
-                item.ProductId = Json.ProductId;
-                item.Quantity = Json.ProductQuantity;
-                item.Bill = bill;
-
-                foreach (var extra in Json.Extras)
-                {
-                    ItemExtra itemExtra = new ItemExtra();
-                    itemExtra.ExtraId = extra.Id;
-                    itemExtra.ProductQuantity = extra.Quantity;
-                    itemExtra.Quantity = extra.ExtraQuantity;
-                    itemExtras.Add(itemExtra);
-                }
-
-                foreach (var sideJson in Json.Sides)
-                {
-                    ItemSide itemSide = new ItemSide();
-                    itemSide.SidesId = sideJson.SideId;
-                    itemSide.ProductQuantity = sideJson.Quantity;
-                    itemSides.Add(itemSide);
-                }
-
-                item.ItemExtras = itemExtras;
-                item.ItemSides = itemSides;
-                items.Add(item);
-            }
+                Description =i.Observation,
+                ProductId = i.ProductId,
+                Quantity = i.ProductQuantity,
+                Price = i.Price,
+                BillId = bill.BillId,
+                ItemExtras = ParseExtras(i.Extras),
+                ItemSides = ParseSides(i.Sides)
+            }));
 
             return items;
+        }
+
+        public  List<ItemExtra> ParseExtras(List<ExtraJson> extrasJson)
+        {
+            List<ItemExtra> itemExtras = new List<ItemExtra>();
+            extrasJson.ForEach(e => itemExtras.Add(new ItemExtra()
+            {
+                ExtraId = e.Id,
+                ProductQuantity = e.Quantity,
+                Quantity = e.ExtraQuantity
+            }));
+
+
+            return itemExtras;
+        }
+
+        public List<ItemSide> ParseSides(List<SideJson> sidesJson)
+        {
+            List<ItemSide> itemSides = new List<ItemSide>();
+            sidesJson.ForEach(s => itemSides.Add(new ItemSide()
+            {
+                SidesId = s.SideId,
+                ProductQuantity = s.Quantity
+            }));
+
+
+            return itemSides;
         }
 
         public Bill EditBill(Bill bill, Bill newBill)
@@ -255,6 +262,7 @@ namespace IlCapo.Controllers
             if (item.Quantity != newItem.Quantity)
             {
                 item.Quantity = newItem.Quantity;
+                item.Price = newItem.Price;
                 db.Entry(item).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -266,7 +274,7 @@ namespace IlCapo.Controllers
         {
             var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
             var listaDeExtrasPorAjustar = newItemExtraList.Where(x => ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
-            var listaDeExtrasPorBorrar = ItemExtraList.Where(x => !newItemExtraList.Contains(x,  new ExtrasEqualityComparer())).ToList();
+            var listaDeExtrasPorBorrar = ItemExtraList.Where(x => !newItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
 
             AddExtras(listaDeExtrasPorAgregar, item);
             DeleteExtras(listaDeExtrasPorBorrar);
@@ -362,7 +370,8 @@ namespace IlCapo.Controllers
             List<ItemSide> currentItemSide = new List<ItemSide>();
             currentItemExtra = item.ItemExtras;
             currentItemSide = item.ItemSides;
-            item.Bill = bill;
+            item.BillId = bill.BillId;
+            item.UnitPrice = item.Price / item.Quantity;
             item.ItemExtras = new List<ItemExtra>();
             item.ItemSides = new List<ItemSide>();
             db.Items.Add(item);
@@ -384,6 +393,20 @@ namespace IlCapo.Controllers
             sliceAccount.Quantity = quantity;
 
             return PartialView("BillParts/SliceAccount", sliceAccount);
+        }
+
+        public ActionResult SeparateAccount(int billId)
+        {
+            List<Item> items = new List<Item>();
+
+            items = db.Items.Include("Product").Include("ItemExtras").Include("ItemSides").Include(x => x.Product.ProductTaxes).Where(x => x.BillId == billId).ToList();
+            Bill bill = db.Bills.Find(billId);
+            bill.Items = items;
+            bill.Client = bill.Client.GetClient(bill.Client.Phone);
+            ViewBag.Display = "none";
+            ViewBag.Billable = "notBillable";
+            ViewBag.Extras = db.Extras.ToList();
+            return PartialView("BillParts/SeparateAccount", bill);
         }
 
         protected override void Dispose(bool disposing)
