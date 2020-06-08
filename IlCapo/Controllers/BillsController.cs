@@ -175,7 +175,7 @@ namespace IlCapo.Controllers
 
             itemsJson.ForEach(i => items.Add(new Item()
             {
-                Description =i.Observation,
+                Description = i.Observation,
                 ProductId = i.ProductId,
                 Quantity = i.ProductQuantity,
                 Price = i.Price,
@@ -187,7 +187,7 @@ namespace IlCapo.Controllers
             return items;
         }
 
-        public  List<ItemExtra> ParseExtras(List<ExtraJson> extrasJson)
+        public List<ItemExtra> ParseExtras(List<ExtraJson> extrasJson)
         {
             List<ItemExtra> itemExtras = new List<ItemExtra>();
             extrasJson.ForEach(e => itemExtras.Add(new ItemExtra()
@@ -270,6 +270,64 @@ namespace IlCapo.Controllers
             CompareSides(newItem.ItemSides, item.ItemSides, item);
         }
 
+        public bool DeleteItem(int id)
+        {
+            if (DeleteItemExtra(id) && DeleteItemSides(id))
+            {
+                try
+                {
+                   
+                    var items = from i in db.Items
+                                     where i.ItemId == id
+                                     select i;
+                    items.ToList().ForEach(x => db.Items.Remove(x));
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+
+                    return false;
+                }
+            }
+
+            return false;
+
+        }
+
+        public bool DeleteItemExtra(int id)
+        {
+            try
+            {
+                var itemExtras = from i in db.ItemExtras
+                                 where i.ItemId == id
+                                 select i;
+                itemExtras.ToList().ForEach(x => db.ItemExtras.Remove(x));
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteItemSides(int id)
+        {
+            try
+            {
+                var itemSides = from i in db.ItemSides
+                                 where i.ItemId == id
+                                 select i;
+                itemSides.ToList().ForEach(x => db.ItemSides.Remove(x));
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public void CompareExtras(List<ItemExtra> newItemExtraList, List<ItemExtra> ItemExtraList, Item item)
         {
             var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
@@ -338,12 +396,6 @@ namespace IlCapo.Controllers
             db.SaveChanges();
         }
 
-        public void DeleteItem(int ItemId)
-        {
-            Item item = db.Items.Find(ItemId);
-            db.Items.Remove(item);
-            db.SaveChanges();
-        }
 
         public Bill CreateBill(Bill bill)
         {

@@ -121,15 +121,40 @@ function reduceProductQuantity(productId) {
 
 }
 
-function deleteProduct(productId) {
-    let productsContainer = document.getElementById("billProductsContainer");
-    let products = productsContainer.getElementsByTagName("div");
-    for (var i = 0; i < products.length; i++) {
-        if (products[i].id == productId) {
-            productsContainer.removeChild(products[i]);
-        }
-    }
-    amountsManager();
+function deleteProduct(productId, id) {
+
+    $.ajax({
+        type: "GET",
+        url: "Bills/DeleteItem",
+        data: {
+            id: id
+        },
+        cache: false
+    })
+        .then(function (data) {
+            if (data) {
+                let productsContainer = document.getElementById("billProductsContainer");
+                let products = productsContainer.getElementsByTagName("div");
+                for (var i = 0; i < products.length; i++) {
+                    if (products[i].id == productId) {
+                        productsContainer.removeChild(products[i]);
+                    }
+                }
+                amountsManager();
+            }
+            else {
+                alert("no se puede eliminar en este momento");
+            }
+
+        })
+        .fail(function (data) {
+            alert('sin conexion');
+
+        })
+
+    return false;
+
+
 }
 
 

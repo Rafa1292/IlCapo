@@ -54,7 +54,7 @@
                 <div class="col-3 p-0">
                     <input class="form-control rounded" type="text" id=@String.Concat("observation", item.ProductId) value="@item.Description">
                 </div>
-                <div class="col-12 d-flex flex-wrap text-white justify-content-center font-weight-light">
+                <div class="col-12 d-flex flex-wrap text-white justify-content-start font-weight-light">
                     <button type="button" class="btn justify-content-center p-0 align-content-center btn-outline-success text-center text-white d-flex col-1 border-white extra-button" onmouseover="showExtrasContainer(@item.ProductId@z)" onmouseout="hideExtrasContainer(@item.ProductId@z)">Extras</button>
                     @for (int i = 1; i <= item.Quantity; i++)
                     {
@@ -97,30 +97,6 @@
                             </div>
                         }
                     }
-                    <div class="col-11 d-flex flex-wrap text-white justify-content-center font-weight-light" id="@String.Concat("sidesContainer", item.ProductId)">
-                        @for (int x = 1; x <= item.Quantity; x++)
-                        {
-                            if (x == z)
-                            {
-                                <div class="d-flex p-2 mx-1 my-2 col-3 pr-4 rounded border flex-wrap text-center background-light position-relative" style="min-height: 40px;" id="@String.Concat("sideLabelContainer", item.ProductId, x)">
-
-                                    @foreach (var selectedSide in item.ItemSides)
-                                    {
-                                        if (selectedSide.ProductQuantity == x)
-                                        {
-                                            <small class="mx-2" id="@String.Concat("sideLabel", item.ProductId, x, selectedSide.SidesId)">
-                                                <input type="number" value="@selectedSide.SidesId" class="d-none" id="@String.Concat("sideInput", item.ProductId, x, selectedSide.SidesId)" />
-                                                @selectedSide.Sides.Name
-                                            </small>
-                                        }
-                                    }
-
-
-                                    <i class="fas fa-pencil-alt side-edit" style="display: @ViewBag.Display" onclick="editSides(@item.ProductId@x, @item.ProductId, @x)"></i>
-                                </div>
-                            }
-                        }
-                    </div>
                 </div>
             </div>
         }
