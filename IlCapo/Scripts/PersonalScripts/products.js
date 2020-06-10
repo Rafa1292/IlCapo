@@ -1,4 +1,7 @@
 ﻿function addProductToBill(id) {
+    var command = document.getElementById("command");
+    command.value = false;
+
     let product = selectProduct(id);
     let exists = verifyExistence(product);
 
@@ -43,6 +46,9 @@ function verifyExistence(product) {
 }
 
 function setQuantity(product) {
+    var command = document.getElementById("command");
+    command.value = false;
+
     let quantityId = `quantity${product.Id}`;
     let element = document.getElementById(quantityId);
     let currentQuantity = parseInt(element.innerHTML);
@@ -102,6 +108,9 @@ function getServiceTax(product) {
 }
 
 function reduceProductQuantity(productId) {
+    var command = document.getElementById("command");
+    command.value = false;
+
     let product = selectProduct(productId);
     let quantityId = `quantity${productId}`;
     let element = document.getElementById(quantityId);

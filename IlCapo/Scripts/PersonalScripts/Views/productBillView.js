@@ -2,7 +2,7 @@
     let taxService = getServiceTax(product);
     let taxSale = getSaleTax(product);
     var view =
-        `<div class="col-12 bill-item d-flex flex-wrap text-white text-center border-white" id="${product.Id}" name="BillProducts">
+        `<div class="col-12 bill-item billable d-flex flex-wrap text-white text-center border-white" id="${product.Id}" name="BillProducts">
          <i class="far fa-times-circle  text-danger position-absolute" onclick="deleteProduct(${product.Id})" style="z-index: 10"></i>
             <div class="col-3 p-0">
                 ${product.Name}

@@ -11,7 +11,8 @@ function hideExtrasContainer(id) {
 }
 
 function reduceExtraQuantity(id) {
-
+    var command = document.getElementById("command");
+    command.value = false;
     let extraQuantityContainerId = `extraQuantity${id}`;
     let extraQuantityContainer = document.getElementById(extraQuantityContainerId);
     let extraQuantity = parseInt(extraQuantityContainer.innerHTML);
@@ -25,7 +26,8 @@ function reduceExtraQuantity(id) {
 }
 
 function addExtraToBill(id) {
-
+    var command = document.getElementById("command");
+    command.value = false;
     let extraQuantityContainerId = `extraQuantity${id}`;
     let extraQuantityContainer = document.getElementById(extraQuantityContainerId);
     let extraQuantity = parseInt(extraQuantityContainer.innerHTML);

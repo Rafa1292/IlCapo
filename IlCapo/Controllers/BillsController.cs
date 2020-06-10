@@ -18,7 +18,7 @@ namespace IlCapo.Controllers
     {
         private IlCapoContext db = new IlCapoContext();
 
-        // GET: Bills
+        // Tengo que enviar los campos nuevos en el json bill
         public ActionResult Index()
         {
             return View();
@@ -106,11 +106,16 @@ namespace IlCapo.Controllers
             bill.Client = emptyClient;
             bill.Items = emptyItems;
             bill.BillId = 0;
+            bill.Total = 0;
+            bill.SubTotal = 0;
+            bill.DiscountAmount = 0;
+            bill.ExtrasAmount = 0;
+            bill.Taxes = 0;
 
             return bill;
         }
 
-        public bool CommandBill(string jsonData, int orderNumber)
+        public ActionResult CommandBill(string jsonData, int orderNumber)
         {
             Validation.Validation elValidador = new Validation.Validation(db, User.Identity.Name);
             Result elResultado = elValidador.ValidateUser();
@@ -118,7 +123,6 @@ namespace IlCapo.Controllers
             if (!elResultado.IsValid)
             {
                 ViewBag.error = elResultado.Message;
-                return elResultado.IsValid;
             }
 
             Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
@@ -128,11 +132,11 @@ namespace IlCapo.Controllers
             Bill bill = new Bill();
             Bill newBill = ParseJsonBill(jsonData, beginDay);
 
-
             if (orderNumber > 0)
             {
                 bill = db.Bills.Find(orderNumber);
                 bill.Items = GetBillItems(bill);
+                bill.Command = true;
                 bill = EditBill(bill, newBill);
             }
             else
@@ -140,7 +144,7 @@ namespace IlCapo.Controllers
                 bill = CreateBill(newBill);
             }
 
-            return true;
+            return Create(bill.TableId, bill.ToGo);
         }
 
         private Bill ParseJsonBill(string jsonData, BeginDay beginDay)
@@ -161,7 +165,12 @@ namespace IlCapo.Controllers
                 ToGo = billJson.ToGo,
                 Express = billJson.Express,
                 State = true,
-                TableId = billJson.TableId
+                TableId = billJson.TableId,
+                SubTotal = billJson.SubTotal,
+                ExtrasAmount = billJson.ExtrasAmount,
+                DiscountAmount = billJson.DiscountAmount,
+                Taxes = billJson.Taxes,
+                Total = billJson.Total
             };
             List<Item> items = ParseItems(billJson.Items, bill);
             bill.Items = items;
@@ -225,6 +234,11 @@ namespace IlCapo.Controllers
             bill.ClientId = client.ClientId;
             bill.Discount = newBill.Discount;
             bill.Express = newBill.Express;
+            bill.SubTotal = newBill.SubTotal;
+            bill.ExtrasAmount = newBill.ExtrasAmount;
+            bill.DiscountAmount = newBill.DiscountAmount;
+            bill.Taxes = newBill.Taxes;
+            bill.Total = newBill.Total;
             EditItems(bill, newBill);
 
             db.Entry(bill).State = EntityState.Modified;

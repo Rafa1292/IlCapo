@@ -73,20 +73,24 @@ namespace IlCapo.Controllers
             return View(client);
         }
 
-        // POST: Clients/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClientId,Name,Phone")] Client client)
+
+        public bool EditClient(Client client)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(client).State = EntityState.Modified;
+                Client newClient = new Client();
+                newClient = client.GetClient(client.Phone);
+                newClient.Name = client.Name;
+                db.Entry(newClient).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return true;
             }
-            return View(client);
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
         }
 
         // GET: Clients/Delete/5

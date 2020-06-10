@@ -202,6 +202,38 @@ function getSidesByProduct(productId, quantity) {
 }
 
 function commandBill() {
+    var command = document.getElementById("command").value;
+
+    if (command == "true") {
+        alert("Ya se envio esta comanda");
+        return;
+    }
+
+    let phone = document.getElementById("phone").value;
+    if (phone == "") {
+        alert("Debe ingresar un telefono");
+        return;
+    }
+
+    let name = document.getElementById("name");
+    if (name.value == "") {
+        alert("Debe ingresar un nombre");
+        return;
+    }
+
+    let address = document.getElementById("newAddress");
+    if (address != null) {
+        alert("Debe ingresar una direccion");
+        return;
+    }
+
+    let elements = document.getElementsByName("totalPrice");
+    if (elements.length < 1) {
+        alert("Debe ingresar almenos 1 producto");
+        return;
+    }
+
+
     openLoader();
     let bill = getBillData();
     let orderNumber = document.getElementById("orderNumber").innerHTML;
@@ -216,7 +248,9 @@ function commandBill() {
         cache: false
     })
         .then(function (data) {
-            alert("si");
+            var modalBody = document.getElementById("bill-body");
+            modalBody.innerHTML = data;
+            $('#billModal').modal('show');
             closeLoader();
         })
         .fail(function (data) {
@@ -233,11 +267,18 @@ function getBillData() {
     let phone = document.getElementById("phone").value;
     if (phone == "") {
         phone = 0;
+        alert("Debe ingresar un cliente");
+        return;
     }
     let itemsList = getItemsList();
     let toGo = document.getElementById("toGo").checked;
     let discount = document.getElementById("descuento").innerHTML;
     let tableId = document.getElementById("tableId").value;
+    let subtotal = document.getElementById("subtotal").innerHTML;
+    let taxes = document.getElementById("impuestos").innerHTML;
+    let extrasAmount = document.getElementById("extras").innerHTML;
+    let discountAmount = document.getElementById("descuento").innerHTML;
+    let total = document.getElementById("total").innerHTML;
 
     let expressInput = document.getElementById("express");
     let express = false;
@@ -257,9 +298,48 @@ function getBillData() {
         Express: express,
         Discount: discount,
         TableId: tableId,
-        Address: address
+        Address: address,
+        Subtotal: subtotal,
+        Taxes: taxes,
+        ExtrasAmount: extrasAmount,
+        DiscountAmount: discountAmount,
+        Total: total
     }
 
     return JSON.stringify(bill);
 
+}
+
+function closeBill() {
+    isComanded();
+    $('#billModal').modal('hide');
+}
+
+function editClient(name) {
+    var phone = parseInt(document.getElementById("phone").value);
+    $.ajax({
+        type: "GET",
+        url: "Clients/EditClient",
+        data: {
+            Name: name,
+            Phone: phone
+        },
+        cache: false
+    })
+        .then(function (data) {
+
+            if (data) {
+                alert("Se cambio la informacion exitosamente");
+            }
+            else {
+                alert("No se pudo cambiar la informacion ");
+
+            }
+        })
+        .fail(function (data) {
+            alert('No');
+
+        })
+
+    return false;
 }

@@ -13,6 +13,16 @@ namespace IlCapo.Models
 
         public bool State { get; set; }
 
+        public int SubTotal { get; set; }
+
+        public int Total { get; set; }
+
+        public int Taxes { get; set; }
+
+        public int ExtrasAmount { get; set; }
+
+        public int DiscountAmount { get; set; }
+
         public int TableId { get; set; }
 
         public virtual Client Client { get; set; }

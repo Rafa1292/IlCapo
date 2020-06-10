@@ -1,4 +1,5 @@
-﻿<div class="col-12 p-0 d-flex flex-wrap ">
+﻿@model IlCapo.Models.Bill
+<div class="col-12 p-0 d-flex flex-wrap ">
     <label class="col-md-8 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <strong>
             Subtotal:
@@ -6,7 +7,7 @@
     </label>
     <div class="col-md-3 mx-2 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <span>¢</span>
-        <span name="subtotal" id="subtotal">0</span>
+        <span name="subtotal" id="subtotal">@Model.SubTotal</span>
     </div>
 </div>
 <div class="col-12 p-0 d-flex flex-wrap">
@@ -17,7 +18,7 @@
     </label>
     <div class="col-md-3 mx-2 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <span>¢</span>
-        <span name="impuestos" id="impuestos">0</span>
+        <span name="impuestos" id="impuestos">@Model.Taxes</span>
     </div>
 </div>
 <div class="col-12 p-0 d-flex flex-wrap">
@@ -28,7 +29,7 @@
     </label>
     <div class="col-md-3 mx-2 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <span>¢</span>
-        <span name="extras" id="extras">0</span>
+        <span name="extras" id="extras">@Model.ExtrasAmount</span>
     </div>
 </div>
 <div class="col-12 p-0 d-flex flex-wrap ">
@@ -39,7 +40,7 @@
     </label>
     <div class="col-md-3 mx-2 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <span>¢</span>
-        <span name="descuento" id="descuento">0</span>
+        <span name="descuento" id="descuento">@Model.DiscountAmount</span>
     </div>
 </div>
 
@@ -51,6 +52,6 @@
     </label>
     <div class="col-md-3 mx-2 m-0 d-flex align-items-center p-0" style="justify-content: flex-end;">
         <span>¢</span>
-        <span name="total" id="total">0</span>
+        <span name="total" id="total">@Model.Total</span>
     </div>
 </div>

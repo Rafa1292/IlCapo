@@ -114,7 +114,7 @@ function createDiscountView() {
 }
 
 function getDiscountView() {
-    setOriginalPositionModal();
+    
     let view = createDiscountView();
     let viewContainer = document.getElementById("modalBody");
     viewContainer.innerHTML = "";
@@ -252,13 +252,19 @@ function separateAccount() {
 }
 
 function ShowPaid() {
-    let paysViewContainer = document.getElementById("payViewContainer");
-    paysViewContainer.style.transition = "top 0s ease, background 1s ease";
-    paysViewContainer.style.top = "0";
-    paysViewContainer.style.background = "rgba(0, 0, 0, .7)";
-    let paysView = document.getElementById("payView");
-    paysView.style.top = "25vh";
 
+    if (isComanded()) {
+
+        let paysViewContainer = document.getElementById("payViewContainer");
+        paysViewContainer.style.transition = "top 0s ease, background 1s ease";
+        paysViewContainer.style.top = "0";
+        paysViewContainer.style.background = "rgba(0, 0, 0, .7)";
+        let paysView = document.getElementById("payView");
+        paysView.style.top = "25vh";
+    }
+    else {
+        alert("comanda enviada exitosamente");
+    }
 }
 
 function hidePaid() {
@@ -293,4 +299,23 @@ function switchBillableClass(product) {
     product.classList.toggle("billable");
     product.classList.toggle("notBillable");
 
+}
+
+function isComanded() {
+    var command = document.getElementById("command").value;
+    let elements = document.getElementsByName("totalPrice");
+
+    if (command == "false" && elements.length > 0) {
+        commandBill();
+        closeLoader();
+        return false;
+    }
+
+    return true;
+}
+
+function selectPayMethod(id) { 
+    var price = parseInt(document.getElementById("total").innerHTML);
+    var methodInput = document.getElementById(id);
+    methodInput.value = price;
 }
