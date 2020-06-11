@@ -19,6 +19,8 @@ namespace IlCapo.Models
 
         public int UnitPrice { get; set; }
 
+        public bool Commanded { get; set; }
+
         public virtual Product Product { get; set; }
 
         public int ProductId { get; set; }

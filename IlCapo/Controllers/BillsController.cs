@@ -140,11 +140,15 @@ namespace IlCapo.Controllers
                 db.Entry(bill).State = EntityState.Modified;
                 db.SaveChanges();
                 bill = EditBill(bill, newBill);
+
             }
             else
             {
                 bill = CreateBill(newBill);
             }
+
+
+            SendTicket(bill);
 
             return Create(bill.TableId, bill.ToGo);
         }
@@ -518,6 +522,43 @@ namespace IlCapo.Controllers
             return PartialView("BillParts/SeparateAccount", bill);
         }
 
+        public bool SendTicket(Bill bill)
+        {
+            var address = bill.Client.Addresses.Find(x => x.AddressId == bill.Client.SelectedAddressId);
+            ticket ticket = new ticket();
+
+            ticket.TextoCentro("Pizza Il Capo");
+            ticket.TextoCentro("Alajuela, Grecia, Centro");
+            ticket.TextoCentro("Mall plaza Grecia");
+            ticket.TextoCentro("Telefono: 2444-3001");
+            ticket.TextoCentro("Ticket #:"+ bill.BillId.ToString());
+            ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
+            ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+
+            ticket.LineasAsterisco();
+
+            ticket.TextoIzquierda(" ");
+            ticket.TextoIzquierda("Atendio: : " + bill.BeginDay.Worker.Name);
+            ticket.TextoIzquierda("Cliente: " + bill.Client.Name);
+            ticket.TextoIzquierda("Contacto: " + bill.Client.Phone);
+            ticket.TextoIzquierda("Direccion: " + address.Description);
+            ticket.TextoIzquierda(" ");
+            ticket.LineasAsterisco();
+
+            ticket.Encabezado();
+            ticket.LineasIgual();
+
+            foreach (var item in bill.Items)
+            {
+                ticket.AgregarArticulo(item.Product.Name, item.Quantity, item.UnitPrice, item.Price);
+            }
+
+
+            ticket.ImprimirTicket("LR2000");
+
+            return true;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -526,5 +567,7 @@ namespace IlCapo.Controllers
             }
             base.Dispose(disposing);
         }
+
+
     }
 }

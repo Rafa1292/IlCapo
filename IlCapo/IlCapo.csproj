@@ -227,6 +227,7 @@
     <Compile Include="Models\Sides.cs" />
     <Compile Include="Models\SliceAccount.cs" />
     <Compile Include="Models\Tax.cs" />
+    <Compile Include="Models\ticket.cs" />
     <Compile Include="Models\WorkDay.cs" />
     <Compile Include="Models\Worker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
