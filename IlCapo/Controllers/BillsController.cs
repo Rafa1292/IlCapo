@@ -137,6 +137,8 @@ namespace IlCapo.Controllers
                 bill = db.Bills.Find(orderNumber);
                 bill.Items = GetBillItems(bill);
                 bill.Command = true;
+                db.Entry(bill).State = EntityState.Modified;
+                db.SaveChanges();
                 bill = EditBill(bill, newBill);
             }
             else
@@ -342,6 +344,7 @@ namespace IlCapo.Controllers
                 return false;
             }
         }
+
         public void CompareExtras(List<ItemExtra> newItemExtraList, List<ItemExtra> ItemExtraList, Item item)
         {
             var listaDeExtrasPorAgregar = newItemExtraList.Where(x => !ItemExtraList.Contains(x, new ExtrasEqualityComparer())).ToList();
@@ -410,6 +413,46 @@ namespace IlCapo.Controllers
             db.SaveChanges();
         }
 
+        public bool Billing(int billId, string payMethod, int payWith)
+        {
+            try
+            {
+                PayMethod payMethodEnum = GetPayMethod(payMethod);
+                Bill bill = db.Bills.Find(billId);
+                bill.PayMethod = payMethodEnum;
+                bill.PayWith = payWith;
+                bill.State = false;
+                db.Entry(bill).State = EntityState.Modified;
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+        }
+
+        public PayMethod GetPayMethod(string name)
+        {
+            PayMethod payMethod = new PayMethod();
+
+            switch (name)
+            {
+                case "card": 
+                    payMethod = PayMethod.Card;
+                    break;
+                case "cash":
+                    payMethod = PayMethod.Cash;
+                    break;
+                case "dollar":
+                    payMethod = PayMethod.Dollar;
+                    break;
+            }
+
+            return payMethod;
+        }
 
         public Bill CreateBill(Bill bill)
         {

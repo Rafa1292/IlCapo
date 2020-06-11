@@ -216,6 +216,7 @@
     <Compile Include="Models\ItemSide.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Pay.cs" />
+    <Compile Include="Models\PayMethod.cs" />
     <Compile Include="Models\PayType.cs" />
     <Compile Include="Models\Printer.cs" />
     <Compile Include="Models\Product.cs" />

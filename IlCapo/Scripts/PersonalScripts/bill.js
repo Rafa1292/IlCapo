@@ -343,3 +343,94 @@ function editClient(name) {
 
     return false;
 }
+
+function getPayMethod() {
+    var creditCard = document.getElementById("creditCard");
+
+    if (creditCard.value != "") {
+        return "card";
+    }
+
+    var cash = document.getElementById("colones");
+
+    if (cash.value != "") {
+        return "cash";
+    }
+
+    var dollar = document.getElementById("dolares");
+
+    if (dollar.value != "") {
+        return "dollar";
+    }
+}
+
+function getPayWith() {
+
+    var creditCard = document.getElementById("creditCard");
+
+    if (creditCard.value != "") {
+        return creditCard.value;
+    }
+
+    var cash = document.getElementById("colones");
+
+    if (cash.value != "") {
+        return cash.value;
+    }
+
+    var dollar = document.getElementById("dolares");
+
+    if (dollar.value != "") {
+        return dollar.value;
+    }
+}
+
+function pay(billId) {
+    var payMethod = getPayMethod();
+    var payWith = getPayWith();
+    billing(billId, payMethod, payWith);
+}
+
+function billing(billId, payMethod, payWith) {
+    var total = parseInt(document.getElementById("total").innerHTML);
+
+    if (total > payWith) {
+        alert("El monto a cancelar es mayor que el metodo de pago");
+    }
+    else {
+        $.ajax({
+            type: "GET",
+            url: "Bills/Billing",
+            data: {
+                billId: billId,
+                payMethod: payMethod,
+                payWith: payWith
+            },
+            cache: false
+        })
+            .then(function (data) {
+
+                if (data) {
+                    ShowChange(payWith);
+                    hidePaid();
+                    closeBill();
+                }
+                else {
+                    alert("No se pudo facturar");
+
+                }
+            })
+            .fail(function (data) {
+                alert('No');
+
+            })
+
+        return false;
+    }
+}
+
+function ShowChange(payWith) {
+    var total = parseInt(document.getElementById("total").innerHTML);
+    var change = parseInt(payWith) - total;
+    alert(`Su vuelto es de ¢${change} \n Gracias por su compra`);
+}

@@ -39,6 +39,10 @@ namespace IlCapo.Models
 
         public bool ToGo { get; set; }
 
+        public PayMethod PayMethod { get; set; }
+
+        public int PayWith { get; set; }
+
         public virtual BeginDay BeginDay { get; set; }
 
         public int BeginDayId { get; set; }
