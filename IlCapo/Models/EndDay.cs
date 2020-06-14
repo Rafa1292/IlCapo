@@ -22,6 +22,8 @@ namespace IlCapo.Models
         [Required]
         public decimal CreditCard { get; set; }
 
+        public decimal Dollar { get; set; }
+
         public virtual Worker Worker { get; set; }
 
         public int WorkerId { get; set; }

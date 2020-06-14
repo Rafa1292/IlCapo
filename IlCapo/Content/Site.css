@@ -40,6 +40,13 @@ textarea {
         color: red !important;
     }
 
+
+.to-go-selected {
+    background-Color : #ffc107;
+}
+
+
+
 .extras-container {
     opacity: 0;
     display: none;
@@ -148,7 +155,7 @@ textarea {
 .bill-item {
     border-bottom: solid;
     padding: 6px 0;
-    height:fit-content;
+    height: fit-content;
 }
 
 .bill-item-check {

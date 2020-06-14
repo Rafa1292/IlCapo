@@ -25,6 +25,8 @@ namespace IlCapo.Models
 
         public int TableId { get; set; }
 
+        public string Date { get; set; }
+
         public virtual Client Client { get; set; }
 
         public int ClientId { get; set; }
@@ -47,17 +49,24 @@ namespace IlCapo.Models
 
         public int BeginDayId { get; set; }
 
-        public Bill tableContent(int tableId, int beginDayId)
+        public Bill tableContent(int tableId, int beginDayId, int billId)
         {
             Bill bill = new Bill();
 
 
             using (IlCapoContext db = new IlCapoContext())
             {
-                var bills = from b in db.Bills.Include("Client")
-                            where  b.TableId == tableId && b.State
-                            select b;
-                bill = bills.ToList().FirstOrDefault();
+                if (billId != 0)
+                {
+                    bill = db.Bills.Include("Client").ToList().Find(x => x.BillId == billId);
+                }
+                else
+                {
+                    var bills = from b in db.Bills.Include("Client")
+                                where b.TableId == tableId && b.State
+                                select b;
+                    bill = bills.ToList().FirstOrDefault();
+                }
             }
             return bill;
         }

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 
 public class IlCapoContext : DbContext
 {
+
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+        modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+    }
     // You can add custom code to this file. Changes will not be overwritten.
     // 
     // If you want Entity Framework to drop and regenerate your database
@@ -15,6 +21,7 @@ public class IlCapoContext : DbContext
 
     public IlCapoContext() : base("name=IlCapoContext")
     {
+
     }
 
     public System.Data.Entity.DbSet<IlCapo.Models.ProductCategory> ProductCategories { get; set; }
@@ -56,6 +63,8 @@ public class IlCapoContext : DbContext
     public System.Data.Entity.DbSet<IlCapo.Models.ItemExtra> ItemExtras { get; set; }
 
     public System.Data.Entity.DbSet<IlCapo.Models.ItemSide> ItemSides { get; set; }
+
+    public System.Data.Entity.DbSet<IlCapo.Models.WorkDay> WorkDays { get; set; }
 
 
 }

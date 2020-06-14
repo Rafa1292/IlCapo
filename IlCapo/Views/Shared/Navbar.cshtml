@@ -1,6 +1,6 @@
 ﻿
 <nav class="navbar navbar-expand-lg navbar-dark p-3 " style="box-shadow: 5px 5px 10px grey;background-color: #343a40; border: 2px solid #ffc107; border-right: none; border-left: none;">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
         <img src="~/Images/logoNebulosa.png" width="150" height="50" alt="">
     </a>        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,23 +8,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Ventas
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    @Html.ActionLink("Facturacion", "Index", "ProductCategories", null, new { @class = "nav-link" })
-                </div>
-            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Mantenimiento
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    @Html.ActionLink("Categoria", "Index", "ProductCategories", null, new { @class = "nav-link" })
-                    @Html.ActionLink("Subcategoria", "Index", "ProductSubCategories", null, new { @class = "nav-link" })
-                    @Html.ActionLink("Productos", "Index", "Products", null, new { @class = "nav-link" })
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="z-index:1001;">
+                    @Html.ActionLink("Categoria", "Index", "ProductCategories", null, new { @class = "nav-link text-black-50" })
+                    @Html.ActionLink("Subcategoria", "Index", "ProductSubCategories", null, new { @class = "nav-link text-black-50" })
+                    @Html.ActionLink("Productos", "Index", "Products", null, new { @class = "nav-link text-black-50" })
                 </div>
             </li>
             <li class="nav-item dropdown">

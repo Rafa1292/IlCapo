@@ -6,7 +6,7 @@
 }
 
 
-<div class=" p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:10px 10px 5px 4px gray; width: 50vw; z-index: 1000; min-height: 85vh; margin-top: 1vh; position: absolute; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-38vw); border-top: none; border-bottom: none;" id="ordersToGo">
+<div class=" p-0 express" style="background-color: #343a40; border-radius: 15px; box-shadow:10px 10px 5px 4px gray; width: 50vw; z-index: 1000; min-height: 85vh; margin-top: 1vh; position: absolute; border: 2px solid #ffc107; overflow: hidden; transform: translateX(-36vw); border-top: none; border-bottom: none;" id="ordersToGo">
     <div class="col-12 px-0 py-3 d-flex" style="background-color: rgba(255, 255, 255, 0.01)">
         @for (int i = 0; i < 20; i++)
         {
@@ -21,7 +21,7 @@
     </div>
 
     <div class="col-md-12 d-flex flex-wrap p-4 " style="justify-content: center; transition: all 1s cubic-bezier(.42,0,.23,1.09); transform: translateX(19vw);" id="OrdersToGoBtnContainer">
-        <button type="button" class="btn btn-outline-warning  " onclick="getBill(0,true)">Agregar orden</button>
+        <button type="button" class="btn btn-outline-warning  " onclick="getBill(0,true, 0)">Agregar orden</button>
     </div>
     @Html.Partial("OrdersToGo")
 

@@ -17,7 +17,7 @@
     }
 
     //cambiar al actualizar create de products
-    if (!product.Sides) {
+    if (product.Sides) {
         getSidesView(product, true, undefined, 0);
     }
 

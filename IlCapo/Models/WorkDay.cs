@@ -13,23 +13,43 @@ namespace IlCapo.Models
 
         public bool State { get; set; }
 
-        public virtual BeginDay BeginDay { get; set; }
+        public decimal InitialCash { get; set; }
 
-        public virtual EndDay EndDay { get; set; }
+        public decimal TotalSales { get; set; }
+
+        public decimal TotalEntries { get; set; }
+
+        public decimal TotalTaxes { get; set; }
+
+        public decimal TotalPays { get; set; }
+
+        public decimal TotalDollar { get; set; }
+
+        public decimal TotalCard { get; set; }
+
+        public decimal TotalCash { get; set; }
+
+        public decimal TotalDiscount { get; set; }
+
+        public decimal Diference { get; set; }
+
+        public virtual BeginDay BeginDay { get; set; }
 
         public int BeginDayId { get; set; }
 
-        public List<Billing> Billings { get; set; }
+        public virtual EndDay EndDay { get; set; }
 
         public int EndDayId { get; set; }
-
-        public List<Pay> Pays { get; set; }
-
-        public List<Entry> Entries { get; set; }
 
         public virtual Worker Worker { get; set; }
 
         public int WorkerId { get; set; }
+
+        public List<Bill> Bills { get; set; }
+
+        public List<Pay> Pays { get; set; }
+
+        public List<Entry> Entries { get; set; }
 
         public bool IsInWorkingDay(Worker worker)
         {

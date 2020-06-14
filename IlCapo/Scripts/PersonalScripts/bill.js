@@ -1,4 +1,4 @@
-﻿function getBill(tableId, toGo) {
+﻿function getBill(tableId, toGo, billId) {
     openLoader();
 
     $.ajax({
@@ -6,7 +6,8 @@
         url: "Bills/Create",
         data: {
             tableId: tableId,
-            toGo: toGo
+            toGo: toGo,
+            billId: billId
         },
         cache: false
     })
@@ -252,6 +253,7 @@ function commandBill() {
             modalBody.innerHTML = data;
             $('#billModal').modal('show');
             closeLoader();
+            location.reload();
         })
         .fail(function (data) {
             alert('No');
@@ -271,7 +273,13 @@ function getBillData() {
         return;
     }
     let itemsList = getItemsList();
-    let toGo = document.getElementById("toGo").checked;
+    let toGo = document.getElementById("toGo").value;
+    if (toGo.toLowerCase() == "false") {
+        togo = false;
+    }
+    else {
+        toGo = true;
+    }
     let discount = document.getElementById("descuento").innerHTML;
     let tableId = document.getElementById("tableId").value;
     let subtotal = document.getElementById("subtotal").innerHTML;
@@ -386,12 +394,17 @@ function getPayWith() {
 }
 
 function pay(billId) {
+    var discount = document.getElementById("discount").value;
+    if (discount == "") {
+        discount = 0;
+    }
+
     var payMethod = getPayMethod();
     var payWith = getPayWith();
-    billing(billId, payMethod, payWith);
+    billing(billId, payMethod, payWith, discount);
 }
 
-function billing(billId, payMethod, payWith) {
+function billing(billId, payMethod, payWith, discount) {
     var total = parseInt(document.getElementById("total").innerHTML);
 
     if (total > payWith) {
@@ -404,7 +417,8 @@ function billing(billId, payMethod, payWith) {
             data: {
                 billId: billId,
                 payMethod: payMethod,
-                payWith: payWith
+                payWith: payWith,
+                discount: discount
             },
             cache: false
         })
@@ -414,6 +428,7 @@ function billing(billId, payMethod, payWith) {
                     ShowChange(payWith);
                     hidePaid();
                     closeBill();
+                    location.reload();
                 }
                 else {
                     alert("No se pudo facturar");

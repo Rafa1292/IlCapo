@@ -1,6 +1,6 @@
 ﻿@model IlCapo.Models.Bill
 
-@{ 
+@{
     var value = "false";
 
     if (Model.Command)
@@ -9,28 +9,43 @@
     }
 }
 
-    <div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
-        <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-none" />
-        <input type="number" value="@ViewBag.TableId" id="tableId" class="d-none" />
-        <input type="checkbox"  value="@value" id="command" class="d-none" />
+<div class="col-12 text-white text-center p-0  bill-order-name flex-wrap">
+    <input type="checkbox" value="@ViewBag.ToGo" id="toGo" class="d-none" />
+    <input type="number" value="@ViewBag.TableId" id="tableId" class="d-none" />
+    <input type="checkbox" value="@value" id="command" class="d-none" />
+    <input type="number" value="" id="discount" class="d-none" />
 
-        @if (ViewBag.ToGo == "True")
+
+    @if (ViewBag.ToGo == "True")
+    {
+        var motorcycle = "";
+        var walking = "";
+
+        if (Model.Express)
         {
-            <div class="col-12 justify-content-start d-flex pt-2">
-                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="walking" onclick="express(this.id)">
-                    <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
-                </button>
-                <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded" id="motorcycle" onclick="express(this.id)">
-                    <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
-                </button>
-                <input class="d-none" id="express" value="" />
-            </div>
+            motorcycle = "to-go-selected";
         }
-        <h5 class="mb-2">
-            <strong> Orden #</strong>
-            <span id="orderNumber">@Model.BillId</span>
-        </h5>
-    </div>
+
+        if (!Model.Express && Model.BillId > 0)
+        {
+            walking = "to-go-selected";
+        }
+
+        <div class="col-12 justify-content-start d-flex pt-2">
+            <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded @walking" id="walking" onclick="express(this.id)">
+                <i class="fas fa-walking text-dark" style="font-size:30px;"></i>
+            </button>
+            <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded @motorcycle" id="motorcycle" onclick="express(this.id)">
+                <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
+            </button>
+            <input class="d-none" id="express" value="" />
+        </div>
+    }
+    <h5 class="mb-2">
+        <strong> Orden #</strong>
+        <span id="orderNumber">@Model.BillId</span>
+    </h5>
+</div>
 
 <div class="col-12 p-2 d-flex flex-wrap text-white justify-content-around" style="height: 13vh !important;">
     @Html.Partial("BillParts/ClientInfo", Model)

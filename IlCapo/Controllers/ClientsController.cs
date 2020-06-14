@@ -80,6 +80,13 @@ namespace IlCapo.Controllers
             {
                 Client newClient = new Client();
                 newClient = client.GetClient(client.Phone);
+
+                if (newClient == null)
+                {
+                    db.Clients.Add(client);
+                    db.SaveChanges();
+                    return true;
+                }
                 newClient.Name = client.Name;
                 db.Entry(newClient).State = EntityState.Modified;
                 db.SaveChanges();

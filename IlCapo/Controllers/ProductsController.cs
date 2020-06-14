@@ -50,7 +50,7 @@ namespace IlCapo.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,Name,Cost,Price,KitchenMessage,ProductSubCategoryId")] Product product, int[] Tax)
+        public ActionResult Create(Product product, int[] Tax)
         {
             using (var transaction = db.Database.BeginTransaction())
             {
@@ -173,7 +173,7 @@ namespace IlCapo.Controllers
                     Price = product.Price,
                     Message = product.KitchenMessage,
                     Sides = product.Sides,
-                    SidesQuantity = 5,
+                    SidesQuantity = product.SidesQuantity,
                     Category = product.ProductSubCategory.ProductCategory.Name,
                     SubCategory = product.ProductSubCategory.Name,
                     Taxes = GetTaxes(product)

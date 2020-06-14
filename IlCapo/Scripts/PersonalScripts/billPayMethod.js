@@ -123,11 +123,12 @@ function getDiscountView() {
 }
 
 function applyDiscount() {
+    let discountInput = document.getElementById("discount");
     let discountPercentage = parseInt(document.getElementById("discountAmount").value);
     let subtotal = parseInt(document.getElementById("subtotal").innerHTML);
     let impuestos = parseInt(document.getElementById("impuestos").innerHTML);
     let extra = parseInt(document.getElementById("extras").innerHTML);
-
+    discountInput.value = discountPercentage;
     let discount = document.getElementsByName("descuento");
     let discountAmount = discountPercentage * (subtotal + impuestos + extra) / 100;
 
@@ -302,10 +303,14 @@ function switchBillableClass(product) {
 }
 
 function isComanded() {
-    var command = document.getElementById("command").value;
+    var command = document.getElementById("command");
     let elements = document.getElementsByName("totalPrice");
 
-    if (command == "false" && elements.length > 0) {
+    if (command == null) {
+        command = true;
+    }
+
+    if (command.value == "false" && elements.length > 0) {
         commandBill();
         closeLoader();
         return false;

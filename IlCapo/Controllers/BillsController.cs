@@ -18,29 +18,12 @@ namespace IlCapo.Controllers
     {
         private IlCapoContext db = new IlCapoContext();
 
-        // Tengo que enviar los campos nuevos en el json bill
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: Bills/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Bill bill = db.Bills.Find(id);
-            if (bill == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bill);
-        }
-
-        // GET: Bills/Create
-        public ActionResult Create(int tableId, bool toGo)
+        public ActionResult Create(int tableId, bool toGo, int billId)
         {
 
             Validation.Validation elValidador = new Validation.Validation(db, User.Identity.Name);
@@ -52,11 +35,17 @@ namespace IlCapo.Controllers
                 return PartialView("advertisement");
             }
 
+
             Bill bill = new Bill();
             BeginDay beginDay = new BeginDay();
             Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
             beginDay = beginDay.GetBeginDay(worker);
-            var billContent = bill.tableContent(tableId, beginDay.BeginDayId);
+            var billContent = bill.tableContent(tableId, beginDay.BeginDayId, billId);
+
+            if (tableId == 0 && billId == 0)
+            {
+                billContent = null;
+            }
 
             if (billContent != null)
             {
@@ -148,9 +137,11 @@ namespace IlCapo.Controllers
             }
 
 
-            SendTicket(bill);
+            bill.Command = true;
+            db.Entry(bill).State = EntityState.Modified;
+            db.SaveChanges();
 
-            return Create(bill.TableId, bill.ToGo);
+            return Create(bill.TableId, bill.ToGo, bill.BillId);
         }
 
         private Bill ParseJsonBill(string jsonData, BeginDay beginDay)
@@ -161,11 +152,13 @@ namespace IlCapo.Controllers
             Client client = new Client();
             client = client.GetClient(billJson.Phone);
             client.SelectedAddressId = billJson.Address;
+            db.Entry(client).State = EntityState.Modified;
+            db.SaveChanges();
 
             Bill bill = new Bill()
             {
                 BeginDayId = beginDay.BeginDayId,
-                Client = client,
+                ClientId = client.ClientId,
                 Command = false,
                 Discount = billJson.Discount,
                 ToGo = billJson.ToGo,
@@ -246,9 +239,12 @@ namespace IlCapo.Controllers
             bill.Taxes = newBill.Taxes;
             bill.Total = newBill.Total;
             EditItems(bill, newBill);
-
             db.Entry(bill).State = EntityState.Modified;
-
+            db.SaveChanges();
+            SendCommand(bill);
+            List<Item> items = GetBillItems(bill);
+            items.ForEach(x => x.Commanded = true);
+            items.ForEach(y => db.Entry(y).State = EntityState.Modified);
             db.SaveChanges();
             return bill;
         }
@@ -279,15 +275,23 @@ namespace IlCapo.Controllers
 
         public void EditItem(Item newItem, Item item)
         {
+            var editCommand = false;
             if (item.Quantity != newItem.Quantity)
             {
                 item.Quantity = newItem.Quantity;
                 item.Price = newItem.Price;
                 db.Entry(item).State = EntityState.Modified;
                 db.SaveChanges();
+                editCommand = true;
+
             }
             CompareExtras(newItem.ItemExtras, item.ItemExtras, item);
             CompareSides(newItem.ItemSides, item.ItemSides, item);
+
+            if (editCommand)
+            {
+                EditCommand(item);
+            }
         }
 
         public bool DeleteItem(int id)
@@ -296,10 +300,10 @@ namespace IlCapo.Controllers
             {
                 try
                 {
-                   
+
                     var items = from i in db.Items
-                                     where i.ItemId == id
-                                     select i;
+                                where i.ItemId == id
+                                select i;
                     items.ToList().ForEach(x => db.Items.Remove(x));
                     db.SaveChanges();
                     return true;
@@ -337,8 +341,8 @@ namespace IlCapo.Controllers
             try
             {
                 var itemSides = from i in db.ItemSides
-                                 where i.ItemId == id
-                                 select i;
+                                where i.ItemId == id
+                                select i;
                 itemSides.ToList().ForEach(x => db.ItemSides.Remove(x));
                 db.SaveChanges();
                 return true;
@@ -357,8 +361,12 @@ namespace IlCapo.Controllers
 
             AddExtras(listaDeExtrasPorAgregar, item);
             DeleteExtras(listaDeExtrasPorBorrar);
-            EditExtras(ItemExtraList, listaDeExtrasPorAjustar);
+            EditExtras(ItemExtraList, listaDeExtrasPorAjustar, item);
 
+            if (listaDeExtrasPorAgregar.Count > 0 || listaDeExtrasPorBorrar.Count > 0)
+            {
+                EditCommand(item);
+            }
         }
 
         public void CompareSides(List<ItemSide> newItemSideList, List<ItemSide> itemSideList, Item item)
@@ -402,7 +410,7 @@ namespace IlCapo.Controllers
             db.SaveChanges();
         }
 
-        public void EditExtras(List<ItemExtra> itemExtrasList, List<ItemExtra> listaDeExtrasPorAjustar)
+        public void EditExtras(List<ItemExtra> itemExtrasList, List<ItemExtra> listaDeExtrasPorAjustar, Item item)
         {
             foreach (var extraPorAjustar in listaDeExtrasPorAjustar)
             {
@@ -412,22 +420,29 @@ namespace IlCapo.Controllers
                 {
                     itemExtra.Quantity = extraPorAjustar.Quantity;
                     db.Entry(itemExtra).State = EntityState.Modified;
+                    EditCommand(item);
+
+
                 }
             }
             db.SaveChanges();
         }
 
-        public bool Billing(int billId, string payMethod, int payWith)
+        public bool Billing(int billId, string payMethod, int payWith, int discount)
         {
             try
             {
                 PayMethod payMethodEnum = GetPayMethod(payMethod);
-                Bill bill = db.Bills.Find(billId);
+                Bill bill = db.Bills.Include(x => x.Client.Addresses).Include("Items").FirstOrDefault(x => x.BillId == billId);
                 bill.PayMethod = payMethodEnum;
+                bill.Discount = discount;
+                bill.DiscountAmount = discount * bill.Total / 100;
                 bill.PayWith = payWith;
                 bill.State = false;
                 db.Entry(bill).State = EntityState.Modified;
                 db.SaveChanges();
+                SendTicket(bill);
+
                 return true;
             }
             catch (Exception)
@@ -444,7 +459,7 @@ namespace IlCapo.Controllers
 
             switch (name)
             {
-                case "card": 
+                case "card":
                     payMethod = PayMethod.Card;
                     break;
                 case "cash":
@@ -463,17 +478,22 @@ namespace IlCapo.Controllers
             List<Item> currentItems = bill.Items;
             List<Item> Items = new List<Item>();
             bill.Items = Items;
+            bill.Date = DateTime.Now.ToShortTimeString();
             db.Bills.Add(bill);
             db.SaveChanges();
 
 
             foreach (var item in currentItems)
             {
-                Items.Add(CreateItem(item, bill));
+                var newItem = CreateItem(item, bill);
+                newItem.Product = db.Products.Find(item.ProductId);
             }
 
             bill.Items = Items;
-
+            SendCommand(bill);
+            Items.ForEach(x => x.Commanded = true);
+            Items.ForEach(y => db.Entry(y).State = EntityState.Modified);
+            db.SaveChanges();
             return bill;
         }
 
@@ -484,6 +504,7 @@ namespace IlCapo.Controllers
             currentItemExtra = item.ItemExtras;
             currentItemSide = item.ItemSides;
             item.BillId = bill.BillId;
+            item.Commanded = false;
             item.UnitPrice = item.Price / item.Quantity;
             item.ItemExtras = new List<ItemExtra>();
             item.ItemSides = new List<ItemSide>();
@@ -495,6 +516,18 @@ namespace IlCapo.Controllers
             db.ItemExtras.AddRange(item.ItemExtras);
             db.ItemSides.AddRange(item.ItemSides);
             db.SaveChanges();
+
+            foreach (var itemExtra in item.ItemExtras)
+            {
+                itemExtra.Extra = db.Extras.Find(itemExtra.ExtraId);
+            }
+
+            foreach (var itemSide in item.ItemSides)
+            {
+                itemSide.Sides = db.Sides.Find(itemSide.SidesId);
+            }
+
+            item.Product = db.Products.Find(item.ProductId);
 
             return item;
         }
@@ -526,22 +559,23 @@ namespace IlCapo.Controllers
         {
             var address = bill.Client.Addresses.Find(x => x.AddressId == bill.Client.SelectedAddressId);
             ticket ticket = new ticket();
-
+            var total = bill.Total - bill.DiscountAmount + bill.Taxes;
             ticket.TextoCentro("Pizza Il Capo");
             ticket.TextoCentro("Alajuela, Grecia, Centro");
             ticket.TextoCentro("Mall plaza Grecia");
             ticket.TextoCentro("Telefono: 2444-3001");
-            ticket.TextoCentro("Ticket #:"+ bill.BillId.ToString());
+            ticket.TextoCentro("Ticket #:" + bill.BillId.ToString());
             ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
             ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
 
             ticket.LineasAsterisco();
 
             ticket.TextoIzquierda(" ");
-            ticket.TextoIzquierda("Atendio: : " + bill.BeginDay.Worker.Name);
-            ticket.TextoIzquierda("Cliente: " + bill.Client.Name);
-            ticket.TextoIzquierda("Contacto: " + bill.Client.Phone);
+            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
+            ticket.TextoIzquierda(" Contacto: " + bill.Client.Phone);
             ticket.TextoIzquierda("Direccion: " + address.Description);
+
             ticket.TextoIzquierda(" ");
             ticket.LineasAsterisco();
 
@@ -550,15 +584,120 @@ namespace IlCapo.Controllers
 
             foreach (var item in bill.Items)
             {
-                ticket.AgregarArticulo(item.Product.Name, item.Quantity, item.UnitPrice, item.Price);
+                ticket.AgregarArticulo($" {item.Product.Name} {item.Product.ProductSubCategory.Name}", item.Quantity, item.UnitPrice, item.Price);
+            }
+            ticket.LineasIgual();
+            ticket.AgregarTotales("               SUBTOTAL......", decimal.Parse(bill.SubTotal.ToString()));
+            ticket.AgregarTotales("               EXTRAS........", decimal.Parse(bill.ExtrasAmount.ToString()));
+            ticket.AgregarTotales("               DESCUENTO.....", decimal.Parse(bill.DiscountAmount.ToString()));
+            ticket.AgregarTotales("               IMPUESTOS.....", decimal.Parse(bill.Taxes.ToString()));
+            ticket.AgregarTotales("               TOTAL.........", decimal.Parse(total.ToString()));
+            ticket.AgregarTotales("               PAGA CON......", decimal.Parse(bill.PayWith.ToString()));
+            ticket.AgregarTotales("               VUELTO........", decimal.Parse((bill.PayWith - total).ToString()));
+
+
+
+            for (int i = 0; i < 7; i++)
+            {
+                ticket.TextoIzquierda(" ");
+
             }
 
-
+            ticket.CortarTicket();
             ticket.ImprimirTicket("LR2000");
 
             return true;
         }
 
+        public bool EditCommand(Item item)
+        {
+            Bill bill = db.Bills.Find(item.BillId);
+            ticket ticket = new ticket();
+
+
+            ticket.TextoCentro("Ticket #:" + bill.BillId.ToString());
+            ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
+            ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+
+            ticket.LineasAsterisco();
+
+            ticket.TextoIzquierda(" ");
+            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
+            ticket.TextoIzquierda(" ");
+
+            ticket.LineasAsterisco();
+            ticket.TextoCentro($" ESTA ES UNA EDICION DEL TICKET #{bill.BillId} SOBRE EL ITEM #{item.ItemId}, HAGA CASO OMISO A DICHO ITEM.");
+
+            ticket.LineasIgual();
+
+
+            ticket.AgregarArticuloComanda(item.Product, item.Quantity, item.Description, item.ItemExtras, item.ItemSides, item.ItemId);
+
+            ticket.LineasIgual();
+
+            for (int i = 0; i < 7; i++)
+            {
+                ticket.TextoIzquierda(" ");
+
+            }
+
+            ticket.CortarTicket();
+            ticket.ImprimirTicket("LR2000");
+
+            return true;
+        }
+
+
+        public bool SendCommand(Bill bill)
+        {
+
+
+            ticket ticket = new ticket();
+
+
+            ticket.TextoCentro("Ticket #:" + bill.BillId.ToString());
+            ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
+            ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+
+            ticket.LineasAsterisco();
+
+            ticket.TextoIzquierda(" ");
+            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
+            ticket.TextoIzquierda(" ");
+
+            ticket.LineasAsterisco();
+
+
+            var haveItems = false;
+
+            foreach (var item in bill.Items)
+            {
+                if (!item.Commanded && item.Product.KitchenMessage)
+                {
+                    haveItems = true;
+                    ticket.AgregarArticuloComanda(item.Product, item.Quantity, item.Description, item.ItemExtras, item.ItemSides, item.ItemId);
+                    ticket.TextoIzquierda("");
+                    ticket.LineasGuion();
+                }
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                ticket.TextoIzquierda(" ");
+
+            }
+
+            if (haveItems)
+            {
+                ticket.CortarTicket();
+                ticket.ImprimirTicket("LR2000");
+            }
+
+            return true;
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

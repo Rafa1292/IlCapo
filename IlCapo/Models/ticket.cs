@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,7 +11,7 @@ namespace IlCapo.Models
     public class ticket
     {
         StringBuilder linea = new StringBuilder();
-        int maxCar = 40;
+        int maxCar = 42;
         int cortar;
 
         public string LineasGuion()
@@ -45,7 +46,7 @@ namespace IlCapo.Models
 
         public void Encabezado()
         {
-            linea.AppendLine("ARTICULO              |CANT|PRECIO|TOTAL");
+            linea.AppendLine(" ARTICULO             |CANT|PRECIO|TOTAL");
         }
 
         public void TextoIzquierda(string texto)
@@ -63,7 +64,7 @@ namespace IlCapo.Models
             }
             else
             {
-                linea.AppendLine(texto);
+                linea.AppendLine(" " + texto);
             }
         }
 
@@ -170,10 +171,10 @@ namespace IlCapo.Models
         {
             string resumen, valor, textoCompleto, espacios = "";
 
-            if (texto.Length > 25)
+            if (texto.Length > 30)
             {
-                cortar = texto.Length - 25;
-                resumen = texto.Remove(25, cortar);
+                cortar = texto.Length - 30;
+                resumen = texto.Remove(30, cortar);
             }
             else
             {
@@ -181,18 +182,67 @@ namespace IlCapo.Models
             }
 
             textoCompleto = resumen;
-            valor = total.ToString("#,#.00");
-            int nroEspacios = maxCar - (resumen.Length + valor.Length);
+
+            var initialPrice = total.ToString();
+            var priceSize = initialPrice.Length - 3;
+            for (int x = priceSize; x > 0; x -= 3)
+            {
+                initialPrice = initialPrice.Insert(x, ",");
+            }
+            valor = initialPrice;
+            int nroEspacios = maxCar - (resumen.Length + valor.Length + 4);
 
             for (int i = 0; i < nroEspacios; i++)
             {
                 espacios += " ";
             }
 
-            textoCompleto += espacios + valor;
+            textoCompleto += espacios + "CRC " + valor;
             linea.AppendLine(textoCompleto);
         }
 
+        public void AgregarArticuloComanda(Product product, int cant, string descripcion, List<ItemExtra> extras, List<ItemSide> acompañamientos, int itemId)
+        {
+            linea.AppendLine($"  Linea #{itemId} ");
+
+            string elemento = "  ";
+            bool bandera = false;
+
+            elemento += cant.ToString() + ": ";
+            elemento += $"{product.ProductSubCategory.Name} {product.Name}";
+
+            linea.AppendLine(elemento);
+
+
+
+            if (acompañamientos.Count > 0)
+            {
+                linea.AppendLine("            Acompanamientos");
+
+                foreach (var side in acompañamientos)
+                {
+                    linea.AppendLine($"          -{side.Sides.Name} (Pr.{side.ProductQuantity})");
+                }
+            }
+
+            if (extras.Count > 0)
+            {
+                linea.AppendLine("                 Extras");
+
+                foreach (var extra in extras)
+                {
+                    linea.AppendLine($"          {extra.Quantity}: {extra.Extra.Name} (Pr.{extra.ProductQuantity})");
+                }
+            }
+            linea.AppendLine("");
+
+            if (descripcion != "")
+            {
+                linea.AppendLine(" Detalles: " +descripcion);
+
+            }
+
+        }
         public void AgregarArticulo(string articulo, int cant, int precio, int total)
         {
             if (cant.ToString().Length <= 5 && precio.ToString().Length <= 7 && total.ToString().Length <= 8)
@@ -292,6 +342,12 @@ namespace IlCapo.Models
                 throw new Exception("Valores demasiado  grandes");
 
             }
+        }
+
+        public void CortarTicket()
+        {
+            linea.AppendLine("\x1b" + "m");
+
         }
 
         public void ImprimirTicket(string impresora)
