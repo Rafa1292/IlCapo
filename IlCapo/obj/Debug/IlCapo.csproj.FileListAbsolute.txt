@@ -124,3 +124,5 @@ C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.csproj.CopyComplete
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.dll
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.pdb
 C:\Users\rvill\source\repos\IlCapo\IlCapo\obj\Debug\IlCapo.csprojAssemblyReference.cache
+C:\Users\rvill\source\repos\IlCapo\IlCapo\bin\IlCapo.dll.CodeAnalysisLog.xml
+C:\Users\rvill\source\repos\IlCapo\IlCapo\bin\IlCapo.dll.lastcodeanalysissucceeded
