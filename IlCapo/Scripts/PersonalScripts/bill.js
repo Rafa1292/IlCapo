@@ -186,17 +186,20 @@ function getSidesByProduct(productId, quantity) {
 
     for (var i = 1; i <= quantity; i++) {
         let sideLabelContainer = document.getElementById(`sideLabelContainer${productId}${i}`);
-        let sideInputs = sideLabelContainer.getElementsByTagName("input");
+        if (sideLabelContainer != null) {
+            let sideInputs = sideLabelContainer.getElementsByTagName("input");
 
-        for (var x = 0; x < sideInputs.length; x++) {
-            let side = {
-                SideId: sideInputs[x].value,
-                ProductId: productId,
-                Quantity: i
+            for (var x = 0; x < sideInputs.length; x++) {
+                let side = {
+                    SideId: sideInputs[x].value,
+                    ProductId: productId,
+                    Quantity: i
+                }
+
+                addedSides.push(side);
             }
-
-            addedSides.push(side);
         }
+
     }
 
     return addedSides;

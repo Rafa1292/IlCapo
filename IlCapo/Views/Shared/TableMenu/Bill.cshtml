@@ -2,10 +2,16 @@
 
 @{
     var value = "false";
+    var express = "false";
 
     if (Model.Command)
     {
         value = "true";
+    }
+
+    if (Model.Express)
+    {
+        express = "true";
     }
 }
 
@@ -38,7 +44,7 @@
             <button type="button" class="mx-3 nebulosa-btn btn-outline-warning rounded @motorcycle" id="motorcycle" onclick="express(this.id)">
                 <i class="fas fa-motorcycle text-dark" style="font-size:30px;"></i>
             </button>
-            <input class="d-none" id="express" value="" />
+            <input class="d-none" id="express" value="@express" />
         </div>
     }
     <h5 class="mb-2">

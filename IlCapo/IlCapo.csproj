@@ -458,7 +458,6 @@
     <Content Include="Views\Bills\Delete.cshtml" />
     <Content Include="Views\Bills\Details.cshtml" />
     <Content Include="Views\Bills\Edit.cshtml" />
-    <Content Include="Views\Bills\Index.cshtml" />
     <Content Include="Views\Shared\advertisement.cshtml" />
     <Content Include="Views\Shared\Navbar.cshtml" />
     <Content Include="Views\Shared\BasicModal.cshtml" />
@@ -503,6 +502,7 @@
     <Content Include="Views\Shared\BillParts\SeparateAccount.cshtml" />
     <Content Include="Views\Shared\BillParts\BillProductsSeparate.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
+    <Content Include="Views\Bills\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

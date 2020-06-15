@@ -20,7 +20,12 @@ namespace IlCapo.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            BeginDay beginDay = new BeginDay();
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            beginDay = beginDay.GetBeginDay(worker);
+            var bills = db.Bills.ToList().Where(x => x.BeginDayId == beginDay.BeginDayId).ToList();
+            ViewBag.totalBills = bills.Sum(x => x.Total);
+            return View(bills);
         }
 
         public ActionResult Create(int tableId, bool toGo, int billId)
@@ -68,7 +73,7 @@ namespace IlCapo.Controllers
             ViewBag.TableId = tableId;
             ViewBag.ToGo = toGo.ToString();
             Product product = new Product();
-            ViewBag.Favorites = product.Get().OrderBy(p => p.TotalSales).ToList();
+            ViewBag.Favorites = product.Get().OrderByDescending(p => p.TotalSales).ToList();
             ViewBag.Category = db.ProductCategories.ToList();
             return PartialView("TableMenu/TableMenu", bill);
         }
@@ -225,12 +230,7 @@ namespace IlCapo.Controllers
         public Bill EditBill(Bill bill, Bill newBill)
         {
 
-            Client client = new Client();
-            client = client.GetClient(newBill.Client.Phone);
-            client.SelectedAddressId = newBill.Client.SelectedAddressId;
-            db.Entry(client).State = EntityState.Modified;
-
-            bill.ClientId = client.ClientId;
+            bill.ClientId = newBill.ClientId;
             bill.Discount = newBill.Discount;
             bill.Express = newBill.Express;
             bill.SubTotal = newBill.SubTotal;
@@ -442,7 +442,15 @@ namespace IlCapo.Controllers
                 db.Entry(bill).State = EntityState.Modified;
                 db.SaveChanges();
                 SendTicket(bill);
+                SendTicket(bill);
 
+                foreach (var item in bill.Items)
+                {
+                    var product = db.Products.Find(item.ProductId);
+                    product.TotalSales += item.Quantity;
+                    db.Entry(product).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
                 return true;
             }
             catch (Exception)
@@ -603,6 +611,9 @@ namespace IlCapo.Controllers
 
             }
 
+            ticket.TextoCentro("Gracias por su compra");
+
+
             ticket.CortarTicket();
             ticket.ImprimirTicket("LR2000");
 
@@ -651,8 +662,12 @@ namespace IlCapo.Controllers
 
         public bool SendCommand(Bill bill)
         {
+            var toGo = " Servido";
 
-
+            if (bill.ToGo)
+            {
+                toGo = " LLevar";
+            }
             ticket ticket = new ticket();
 
 
@@ -665,6 +680,8 @@ namespace IlCapo.Controllers
             ticket.TextoIzquierda(" ");
             ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
             ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
+            ticket.TextoIzquierda(toGo);
+
             ticket.TextoIzquierda(" ");
 
             ticket.LineasAsterisco();
