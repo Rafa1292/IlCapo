@@ -11,7 +11,7 @@ namespace IlCapo.Controllers
         IlCapoContext db = new IlCapoContext();
         public ActionResult Index()
         {
-            var bills = db.Bills.ToList().Where(x => x.State && x.ToGo).ToList();
+            var bills = db.Bills.ToList().Where(x => x.State).ToList();
 
             return View(bills);
         }

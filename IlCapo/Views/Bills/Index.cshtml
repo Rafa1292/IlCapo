@@ -4,29 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 
-<label>@ViewBag.totalBills</label>
+<label class="col-12 text-center mt-5">Total ventas: ¢@ViewBag.totalBills</label>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.BeginDay.BeginDayId)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Client.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.State)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.SubTotal)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Total)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Taxes)
@@ -38,19 +25,13 @@
             @Html.DisplayNameFor(model => model.DiscountAmount)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Total)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.TableId)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Discount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Command)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Express)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ToGo)
@@ -61,65 +42,45 @@
         <th>
             @Html.DisplayNameFor(model => model.PayWith)
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BeginDay.BeginDayId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Client.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.State)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubTotal)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Total)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Taxes)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExtrasAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DiscountAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TableId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Discount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Command)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Express)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ToGo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PayMethod)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PayWith)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.BillId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BillId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.BillId })
-        </td>
-    </tr>
+<tr>
+
+    <td>
+        @Html.DisplayFor(modelItem => item.Client.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SubTotal)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Taxes)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ExtrasAmount)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DiscountAmount)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Total)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TableId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ToGo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PayMethod)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PayWith)
+    </td>
+</tr>
 }
 
 </table>

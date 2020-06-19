@@ -17,8 +17,9 @@ namespace IlCapo.Controllers
         // GET: EndDays
         public ActionResult Index()
         {
-
-            return PartialView("Index", GetValidateEndDaysList());
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            var endDay = GetValidateEndDaysList();
+            return PartialView("Index", endDay);
 
         }
 
@@ -41,7 +42,7 @@ namespace IlCapo.Controllers
             ViewBag.entries = entries;            
             EndDay endDay = new EndDay();
             endDay.Worker = worker;
-            int creditCardAmount = db.Bills.ToList().Where(x => x.PayMethod == PayMethod.Card).ToList().Sum(x => x.Total - x.DiscountAmount);
+            int creditCardAmount = db.Bills.ToList().Where(x => x.PayMethod == PayMethod.Card && x.BeginDayId == beginDay.BeginDayId).ToList().Sum(x => x.Total - x.DiscountAmount);
             endDay.CreditCard = creditCardAmount;
 
             return PartialView("Create", endDay);
@@ -62,6 +63,8 @@ namespace IlCapo.Controllers
                 db.EndDays.Add(endDay);
                 db.SaveChanges();
                 EndWorkDay(endDay.EndDayId);
+                var endDayList = GetValidateEndDaysList();
+                return PartialView("Index", endDayList);
             }
 
 
@@ -83,7 +86,7 @@ namespace IlCapo.Controllers
             int discountAmount = bills.Sum(x => x.DiscountAmount);
             decimal entriesAmount = (entries.Sum(x => x.Amount));
             decimal paysAmount = pays.Sum(x => x.Amount);
-            decimal diference = endDay.Cash - beginDay.Cash + decimal.Parse(billsAmount.ToString()) + entriesAmount + decimal.Parse(taxesAmount.ToString()) - decimal.Parse(discountAmount.ToString()) - paysAmount - endDay.CreditCard;
+            decimal diference = endDay.Cash - (beginDay.Cash + decimal.Parse(billsAmount.ToString()) + entriesAmount + decimal.Parse(taxesAmount.ToString()) - decimal.Parse(discountAmount.ToString()) - paysAmount - endDay.CreditCard);
             WorkDay workDay = new WorkDay()
             {
                 BeginDayId = beginDay.BeginDayId,
@@ -104,6 +107,7 @@ namespace IlCapo.Controllers
             db.WorkDays.Add(workDay);
             db.SaveChanges();
             SendCloseTicket(workDay);
+
         }
 
         public bool ValidateUser()
@@ -137,6 +141,8 @@ namespace IlCapo.Controllers
 
         public bool SendCloseTicket( WorkDay workDay)
         {
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            var endDay = db.EndDays.Find(workDay.EndDayId);
             ticket ticket = new ticket();
             ticket.TextoCentro("Pizza Il Capo");
             ticket.TextoCentro("Alajuela, Grecia, Centro");
@@ -144,7 +150,7 @@ namespace IlCapo.Controllers
             ticket.TextoCentro("Telefono: 2444-3001");
             ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
             ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
-            ticket.TextoCentro(" Cajero: : " + User.Identity.Name);
+            ticket.TextoCentro(" Cajero: : " + worker.Name);
 
             ticket.LineasAsterisco();
             ticket.TextoIzquierda(" ");
@@ -163,8 +169,8 @@ namespace IlCapo.Controllers
             ticket.TextoIzquierda($" Venta tarjeta: {workDay.TotalCard}");
             ticket.TextoIzquierda($" Venta efectivo: {workDay.TotalCash}");
             ticket.TextoIzquierda($" Total: {total}");
-            ticket.TextoIzquierda($" Efectivo en caja: {workDay.TotalCash}");
-            ticket.TextoIzquierda($" Diferencia: {workDay.TotalCash - total}");
+            ticket.TextoIzquierda($" Efectivo en caja: {endDay.Cash}");
+            ticket.TextoIzquierda($" Diferencia: {workDay.Diference}");
 
 
 

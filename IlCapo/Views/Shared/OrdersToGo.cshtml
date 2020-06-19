@@ -19,20 +19,22 @@
         {
             foreach (var bill in Model)
             {
-                var express = bill.Express ? "fas fa-motorcycle" : "fas fa-walking";
+                if (bill.ToGo)
+                {
+                    var express = bill.Express ? "fas fa-motorcycle" : "fas fa-walking";
 
-                <tr>
-                    <td class="d-none crono" id="@bill.BillId" >@bill.Date</td>
-                    <td class="hideItem">@bill.Client.Name</td>
-                    <td class="hideItem">@bill.Client.Phone</td>
-                    <td class="hideItem">¢@bill.Total</td>
-                    <td style="width: 100px;" id="time-@bill.BillId">
-
-                    </td>
-                    <th scope="row" onclick="getBill(0,true, @bill.BillId)">
-                        <i class="@express"></i>
-                    </th>
-                </tr>
+                    <tr>
+                        <td class="d-none crono" id="@bill.BillId">@bill.Date</td>
+                        <td class="hideItem">@bill.Client.Name</td>
+                        <td class="hideItem">@bill.Client.Phone</td>
+                        <td class="hideItem">¢@bill.Total</td>
+                        <td style="width: 100px;" id="time-@bill.BillId">
+                        </td>
+                        <th scope="row" onclick="getBill(0,true, @bill.BillId)">
+                            <i class="@express"></i>
+                        </th>
+                    </tr>
+                }
             }
         }
     </tbody>

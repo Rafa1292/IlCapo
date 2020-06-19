@@ -243,7 +243,6 @@ namespace IlCapo.Models
             }
 
         }
-
         public void AgregarArticulo(string articulo, int cant, int precio, int total)
         {
             if (cant.ToString().Length <= 5 && precio.ToString().Length <= 7 && total.ToString().Length <= 8)

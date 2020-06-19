@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace IlCapo.Models
+{
+    public class Bill
+    {
+        [Key]
+        public int BillId { get; set; }
+
+        public bool State { get; set; }
+
+        public int SubTotal { get; set; }
+
+        public int Total { get; set; }
+
+        public int Taxes { get; set; }
+
+        public int ExtrasAmount { get; set; }
+
+        public int DiscountAmount { get; set; }
+
+        public int TableId { get; set; }
+
+        public string Date { get; set; }
+
+        public virtual Client Client { get; set; }
+
+        public int ClientId { get; set; }
+
+        public List<Item> Items { get; set; }
+
+        public int Discount { get; set; }
+
+        public bool Command { get; set; }
+
+        public bool Express { get; set; }
+
+        public bool ToGo { get; set; }
+
+        public PayMethod PayMethod { get; set; }
+
+        public int PayWith { get; set; }
+
+        public virtual BeginDay BeginDay { get; set; }
+
+        public int BeginDayId { get; set; }
+
+        public Bill tableContent(int tableId, int beginDayId, int billId)
+        {
+            Bill bill = new Bill();
+
+
+            using (IlCapoContext db = new IlCapoContext())
+            {
+                if (billId != 0)
+                {
+                    bill = db.Bills.Include("Client").ToList().Find(x => x.BillId == billId);
+                }
+                else
+                {
+                    var bills = from b in db.Bills.Include("Client")
+                                where b.TableId == tableId && b.State
+                                select b;
+                    bill = bills.ToList().FirstOrDefault();
+                }
+            }
+            return bill;
+        }
+    }
+}

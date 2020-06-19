@@ -58,11 +58,36 @@ namespace IlCapo.Controllers
             {
                 db.Pays.Add(pay);
                 db.SaveChanges();
+                SendTicket(pay);
                 return RedirectToAction("Index");
             }
 
             ViewBag.ProviderId = new SelectList(db.Providers, "ProviderId", "Name", pay.ProviderId);
             return PartialView("Create", pay);
+        }
+
+        public bool SendTicket(Pay pay)
+        {
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            ticket ticket = new ticket();
+            ticket.TextoCentro("RETIRO");
+            ticket.TextoCentro(" ");
+            ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
+            ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+            ticket.TextoCentro("Cajero: : " + worker.Name);
+
+            ticket.TextoIzquierda($"{pay.Descripcion}: {pay.Amount}");
+
+            for (int i = 0; i < 5; i++)
+            {
+                ticket.TextoIzquierda(" ");
+
+            }
+
+            ticket.CortarTicket();
+            ticket.ImprimirTicket("LR2000");
+
+            return true;
         }
 
         public bool ValidateWorker()

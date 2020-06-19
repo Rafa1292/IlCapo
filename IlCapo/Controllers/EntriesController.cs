@@ -47,6 +47,7 @@ namespace IlCapo.Controllers
                         entry.BeginDayId = beginDay.BeginDayId;
                         db.Entries.Add(entry);
                         db.SaveChanges();
+                        SendTicket(entry);
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -59,6 +60,34 @@ namespace IlCapo.Controllers
             }
 
             return PartialView("Create", entry);
+        }
+
+
+        public bool SendTicket(Entry entry)
+        {
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            ticket ticket = new ticket();
+            ticket.TextoCentro("INGRESO");
+            ticket.TextoCentro(" ");
+            ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
+            ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+            ticket.TextoCentro("Cajero: : " + worker.Name);
+
+            ticket.TextoIzquierda($"{entry.Description}: {entry.Amount}");
+
+
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                ticket.TextoIzquierda(" ");
+
+            }
+
+            ticket.CortarTicket();
+            ticket.ImprimirTicket("LR2000");
+
+            return true;
         }
 
         public bool ValidateWorker()

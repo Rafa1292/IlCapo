@@ -296,11 +296,16 @@ namespace IlCapo.Controllers
 
         public bool DeleteItem(int id)
         {
+
+            if (id == 0)
+            {
+                return true;
+            }
+
             if (DeleteItemExtra(id) && DeleteItemSides(id))
             {
                 try
                 {
-
                     var items = from i in db.Items
                                 where i.ItemId == id
                                 select i;
@@ -565,10 +570,13 @@ namespace IlCapo.Controllers
 
         public bool SendTicket(Bill bill)
         {
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+
             var address = bill.Client.Addresses.Find(x => x.AddressId == bill.Client.SelectedAddressId);
             ticket ticket = new ticket();
             var total = bill.Total - bill.DiscountAmount + bill.Taxes;
             ticket.TextoCentro("Pizza Il Capo");
+            ticket.TextoCentro("Cedula: 2-0714-0714");
             ticket.TextoCentro("Alajuela, Grecia, Centro");
             ticket.TextoCentro("Mall plaza Grecia");
             ticket.TextoCentro("Telefono: 2444-3001");
@@ -579,7 +587,7 @@ namespace IlCapo.Controllers
             ticket.LineasAsterisco();
 
             ticket.TextoIzquierda(" ");
-            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Atendio: : " + worker.Name);
             ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
             ticket.TextoIzquierda(" Contacto: " + bill.Client.Phone);
             ticket.TextoIzquierda("Direccion: " + address.Description);
@@ -603,15 +611,15 @@ namespace IlCapo.Controllers
             ticket.AgregarTotales("               PAGA CON......", decimal.Parse(bill.PayWith.ToString()));
             ticket.AgregarTotales("               VUELTO........", decimal.Parse((bill.PayWith - total).ToString()));
 
+            ticket.TextoIzquierda(" ");
+            ticket.TextoCentro("Gracias por su compra");
 
-
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 5; i++)
             {
                 ticket.TextoIzquierda(" ");
 
             }
 
-            ticket.TextoCentro("Gracias por su compra");
 
 
             ticket.CortarTicket();
@@ -622,6 +630,8 @@ namespace IlCapo.Controllers
 
         public bool EditCommand(Item item)
         {
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+
             Bill bill = db.Bills.Find(item.BillId);
             ticket ticket = new ticket();
 
@@ -630,14 +640,11 @@ namespace IlCapo.Controllers
             ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
             ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
 
-            ticket.LineasAsterisco();
 
-            ticket.TextoIzquierda(" ");
-            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Atendio: : " + worker.Name);
             ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
             ticket.TextoIzquierda(" ");
 
-            ticket.LineasAsterisco();
             ticket.TextoCentro($" ESTA ES UNA EDICION DEL TICKET #{bill.BillId} SOBRE EL ITEM #{item.ItemId}, HAGA CASO OMISO A DICHO ITEM.");
 
             ticket.LineasIgual();
@@ -659,14 +666,14 @@ namespace IlCapo.Controllers
             return true;
         }
 
-
         public bool SendCommand(Bill bill)
         {
-            var toGo = " Servido";
+            Worker worker = db.Workers.FirstOrDefault(w => w.Mail == User.Identity.Name);
+            var toGo = "SERVIDO";
 
             if (bill.ToGo)
             {
-                toGo = " LLevar";
+                toGo = " LLEVAR";
             }
             ticket ticket = new ticket();
 
@@ -674,18 +681,11 @@ namespace IlCapo.Controllers
             ticket.TextoCentro("Ticket #:" + bill.BillId.ToString());
             ticket.TextoCentro("Fecha:" + DateTime.Now.ToShortDateString());
             ticket.TextoCentro("Hora:" + DateTime.Now.ToLongTimeString());
+            ticket.TextoIzquierda("");
 
-            ticket.LineasAsterisco();
-
-            ticket.TextoIzquierda(" ");
-            ticket.TextoIzquierda(" Atendio: : " + User.Identity.Name);
+            ticket.TextoIzquierda(" Atendio: : " + worker.Name);
             ticket.TextoIzquierda(" Cliente: " + bill.Client.Name);
-            ticket.TextoIzquierda(toGo);
-
-            ticket.TextoIzquierda(" ");
-
-            ticket.LineasAsterisco();
-
+            ticket.TextoCentro(toGo);
 
             var haveItems = false;
 
@@ -695,12 +695,11 @@ namespace IlCapo.Controllers
                 {
                     haveItems = true;
                     ticket.AgregarArticuloComanda(item.Product, item.Quantity, item.Description, item.ItemExtras, item.ItemSides, item.ItemId);
-                    ticket.TextoIzquierda("");
                     ticket.LineasGuion();
                 }
             }
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 5; i++)
             {
                 ticket.TextoIzquierda(" ");
 
@@ -715,6 +714,7 @@ namespace IlCapo.Controllers
             return true;
 
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

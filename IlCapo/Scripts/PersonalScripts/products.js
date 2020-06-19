@@ -131,7 +131,9 @@ function reduceProductQuantity(productId) {
 }
 
 function deleteProduct(productId, id) {
-
+    if (id == null) {
+        id = 0;
+    }
     $.ajax({
         type: "GET",
         url: "Bills/DeleteItem",
